@@ -59,7 +59,7 @@ class Bundle extends Model
         return $this->subscriptions()->create([
             'email' => $email,
             'bundle' => $this->name,
-            'amount' => $paymentGateway->totalCharges(),
+            'amount' => $this->price,
         ]);
     }
 
@@ -76,19 +76,6 @@ class Bundle extends Model
             'bundle' => $this->name,
             'amount' => $this->price,
         ]);
-    }
-
-    /**
-     * summary
-     *
-     * @return void
-     * @author 
-     */
-    public function checkIfSubscriptionExists($email)
-    {
-        if ($this->hasActiveSubscriptionFor($email)) {
-            throw new SubscriptionExistsException;
-        }
     }
 
     /**
