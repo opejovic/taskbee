@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Bundle;
+use App\Models\Plan;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +27,11 @@ Artisan::command('generate-bundles', function () {
 	  	],
 	]);
 
-    \Stripe\Plan::create([
+    $basicPlan = \Stripe\Plan::create([
         "amount" => $basicBundle['metadata']['price'],
         "interval" => "month",
         "product" => $basicBundle['id'],
         "currency" => "eur",
-        "id" => "basic-bundle"
     ]);
 
     Bundle::create([
@@ -39,7 +39,15 @@ Artisan::command('generate-bundles', function () {
     	'name' => $basicBundle['name'],
     	'members_limit' => $basicBundle['metadata']['members_limit'],
     	'price' => $basicBundle['metadata']['price'],
-    ]);    
+    ]);
+
+    Plan::create([
+        "amount" => $basicBundle['metadata']['price'],
+        "interval" => "month",
+        "product" => $basicBundle['id'],
+        "currency" => "eur",
+        "stripe_id" => $basicPlan['id'],
+    ]);
 
     // advanced bundle and plan creation
     $advancedBundle = \Stripe\Product::create([
@@ -51,12 +59,11 @@ Artisan::command('generate-bundles', function () {
              ],
     ]);
 
-    \Stripe\Plan::create([
+    $advancedPlan = \Stripe\Plan::create([
         "amount" => $advancedBundle['metadata']['price'],
         "interval" => "month",
         "product" => $advancedBundle['id'],
         "currency" => "eur",
-        "id" => "advanced-bundle"
     ]);
 
     Bundle::create([
@@ -64,6 +71,14 @@ Artisan::command('generate-bundles', function () {
         'name' => $advancedBundle['name'],
         'members_limit' => $advancedBundle['metadata']['members_limit'],
         'price' => $advancedBundle['metadata']['price'],
+    ]);
+
+    Plan::create([
+        "amount" => $advancedBundle['metadata']['price'],
+        "interval" => "month",
+        "product" => $advancedBundle['id'],
+        "currency" => "eur",
+        "stripe_id" => $advancedPlan['id'],
     ]);
 
     // pro bundle and plan creation
@@ -76,12 +91,11 @@ Artisan::command('generate-bundles', function () {
              ],
     ]);
 
-    \Stripe\Plan::create([
+    $proPlan = \Stripe\Plan::create([
         "amount" => $proBundle['metadata']['price'],
         "interval" => "month",
         "product" => $proBundle['id'],
         "currency" => "eur",
-        "id" => "pro-bundle"
     ]);
 
     Bundle::create([
@@ -89,5 +103,13 @@ Artisan::command('generate-bundles', function () {
         'name' => $proBundle['name'],
         'members_limit' => $proBundle['metadata']['members_limit'],
         'price' => $proBundle['metadata']['price'],
+    ]);
+
+    Plan::create([
+        "amount" => $proBundle['metadata']['price'],
+        "interval" => "month",
+        "product" => $proBundle['id'],
+        "currency" => "eur",
+        "stripe_id" => $proPlan['id'],
     ]);
 })->describe('Generate Bundles and subscription plans');

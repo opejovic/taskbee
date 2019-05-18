@@ -10,12 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/bundles', 'BundlesController@index');
-
-// Route::post('/bundles/{bundle}/pay', 'SubscriptionsController@store');
-Route::post('/bundles/{bundle}/subscribe', 'PurchaseSubscriptionsController@store');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('/bundles', 'BundlesController@index');
+Route::post('/bundles/{plan}/purchase', 'SubscriptionsController@store');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bundle;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 
 class BundlesController extends Controller
@@ -14,6 +15,7 @@ class BundlesController extends Controller
      */
     public function index()
     {
-		return view('bundles.index', ['bundles' => Bundle::all()]);        
+    	$plans = Plan::all();
+		return view('bundles.index', ['plans' => Plan::all()]);        
     }
 }

@@ -1776,7 +1776,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['bundle'],
+  props: ['plan'],
   data: function data() {
     return {
       stripeHandler: null,
@@ -1785,16 +1785,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     description: function description() {
-      return "Purchase ".concat(this.bundle.name, " bundle.");
+      return "Purchase ".concat(this.plan.name, " bundle.");
     },
     totalPrice: function totalPrice() {
-      return this.bundle.price;
+      return this.plan.amount;
     },
     priceInDollars: function priceInDollars() {
-      return (this.bundle.price / 100).toFixed(2);
+      return (this.plan.amount / 100).toFixed(2);
     },
     totalPriceInDollars: function totalPriceInDollars() {
-      return (this.bundle.price / 100).toFixed(2);
+      return (this.plan.amount / 100).toFixed(2);
     }
   },
   methods: {
@@ -1816,14 +1816,14 @@ __webpack_require__.r(__webpack_exports__);
         panelLabel: 'Pay {{amount}}',
         amount: this.totalPrice,
         image: '/img/checkout-image.png',
-        token: this.purchaseBundle
+        token: this.purchasePlan
       });
     },
-    purchaseBundle: function purchaseBundle(token) {
+    purchasePlan: function purchasePlan(token) {
       var _this = this;
 
       this.processing = true;
-      axios.post("/bundles/".concat(this.bundle.name, "/pay"), {
+      axios.post("/bundles/".concat(this.plan.id, "/purchase"), {
         email: token.email,
         payment_token: token.id
       }).then(function (response) {

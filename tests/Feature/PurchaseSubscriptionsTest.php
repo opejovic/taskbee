@@ -6,6 +6,7 @@ use App\Billing\FakeSubscriptionGateway;
 use App\Billing\SubscriptionGateway;
 use App\Models\Bundle;
 use App\Models\Customer;
+use App\Models\Plan;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,22 +22,22 @@ class PurchaseSubscriptionsTest extends TestCase
         parent::setUp();
         $this->subscriptionGateway = new FakeSubscriptionGateway;
         $this->app->instance(SubscriptionGateway::class, $this->subscriptionGateway);
-        $this->bundle = factory(Bundle::class)->states('basic')->create();
+        // $this->bundle = factory(Bundle::class)->states('basic')->create();
+        $this->plan = factory(Plan::class)->create(['amount' => 2500]);
     }
 
     /** @test */
     function customer_can_subscribe_to_a_bundle_with_valid_token()
     {
-        $response = $this->json('POST', "/bundles/{$this->bundle->id}/subscribe", [
+        $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'email' => 'jane@example.com',
             'token' => $this->subscriptionGateway->getValidTestToken(),
         ]);
         
         $response->assertStatus(201);
-        $subscription = $this->bundle->subscriptions()
-            ->where('email', 'jane@example.com')->first();
+        $subscription = $this->plan->subscriptions()->where('email', 'jane@example.com')->first();
         $this->assertNotNull($subscription);
-        $this->assertEquals(3995, $subscription->amount);
+        $this->assertEquals(2500, $subscription->amount);
         $this->assertEquals($subscription->expires_at, Carbon::now()->addMonth());
     }
 

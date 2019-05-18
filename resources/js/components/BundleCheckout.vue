@@ -12,7 +12,7 @@
 
 <script>
     export default {
-        props: ['bundle'],
+        props: ['plan'],
         data() {
             return {
                 stripeHandler: null,
@@ -22,16 +22,16 @@
 
         computed: {
             description() {
-                return `Purchase ${this.bundle.name} bundle.`
+                return `Purchase ${this.plan.name} bundle.`
             },
             totalPrice() {
-                return this.bundle.price
+                return this.plan.amount
             },
             priceInDollars() {
-                return (this.bundle.price / 100).toFixed(2)
+                return (this.plan.amount / 100).toFixed(2)
             },
             totalPriceInDollars() {
-                return (this.bundle.price / 100).toFixed(2)
+                return (this.plan.amount / 100).toFixed(2)
             },
         },
         methods: {
@@ -53,12 +53,12 @@
                     panelLabel: 'Pay {{amount}}',
                     amount: this.totalPrice,
                     image: '/img/checkout-image.png',
-                    token: this.purchaseBundle,
+                    token: this.purchasePlan,
                 })
             },
-            purchaseBundle(token) {
+            purchasePlan(token) {
                 this.processing = true
-                axios.post(`/bundles/${this.bundle.name}/pay`, {
+                axios.post(`/bundles/${this.plan.id}/purchase`, {
                     email: token.email,
                     payment_token: token.id,
                 }).then(response => {

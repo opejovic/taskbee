@@ -55,8 +55,8 @@ class Bundle extends Model
      */
     public function purchase($email, $token, $subscriptionGateway)
     {
-        $customer = $subscriptionGateway->createCustomer($email, $token);
-
+        $sub = $subscriptionGateway->createSubscriptionFor($customer, $this);
+        
         return $this->subscriptions()->create([
             'bundle' => $this->name,
             'customer' => $customer->id,

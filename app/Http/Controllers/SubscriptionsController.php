@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Billing\PaymentFailedException;
-use App\Billing\PaymentGateway;
-use App\Exceptions\SubscriptionExistsException;
+use App\Billing\SubscriptionGateway;
 use App\Models\Bundle;
-use App\Models\Subscription;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 
 class SubscriptionsController extends Controller
 {
-	protected $paymentGateway;
+	protected $subGateway;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-	public function __construct(PaymentGateway $paymentGateway)
+	public function __construct(SubscriptionGateway $subGateway)
 	{
-		$this->paymentGateway = $paymentGateway;
+		$this->subGateway = $subGateway;
 	}
 
     /**
@@ -29,27 +28,19 @@ class SubscriptionsController extends Controller
      * @param  App\Models\Bundle $bundle
      * @return \Illuminate\Http\Response
      */
-    public function store(Bundle $bundle)
+    public function store(Plan $plan)
     {
-        abort_if($bundle->hasActiveSubscriptionFor(request('email')), 422);
-
-        request()->validate([
+    	request()->validate([
     		'email' => ['required', 'email'],
-            'payment_token' => ['required'],
+    		'payment_token' => ['required'],
     	]);
-        
-        try {
-            // $sub = $subscription->purchase($bundle, $paymentGateway, $email, $token)
-            // $subscription->plan()->purchase($paymentGateway, $email, $token);
-            $subscription = $bundle->purchase(
-                $this->paymentGateway, 
-                request('payment_token'), 
-                request('email')
-            );
 
-    	    return response($subscription->toArray(), 201);
-        } catch (PaymentFailedException $e) {
-            return response([], 422);
-        }
+    	try {
+            $customer = $this->subGateway->createCustomer(request('email'), request('payment_token'));
+    		$subscription = $plan->purchase($this->subGateway, $customer);
+	    	return response($subscription, 201);
+    	} catch (PaymentFailedException $e) {
+    		return response([], 422);
+    	}
     }
 }

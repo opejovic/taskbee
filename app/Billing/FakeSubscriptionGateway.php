@@ -29,16 +29,16 @@ class FakeSubscriptionGateway implements SubscriptionGateway
 		]);
 	}
 
-	public function createSubscriptionFor($customer, $bundle)
+	public function createSubscriptionFor($customer, $plan)
 	{
 		return Subscription::create([
-			'bundle_id' => $bundle->id,
-			'bundle' => $bundle->name,
+			'bundle_id' => $plan->product,
+			'bundle' => $plan->product,
 			'customer' => $customer->id,
 			'email' => $customer->email,
 			'billing' => "charge_automatically",
-			'plan_id' => $bundle->stripe_id,
-			'amount' => $bundle->price,
+			'plan_id' => $plan->stripe_id,
+			'amount' => $plan->amount,
 			'status' => 'active',
 			'start_date' => Carbon::now(),
 			'expires_at' => Carbon::now()->addMonth(),
