@@ -6,7 +6,7 @@ use App\Models\Bundle;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 
-class BundlesController extends Controller
+class SubscriptionPlansController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +16,6 @@ class BundlesController extends Controller
     public function index()
     {
     	$plans = Plan::all();
-		return view('bundles.index', ['plans' => Plan::all()]);        
+		return view('plans.index', ['plans' => Plan::all()]);        
     }
 }

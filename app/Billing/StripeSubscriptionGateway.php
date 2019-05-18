@@ -49,9 +49,15 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 			"customer" => $customer->id,
 			"items" => [
 				[
-				  "plan" => $plan->stripe_id,
+				  "plan" => $plan->stripe_id ?: $plan->id,
 				],
 			]
 		], ['api_key' => $this->apiKey]);
+	}
+
+	public function subscribe($email, $token, $plan)
+	{
+		$customer = $this->createCustomer($email, $token);
+		return $this->createSubscriptionFor($customer, $plan);
 	}
 }

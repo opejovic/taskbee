@@ -22,7 +22,6 @@ class PurchaseSubscriptionsTest extends TestCase
         parent::setUp();
         $this->subscriptionGateway = new FakeSubscriptionGateway;
         $this->app->instance(SubscriptionGateway::class, $this->subscriptionGateway);
-        // $this->bundle = factory(Bundle::class)->states('basic')->create();
         $this->plan = factory(Plan::class)->create(['amount' => 2500]);
     }
 
@@ -31,7 +30,7 @@ class PurchaseSubscriptionsTest extends TestCase
     {
         $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'email' => 'jane@example.com',
-            'token' => $this->subscriptionGateway->getValidTestToken(),
+            'payment_token' => $this->subscriptionGateway->getValidTestToken(),
         ]);
         
         $response->assertStatus(201);
@@ -44,7 +43,7 @@ class PurchaseSubscriptionsTest extends TestCase
     /** @test */
     function subscription_is_not_created_if_payment_fails()
     {
-        $response = $this->json('POST', "/bundles/{$this->bundle->id}/subscribe", [
+        $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'email' => 'jane@example.com',
             'token' => "invalid-token",
         ]);
@@ -57,7 +56,7 @@ class PurchaseSubscriptionsTest extends TestCase
     /** @test */
     function email_is_required_to_purchase_a_subscription()
     {
-        $response = $this->json('POST', "/bundles/{$this->bundle->id}/subscribe", [
+        $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'token' => $this->subscriptionGateway->getValidTestToken(),
         ]);
 
@@ -70,12 +69,12 @@ class PurchaseSubscriptionsTest extends TestCase
     /** @test */
     function token_is_required_to_purchase_a_subscription()
     {
-        $response = $this->json('POST', "/bundles/{$this->bundle->id}/subscribe", [
+        $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'email' => 'john@example.com',
         ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors('token');
+        $response->assertJsonValidationErrors('payment_token');
         $this->assertCount(0, Customer::all());
         $this->assertCount(0, Subscription::all());
     }

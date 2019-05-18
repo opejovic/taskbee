@@ -20,8 +20,7 @@ class PlanTest extends TestCase
 		$plan = factory(Plan::class)->create(['amount' => 3500]);
 		$subGateway = new FakeSubscriptionGateway;
 		$token = $subGateway->getValidTestToken();
-		$customer = factory(Customer::class)->create(['email' => 'john@example.com']);
-		$subscription = $plan->purchase($subGateway, $customer);
+		$subscription = $plan->purchase('john@example.com', $token, $subGateway);
 
 		$this->assertCount(1, Subscription::all());
 		$this->assertEquals('john@example.com', $subscription->email);

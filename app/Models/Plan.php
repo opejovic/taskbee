@@ -38,18 +38,17 @@ class Plan extends Model
      * @return void
      * @author 
      */
-    public function purchase($subscriptionGateway, $customer)
+    public function purchase($email, $token, $subscriptionGateway)
     {
-        $sub = $subscriptionGateway->createSubscriptionFor($customer, $this);
+        $sub = $subscriptionGateway->subscribe($email, $token, $this);
 
-        return Subscription::create([
+        return $this->subscriptions()->create([
             'stripe_id' => $sub['id'],
             'bundle_id' => $this->product,
             'bundle' => $this->product,
-            'customer' => $customer->id,
-            'email' => $customer->email,
+            'customer' => $sub['customer'],
+            'email' => $email,
             'billing' => "charge_automatically",
-            'plan_id' => $this->stripe_id,
             'amount' => $sub['plan']['amount'],
             'status' => $sub['status'],
             'start_date' => Carbon::now(),

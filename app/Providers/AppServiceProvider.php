@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(StripePaymentGateway::class, function () {
             return new StripePaymentGateway(config('services.stripe.secret'));
-        });        
+        });
 
         $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
         

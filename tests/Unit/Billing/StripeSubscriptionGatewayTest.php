@@ -16,7 +16,6 @@ class StripeSubscriptionGatewayTest extends TestCase
 	{
 		parent::setUp();
 	    $this->subGateway = new StripeSubscriptionGateway(config('services.stripe.secret'));
-
 	}
 
 	/** @test */
@@ -29,7 +28,6 @@ class StripeSubscriptionGatewayTest extends TestCase
 				['api_key' => config('services.stripe.secret')]
 			)
 		);
-	    // $this->assertTrue(Customer::first()->is($customer));
 	}
 
 	/** @test */
@@ -113,7 +111,7 @@ class StripeSubscriptionGatewayTest extends TestCase
 	private function createBundle()
 	{
 		return \Stripe\Product::create([
-			"name" => 'Some Sample Workspace Bundle',
+			"name" => 'Some Sample Workspace Bundle 3',
 			"type" => "service",
 	  		"metadata" => [
 	  			"members_limit" => 5,
@@ -129,7 +127,6 @@ class StripeSubscriptionGatewayTest extends TestCase
 	        "interval" => "month",
 	        "product" => $bundle['id'],
 	        "currency" => "eur",
-	        "id" => "sample-bundle"
     	], ['api_key' => config('services.stripe.secret')]);
 	}
 }

@@ -15,5 +15,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/bundles', 'BundlesController@index');
+Route::get('/bundles', 'SubscriptionPlansController@index');
 Route::post('/bundles/{plan}/purchase', 'SubscriptionsController@store');
