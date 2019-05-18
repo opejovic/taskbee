@@ -39,11 +39,14 @@ class SubscriptionsController extends Controller
     	]);
         
         try {
+            // $sub = $subscription->purchase($bundle, $paymentGateway, $email, $token)
+            // $subscription->plan()->purchase($paymentGateway, $email, $token);
             $subscription = $bundle->purchase(
                 $this->paymentGateway, 
                 request('payment_token'), 
                 request('email')
             );
+
     	    return response($subscription->toArray(), 201);
         } catch (PaymentFailedException $e) {
             return response([], 422);

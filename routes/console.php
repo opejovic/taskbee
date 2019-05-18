@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use App\Models\Bundle;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,81 @@ use Illuminate\Foundation\Inspiring;
 |
 */
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->describe('Display an inspiring quote');
+Artisan::command('generate-bundles', function () {
+    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+    // basic bundle and plan creation
+    $basicBundle = \Stripe\Product::create([
+		"name" => 'Basic Workspace Bundle',
+		"type" => "service",
+	  	"metadata" => [
+	  		"members_limit" => 5,
+	  		"price" => 3995,
+	  	],
+	]);
+
+    \Stripe\Plan::create([
+        "amount" => $basicBundle['metadata']['price'],
+        "interval" => "month",
+        "product" => $basicBundle['id'],
+        "currency" => "eur",
+        "id" => "basic-bundle"
+    ]);
+
+    Bundle::create([
+    	'stripe_id' => $basicBundle['id'],
+    	'name' => $basicBundle['name'],
+    	'members_limit' => $basicBundle['metadata']['members_limit'],
+    	'price' => $basicBundle['metadata']['price'],
+    ]);    
+
+    // advanced bundle and plan creation
+    $advancedBundle = \Stripe\Product::create([
+         "name" => 'Advanced Workspace Bundle',
+         "type" => "service",
+             "metadata" => [
+                 "members_limit" => 12,
+                 "price" => 6995,
+             ],
+    ]);
+
+    \Stripe\Plan::create([
+        "amount" => $advancedBundle['metadata']['price'],
+        "interval" => "month",
+        "product" => $advancedBundle['id'],
+        "currency" => "eur",
+        "id" => "advanced-bundle"
+    ]);
+
+    Bundle::create([
+        'stripe_id' => $advancedBundle['id'],
+        'name' => $advancedBundle['name'],
+        'members_limit' => $advancedBundle['metadata']['members_limit'],
+        'price' => $advancedBundle['metadata']['price'],
+    ]);
+
+    // pro bundle and plan creation
+    $proBundle = \Stripe\Product::create([
+         "name" => 'Pro Workspace Bundle',
+         "type" => "service",
+             "metadata" => [
+                 "members_limit" => 20,
+                 "price" => 9995,
+             ],
+    ]);
+
+    \Stripe\Plan::create([
+        "amount" => $proBundle['metadata']['price'],
+        "interval" => "month",
+        "product" => $proBundle['id'],
+        "currency" => "eur",
+        "id" => "pro-bundle"
+    ]);
+
+    Bundle::create([
+        'stripe_id' => $proBundle['id'],
+        'name' => $proBundle['name'],
+        'members_limit' => $proBundle['metadata']['members_limit'],
+        'price' => $proBundle['metadata']['price'],
+    ]);
+})->describe('Generate Bundles and subscription plans');

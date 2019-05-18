@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBundlesTable extends Migration
+class CreateCustomersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateBundlesTable extends Migration
      */
     public function up()
     {
-        Schema::create('bundles', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('stripe_id')->unique();
-            $table->string('name')->unique();
-            $table->unsignedInteger('members_limit');
-            $table->unsignedInteger('price');
+            $table->string('stripe_id')->nullable();
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateBundlesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bundles');
+        Schema::dropIfExists('customers');
     }
 }

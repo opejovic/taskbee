@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Bundle;
 use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -22,8 +23,8 @@ class SubscriptionTest extends TestCase
 
 	    $subscription->cancel();
 
-	    $this->assertNull(Subscription::where('email', 'john@example.com')->first());
-	    $this->assertCount(0, Subscription::all());
+	    $this->assertEquals(Carbon::now()->format('Y-m-d'), $subscription->cancelled_at->format('Y-m-d'));
+	    $this->assertEquals('cancelled', $subscription->status);
 	}
 
 	/** @test */
@@ -33,6 +34,9 @@ class SubscriptionTest extends TestCase
 	    	'email' => 'john@example.com',
 	    	'bundle' => 'basic',
 	    	'amount' => 3995,
+	    	'status' => 'active',
+	    	'start_date' => Carbon::now(),
+	    	'expires_at' => Carbon::now()->addMonth(),
 	    ]);
 
 	    $result = $subscription->toArray();
@@ -40,7 +44,10 @@ class SubscriptionTest extends TestCase
 	    $this->assertEquals([
 	    	'email' => 'john@example.com',
 	    	'bundle' => 'basic',
-	    	'amount' => 3995,	
+	    	'amount' => 3995,
+	    	'status' => 'active',
+	    	'start_date' => Carbon::now()->format('Y-m-d'),
+	    	'expires_at' => Carbon::now()->addMonth()->format('Y-m-d'),
 	    ], $result);
 	}
 }

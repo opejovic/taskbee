@@ -7,34 +7,30 @@ use Faker\Generator as Faker;
 
 $factory->define(Bundle::class, function (Faker $faker) {
 	return [
+		'stripe_id' => 'prod_BASIC123',
 		'name' => Bundle::BASIC,
 		'members_limit' => 5,
-		'storage' => 2,
 		'price' => Bundle::BASIC_PRICE,
-		'additional_information' => 'Additional information about the advanced workspace bundle.'
 	];
 });
 
 $factory->state(Bundle::class, 'basic', [
+	'stripe_id' => 'prod_BASIC123',
 	'name' => Bundle::BASIC,
 	'members_limit' => 5,
-	'storage' => 2,
 	'price' => Bundle::BASIC_PRICE,
-	'additional_information' => 'Additional information about the basic workspace bundle.'
 ]);
 
 $factory->state(Bundle::class, 'advanced', [
+	'stripe_id' => 'prod_ADVANCED123',
 	'name' => Bundle::ADVANCED,
 	'members_limit' => 12,
-	'storage' => 4,
 	'price' => Bundle::ADVANCED_PRICE,
-	'additional_information' => 'Additional information about the advanced workspace bundle.'
 ]);
 
 $factory->state(Bundle::class, 'pro', [
+	'stripe_id' => 'prod_PRO123',
 	'name' => Bundle::PRO,
 	'members_limit' => 20,
-	'storage' => 8,
 	'price' => Bundle::PRO_PRICE,
-	'additional_information' => 'Additional information about the pro workspace bundle.'
 ]);

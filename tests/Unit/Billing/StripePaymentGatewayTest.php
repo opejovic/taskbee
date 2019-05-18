@@ -4,6 +4,7 @@ namespace Tests\Unit\Billing;
 
 use App\Billing\PaymentFailedException;
 use App\Billing\StripePaymentGateway;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;

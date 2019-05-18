@@ -13,7 +13,8 @@
 
 Route::get('/bundles', 'BundlesController@index');
 
-Route::post('/bundles/{bundle}/pay', 'SubscriptionsController@store');
+// Route::post('/bundles/{bundle}/pay', 'SubscriptionsController@store');
+Route::post('/bundles/{bundle}/subscribe', 'PurchaseSubscriptionsController@store');
 
 Auth::routes();
 

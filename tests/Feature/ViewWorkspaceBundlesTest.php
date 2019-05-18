@@ -28,20 +28,14 @@ class ViewWorkspaceBundlesTest extends TestCase
 
         $response->assertSee($basic->name);
         $response->assertSee($basic->members_limit);
-        $response->assertSee($basic->storage);
         $response->assertSee($basic->price);
-        $response->assertSee($basic->additional_information);
 
         $response->assertSee($advanced->name);
         $response->assertSee($advanced->members_limit);
-        $response->assertSee($advanced->storage);
         $response->assertSee($advanced->price);
-        $response->assertSee($advanced->additional_information);
 
         $response->assertSee($pro->name);
         $response->assertSee($pro->members_limit);
-        $response->assertSee($pro->storage);
         $response->assertSee($pro->price);
-        $response->assertSee($pro->additional_information);
     }
 }

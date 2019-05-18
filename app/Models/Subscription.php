@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Subscription extends Model
@@ -19,7 +20,10 @@ class Subscription extends Model
      */
     public function cancel()
     {
-    	$this->delete();
+    	$this->update([
+            'cancelled_at' => Carbon::now(),
+            'status' => 'cancelled', 
+        ]);
     }
 
     /**
@@ -33,6 +37,9 @@ class Subscription extends Model
             'email' => $this->email,
             'bundle' => $this->bundle,
             'amount' => $this->amount,
+            'status' => $this->status,
+            'start_date' => $this->start_date->format('Y-m-d'),
+            'expires_at' => $this->expires_at->format('Y-m-d'),
         ];
     }
 }

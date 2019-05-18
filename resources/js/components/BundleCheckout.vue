@@ -52,7 +52,7 @@
                     allowRememberMe: false,
                     panelLabel: 'Pay {{amount}}',
                     amount: this.totalPrice,
-                    // image: '/img/checkout-icon.png',
+                    image: '/img/checkout-image.png',
                     token: this.purchaseBundle,
                 })
             },

@@ -1,9 +1,3 @@
-@foreach($bundles as $bundle)
-	
-	
-	
-@endforeach
-
 @extends('layouts.app')
 
 @section('content')
@@ -13,19 +7,16 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
-                	<strong>{{ ucfirst($bundle->name) }}</strong>
+                	<strong>{{ $bundle->name }}</strong>
                 </div>
 
                 <div class="card-body">
                 	Members limit: {{ $bundle->members_limit }}
             		<hr>
-            		Storage limit: {{ $bundle->storage }}
-            		<hr>
             		<div class="display-4">
 						$ {{ $bundle->price / 100 }}
             		</div>
-            		<hr>
-            		{{ $bundle->additional_information }}
+                    Monthly
                 </div>
 
                 <div class="card-footer">

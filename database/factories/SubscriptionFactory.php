@@ -3,6 +3,7 @@
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
 use App\Models\Subscription;
+use Carbon\Carbon;
 use Faker\Generator as Faker;
 
 $factory->define(Subscription::class, function (Faker $faker) {
@@ -12,7 +13,13 @@ $factory->define(Subscription::class, function (Faker $faker) {
         	return $bundle->id; 
         },
         'bundle' => $bundle->name,
-        'amount' => $bundle->price,
+        'customer' => 1,
         'email' => 'somebody@example.com',
+        'billing' => 'charge_automatically',
+        'plan_id' => $bundle->stripe_id,
+        'amount' => $bundle->price,
+        'status' => 'active',
+        'start_date' => Carbon::now(),
+        'expires_at' => Carbon::now()->addMonth(),
     ];
 });
