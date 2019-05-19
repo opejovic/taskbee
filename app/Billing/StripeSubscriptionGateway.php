@@ -49,7 +49,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 			"customer" => $customer->id,
 			"items" => [
 				[
-				  "plan" => $plan->stripe_id ?: $plan->id,
+				  "plan" => $plan->stripe_id ?: $plan->id, // for testing only (prod will be $plan->stripe_id)
 				],
 			]
 		], ['api_key' => $this->apiKey]);

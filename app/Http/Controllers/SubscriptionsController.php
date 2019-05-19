@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Billing\PaymentFailedException;
 use App\Billing\SubscriptionGateway;
-use App\Models\Bundle;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 
 class SubscriptionsController extends Controller
 {
-	protected $subscriptionGateway;
+	private $subscriptionGateway;
 
     /**
      * Create a new controller instance.
@@ -25,7 +24,7 @@ class SubscriptionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  App\Models\Bundle $bundle
+     * @param  App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
     public function store(Plan $plan)
@@ -37,8 +36,13 @@ class SubscriptionsController extends Controller
 
     	try {
             $subscription = $plan->purchase(
-                request('email'), request('payment_token'), $this->subscriptionGateway
+                request('email'), 
+                request('payment_token'), 
+                $this->subscriptionGateway
             );
+
+            // Mail::to($subscription->email)->send(new SubscriptionConfirmationEmail($subscription));
+
 	    	return response($subscription, 201);
     	} catch (PaymentFailedException $e) {
     		return response([], 422);

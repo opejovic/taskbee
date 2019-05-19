@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Bundle;
 use App\Models\Plan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,10 +16,13 @@ class ViewWorkspaceBundlesTest extends TestCase
     function customers_can_view_available_workspace_bundles()
     {
         $this->withoutExceptionHandling();
-        // Arrange: 3 Workspace types Basic, Advanced, Pro
-        $basic = factory(Plan::class)->states('basic')->create();
-        $advanced = factory(Plan::class)->states('advanced')->create();
-        $pro = factory(Plan::class)->states('pro')->create();
+        $basicBundle = factory(Bundle::class)->states('basic')->create(['stripe_id' => 'prod_BSCID123']);
+        $advancedBundle = factory(Bundle::class)->states('advanced')->create(['stripe_id' => 'prod_ADVID123']);
+        $proBundle = factory(Bundle::class)->states('pro')->create(['stripe_id' => 'prod_PROID123']);
+
+        $basicPlan = factory(Plan::class)->states('basic')->create(['product' => $basicBundle->stripe_id]);
+        $advancedPlan = factory(Plan::class)->states('advanced')->create(['product' => $advancedBundle->stripe_id]);
+        $proPlan = factory(Plan::class)->states('pro')->create(['product' => $proBundle->stripe_id]);
 
         // Act: Customer visits the workspace bundles page.
         $response = $this->get('/bundles');
@@ -27,16 +31,16 @@ class ViewWorkspaceBundlesTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('plans.index');
 
-        $response->assertSee($basic->name);
-        $response->assertSee(5);
-        $response->assertSee($basic->amount);
+        $response->assertSee($basicPlan->bundle->name);
+        $response->assertSee($basicPlan->bundle->members_limit);
+        $response->assertSee($basicPlan->amount);
 
-        $response->assertSee($advanced->name);
-        $response->assertSee(12);
-        $response->assertSee($advanced->amount);
+        $response->assertSee($advancedPlan->bundle->name);
+        $response->assertSee($advancedPlan->bundle->members_limit);
+        $response->assertSee($advancedPlan->amount);
 
-        $response->assertSee($pro->name);
-        $response->assertSee(20);
-        $response->assertSee($pro->amount);
+        $response->assertSee($proPlan->bundle->name);
+        $response->assertSee($proPlan->bundle->members_limit);
+        $response->assertSee($proPlan->amount);
     }
 }
