@@ -22,18 +22,9 @@ class Bundle extends Model
     /**
      * Attributes that are not mass assignable.
      *
+     * @var array
      */
     protected $guarded = [];
-
-    // *
-    //  * Get the route key for the model.
-    //  *
-    //  * @return string
-     
-    // public function getRouteKeyName()
-    // {
-    //     return 'name';
-    // }
 
     /**
      * Bundle has many subscriptions.

@@ -11,10 +11,9 @@ class Plan extends Model
     protected $guarded = [];
 
     /**
-     * summary
+     * Plan belongs to a Bundle.
      *
-     * @return void
-     * @author 
+     * @return App\Models\Bundle
      */
     public function bundle()
     {
@@ -22,10 +21,9 @@ class Plan extends Model
     }
 
     /**
-     * summary
+     * Plan has many subscriptions
      *
-     * @return void
-     * @author 
+     * @return Illuminate\Database\Eloquent\Collection
      */
     public function subscriptions()
     {
@@ -33,10 +31,12 @@ class Plan extends Model
     }
 
     /**
-     * summary
+     * Purchase the subscription plan.
      *
-     * @return void
-     * @author 
+     * @param $email
+     * @param $token
+     * @param App\Billing\StripeSubscriptionGateway $subscriptionGateway
+     * @return App\Models\Subscription
      */
     public function purchase($email, $token, $subscriptionGateway)
     {

@@ -15,6 +15,6 @@ class SubscriptionPlansController extends Controller
      */
     public function index()
     {
-		return view('plans.index', ['plans' => Plan::all()]);        
+		return view('subscription-plans.index', ['plans' => Plan::all()]);        
     }
 }

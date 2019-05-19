@@ -32,7 +32,6 @@ class PurchaseSubscriptionsTest extends TestCase
     /** @test */
     function customer_can_subscribe_to_a_bundle_with_valid_token()
     {
-        $this->withoutExceptionHandling();
         Mail::fake();
         InvitationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 

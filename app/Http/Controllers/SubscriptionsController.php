@@ -46,15 +46,6 @@ class SubscriptionsController extends Controller
                 request('payment_token'), 
                 $this->subscriptionGateway
             );
-
-            $invitation = Invitation::create([
-                'email' => request('email'),
-                'user_role' => User::ADMIN,
-                'code'  => InvitationCode::generate(),
-                'subscription_id' => $subscription->id,
-            ]);
-            
-            Mail::to($subscription->email)->queue(new SubscriptionPurchaseEmail($subscription, $invitation));
             
 	    	return response($subscription, 201);
     	} catch (PaymentFailedException $e) {

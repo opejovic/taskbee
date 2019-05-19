@@ -11,11 +11,23 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 {
 	private $apiKey;
 
+    /**
+     * Create a new class instance.
+     *
+     * @return void
+     */
 	public function __construct($apiKey)
 	{
 		$this->apiKey = $apiKey;
 	}
 
+	/**
+	 * Create a stripe customer and store it in the database.
+	 *
+	 * @param $email
+	 * @param $token
+	 * @return \Stripe\Customer
+	 */
 	public function createCustomer($email, $token)
 	{
 		try {
@@ -43,6 +55,13 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 		}
 	}
 
+	/**
+	 * Create a stripe subscription for a customer.
+	 *
+	 * @param \Stripe\Customer $customer
+	 * @param App\Models\Plan $plan
+	 * @return \Stripe\Subscription
+	 */
 	public function createSubscriptionFor($customer, $plan)
 	{
 		return \Stripe\Subscription::create([
@@ -55,6 +74,14 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 		], ['api_key' => $this->apiKey]);
 	}
 
+	/**
+	 * Create a stripe customer and a subscription for that customer.
+	 *
+	 * @param $email
+	 * @param $token
+	 * @param App\Models\Plan $plan
+	 * @return \Stripe\Subscription
+	 */
 	public function subscribe($email, $token, $plan)
 	{
 		$customer = $this->createCustomer($email, $token);
