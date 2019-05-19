@@ -7,22 +7,22 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SubscriptionPurchaseEmail extends Mailable
+class SubscriptionPurchasedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $subscription;
-    public $invitation;
+    public $setupAuthorization;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($subscription, $invitation)
+    public function __construct($subscription, $setupAuthorization)
     {
         $this->subscription = $subscription;
-        $this->invitation = $invitation;
+        $this->setupAuthorization = $setupAuthorization;
     }
 
     /**

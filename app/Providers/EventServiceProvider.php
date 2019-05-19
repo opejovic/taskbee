@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         'App\Events\SubscriptionPurchased' => [
-            'App\Listeners\SendInvitationEmail'
+            'App\Listeners\SendSubscriptionPurchasedEmail'
         ],
     ];
 

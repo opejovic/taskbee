@@ -5,7 +5,7 @@ You have successfully purchased a TaskMonkey <strong>{{ $subscription->bundle_na
 
 You can setup your account by visiting the link below.
 
-@component('mail::button', ['url' => "http://127.0.0.1:8000/invitations/$invitation->code"])
+@component('mail::button', ['url' => "http://127.0.0.1:8000/invitations/$setupAuthorization->code"])
     Setup workspace
 @endcomponent
 

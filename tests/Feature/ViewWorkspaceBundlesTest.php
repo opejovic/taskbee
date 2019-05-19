@@ -29,7 +29,7 @@ class ViewWorkspaceBundlesTest extends TestCase
 
         // Assert: Customer can see the workspace bundles and the details of each bundle.
         $response->assertStatus(200);
-        $response->assertViewIs('plans.index');
+        $response->assertViewIs('subscription-plans.index');
 
         $response->assertSee($basicPlan->bundle->name);
         $response->assertSee($basicPlan->bundle->members_limit);

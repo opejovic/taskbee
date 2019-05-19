@@ -1,11 +1,11 @@
-<?php
+<?php 
 
 namespace App\Facades;
 
-use App\Helpers\InvitationCodeGenerator;
+use App\Helpers\AuthorizationCodeGenerator;
 use Illuminate\Support\Facades\Facade;
 
-class InvitationCode extends Facade
+class AuthorizationCode extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -15,6 +15,6 @@ class InvitationCode extends Facade
      */
 	protected static function getFacadeAccessor()
 	{
-		return InvitationCodeGenerator::class;
+		return AuthorizationCodeGenerator::class;
 	}
 }

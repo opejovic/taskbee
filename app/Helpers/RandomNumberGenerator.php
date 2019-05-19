@@ -2,9 +2,9 @@
 
 namespace App\Helpers;
 
-use App\Helpers\InvitationCodeGenerator;
+use App\Helpers\AuthorizationCodeGenerator;
 
-class RandomNumberGenerator implements InvitationCodeGenerator
+class RandomNumberGenerator implements AuthorizationCodeGenerator
 {
 	/**
      * Generate a random 24 character code from a pool of characters for an invitation.

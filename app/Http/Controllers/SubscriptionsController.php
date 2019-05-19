@@ -4,10 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Billing\PaymentFailedException;
 use App\Billing\SubscriptionGateway;
-use App\Facades\InvitationCode;
-use App\Mail\InvitationEmail;
-use App\Mail\SubscriptionPurchaseEmail;
-use App\Models\Invitation;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -46,7 +42,7 @@ class SubscriptionsController extends Controller
                 request('payment_token'), 
                 $this->subscriptionGateway
             );
-            
+
 	    	return response($subscription, 201);
     	} catch (PaymentFailedException $e) {
     		return response([], 422);

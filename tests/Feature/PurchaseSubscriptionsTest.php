@@ -4,13 +4,13 @@ namespace Feature;
 
 use App\Billing\FakeSubscriptionGateway;
 use App\Billing\SubscriptionGateway;
-use App\Facades\InvitationCode;
-use App\Mail\SubscriptionPurchaseEmail;
+use App\Facades\AuthorizationCode;
+use App\Mail\SubscriptionPurchasedEmail;
 use App\Models\Bundle;
 use App\Models\Customer;
-use App\Models\Invitation;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\WorkspaceSetupAuthorization;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -33,7 +33,7 @@ class PurchaseSubscriptionsTest extends TestCase
     function customer_can_subscribe_to_a_bundle_with_valid_token()
     {
         Mail::fake();
-        InvitationCode::shouldReceive('generate')->andReturn('TESTCODE123');
+        AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 
         $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'email' => 'jane@example.com',
@@ -46,15 +46,15 @@ class PurchaseSubscriptionsTest extends TestCase
         $this->assertEquals(2500, $subscription->amount);
         $this->assertEquals($subscription->expires_at, Carbon::now()->addMonth());
 
-        $this->assertCount(1, Invitation::all());
-        $invitation = $subscription->invitation;
-        $this->assertNotNull($invitation);
-        $this->assertEquals('jane@example.com', $invitation->email);
-        $this->assertEquals('TESTCODE123', $invitation->code);
+        $this->assertCount(1, WorkspaceSetupAuthorization::all());
+        $setupAuthorization = WorkspaceSetupAuthorization::first();
+        $this->assertNotNull($setupAuthorization);
+        $this->assertEquals('jane@example.com', $setupAuthorization->email);
+        $this->assertEquals('TESTCODE123', $setupAuthorization->code);
 
-        Mail::assertQueued(SubscriptionPurchaseEmail::class, function($mail) use ($subscription, $invitation) {
+        Mail::assertQueued(SubscriptionPurchasedEmail::class, function($mail) use ($subscription, $setupAuthorization) {
             return $mail->hasTo('jane@example.com')
-                && $mail->invitation->is($invitation)
+                && $mail->setupAuthorization->is($setupAuthorization)
                 && $mail->subscription->id == $subscription->id;
         });
     }
