@@ -46,46 +46,6 @@ class Bundle extends Model
     }
 
     /**
-     * Purchase a subscription for the bundle.
-     *
-     * @param App\Billing\PaymentGateway $paymentGateway
-     * @param $token
-     * @param $email
-     * @return App\Models\Subscription
-     */
-    public function purchase($email, $token, $subscriptionGateway)
-    {
-        $sub = $subscriptionGateway->createSubscriptionFor($customer, $this);
-        
-        return $this->subscriptions()->create([
-            'bundle' => $this->name,
-            'customer' => $customer->id,
-            'email' => $customer->email,
-            'billing' => "charge_automatically",
-            'plan_id' => $this->stripe_id,
-            'amount' => $this->price,
-            'status' => 'active',
-            'start_date' => Carbon::now(),
-            'expires_at' => Carbon::now()->addMonth(),
-        ]);
-    }
-
-    /**
-     * Create a new subscription instance for a given email.
-     *
-     * @param $email
-     * @return App\Models\Subscription
-     */
-    public function addSubscriptionFor($email)
-    {
-        return $this->subscriptions()->create([
-            'email' => $email,
-            'bundle' => $this->name,
-            'amount' => $this->price,
-        ]);
-    }
-
-    /**
      * Does subscription for the given email exists?
      *
      * @param $email

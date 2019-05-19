@@ -9,10 +9,11 @@ use Faker\Generator as Faker;
 $factory->define(Subscription::class, function (Faker $faker) {
     $bundle = factory(App\Models\Bundle::class)->create();
     return [
+        'stripe_id' => 'sub_FAKESTRIPEID123',
         'bundle_id' => function () use ($bundle) { 
         	return $bundle->id; 
         },
-        'bundle' => $bundle->name,
+        'bundle_name' => $bundle->name,
         'customer' => 1,
         'email' => 'somebody@example.com',
         'billing' => 'charge_automatically',

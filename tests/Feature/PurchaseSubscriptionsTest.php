@@ -4,13 +4,17 @@ namespace Feature;
 
 use App\Billing\FakeSubscriptionGateway;
 use App\Billing\SubscriptionGateway;
+use App\Facades\InvitationCode;
+use App\Mail\SubscriptionPurchaseEmail;
 use App\Models\Bundle;
 use App\Models\Customer;
+use App\Models\Invitation;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class PurchaseSubscriptionsTest extends TestCase
@@ -28,6 +32,10 @@ class PurchaseSubscriptionsTest extends TestCase
     /** @test */
     function customer_can_subscribe_to_a_bundle_with_valid_token()
     {
+        $this->withoutExceptionHandling();
+        Mail::fake();
+        InvitationCode::shouldReceive('generate')->andReturn('TESTCODE123');
+
         $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
             'email' => 'jane@example.com',
             'payment_token' => $this->subscriptionGateway->getValidTestToken(),
@@ -38,6 +46,18 @@ class PurchaseSubscriptionsTest extends TestCase
         $this->assertNotNull($subscription);
         $this->assertEquals(2500, $subscription->amount);
         $this->assertEquals($subscription->expires_at, Carbon::now()->addMonth());
+
+        $this->assertCount(1, Invitation::all());
+        $invitation = $subscription->invitation;
+        $this->assertNotNull($invitation);
+        $this->assertEquals('jane@example.com', $invitation->email);
+        $this->assertEquals('TESTCODE123', $invitation->code);
+
+        Mail::assertQueued(SubscriptionPurchaseEmail::class, function($mail) use ($subscription, $invitation) {
+            return $mail->hasTo('jane@example.com')
+                && $mail->invitation->is($invitation)
+                && $mail->subscription->id == $subscription->id;
+        });
     }
 
     /** @test */

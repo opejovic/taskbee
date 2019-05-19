@@ -14,6 +14,14 @@ class Subscription extends Model
     protected $guarded = [];
 
     /**
+     * Get the invitation associated with the subscription.
+     */
+    public function invitation()
+    {
+        return $this->hasOne(Invitation::class, 'subscription_id');
+    }
+
+    /**
      * Cancel the subscription.
      *
      * @return void
@@ -35,7 +43,7 @@ class Subscription extends Model
     {
         return [
             'email' => $this->email,
-            'bundle' => $this->bundle,
+            'bundle_name' => $this->bundle_name,
             'amount' => $this->amount,
             'status' => $this->status,
             'start_date' => $this->start_date->format('Y-m-d'),

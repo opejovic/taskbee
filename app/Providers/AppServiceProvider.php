@@ -6,6 +6,8 @@ use App\Billing\PaymentGateway;
 use App\Billing\StripePaymentGateway;
 use App\Billing\StripeSubscriptionGateway;
 use App\Billing\SubscriptionGateway;
+use App\Helpers\InvitationCodeGenerator;
+use App\Helpers\RandomNumberGenerator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(SubscriptionGateway::class, StripeSubscriptionGateway::class);
+
+        $this->app->bind(InvitationCodeGenerator::class, RandomNumberGenerator::class);
     }
 
     /**

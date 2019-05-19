@@ -17,7 +17,7 @@ class CreateSubscriptionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('stripe_id')->nullable();
             $table->string('bundle_id')->nullable();
-            $table->string('bundle');
+            $table->string('bundle_name');
             $table->string('customer');
             $table->string('email');
             $table->string('billing');

@@ -11,11 +11,18 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * User roles.
+     */
+    const ADMIN = 'Admin';
+    const MEMBER = 'Member';
+
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
+    protected $guarded = [
         'name', 'email', 'password',
     ];
 

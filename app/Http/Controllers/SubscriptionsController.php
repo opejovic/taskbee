@@ -4,8 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Billing\PaymentFailedException;
 use App\Billing\SubscriptionGateway;
+use App\Facades\InvitationCode;
+use App\Mail\InvitationEmail;
+use App\Mail\SubscriptionPurchaseEmail;
+use App\Models\Invitation;
 use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class SubscriptionsController extends Controller
 {
@@ -41,8 +47,15 @@ class SubscriptionsController extends Controller
                 $this->subscriptionGateway
             );
 
-            // Mail::to($subscription->email)->send(new SubscriptionConfirmationEmail($subscription));
-
+            $invitation = Invitation::create([
+                'email' => request('email'),
+                'user_role' => User::ADMIN,
+                'code'  => InvitationCode::generate(),
+                'subscription_id' => $subscription->id,
+            ]);
+            
+            Mail::to($subscription->email)->queue(new SubscriptionPurchaseEmail($subscription, $invitation));
+            
 	    	return response($subscription, 201);
     	} catch (PaymentFailedException $e) {
     		return response([], 422);

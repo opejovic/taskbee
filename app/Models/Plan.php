@@ -45,7 +45,7 @@ class Plan extends Model
         return $this->subscriptions()->create([
             'stripe_id' => $sub['id'],
             'bundle_id' => $this->product,
-            'bundle' => $this->product,
+            'bundle_name' => $this->product,
             'customer' => $sub['customer'],
             'email' => $email,
             'billing' => "charge_automatically",

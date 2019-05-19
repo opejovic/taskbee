@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Bundle;
+use App\Models\Invitation;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,7 +33,7 @@ class SubscriptionTest extends TestCase
 	{
 	    $subscription = factory(Subscription::class)->create([
 	    	'email' => 'john@example.com',
-	    	'bundle' => 'basic',
+	    	'bundle_name' => 'Some Workspace Bundle Name',
 	    	'amount' => 3995,
 	    	'status' => 'active',
 	    	'start_date' => Carbon::now(),
@@ -43,11 +44,21 @@ class SubscriptionTest extends TestCase
 
 	    $this->assertEquals([
 	    	'email' => 'john@example.com',
-	    	'bundle' => 'basic',
+	    	'bundle_name' => 'Some Workspace Bundle Name',
 	    	'amount' => 3995,
 	    	'status' => 'active',
 	    	'start_date' => Carbon::now()->format('Y-m-d'),
 	    	'expires_at' => Carbon::now()->addMonth()->format('Y-m-d'),
 	    ], $result);
+	}
+
+	/** @test */
+	function it_has_invitations()
+	{
+	    $subscription = factory(Subscription::class)->create();
+
+	    $invitation = factory(Invitation::class)->create(['subscription_id' => $subscription->id]);
+
+	    $this->assertTrue($subscription->invitation->is($invitation));
 	}
 }
