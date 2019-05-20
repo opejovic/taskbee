@@ -34,4 +34,25 @@ class Invitation extends Model
     {
         return $this->belongsTo(Workspace::class);
     }
+
+    /**
+     * Retrieve an invitation by its code.
+     *
+     * @param $code
+     * @return App\Models\Invitation
+     */
+    public static function findByCode($code)
+    {
+        return self::where('code', $code)->firstOrFail();
+    }
+
+    /**
+     * Has the invitation been used?
+     *
+     * @return bool
+     */
+    public function hasBeenUsed()
+    {
+        return $this->user_id !== null;
+    }
 }

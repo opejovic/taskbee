@@ -26,12 +26,16 @@ class PurchaseSubscriptionsTest extends TestCase
         parent::setUp();
         $this->subscriptionGateway = new FakeSubscriptionGateway;
         $this->app->instance(SubscriptionGateway::class, $this->subscriptionGateway);
-        $this->plan = factory(Plan::class)->create(['amount' => 2500]);
+        $this->plan = factory(Plan::class)->create([
+            'amount' => 2500,
+            'product' => factory(Bundle::class)->create()->stripe_id,
+        ]);
     }
 
     /** @test */
     function customer_can_subscribe_to_a_bundle_with_valid_token()
     {
+        $this->withoutExceptionHandling();
         Mail::fake();
         AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 

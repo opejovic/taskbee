@@ -19,7 +19,7 @@ class WorkspacesController extends Controller
     public function store()
     {
         $authorization = WorkspaceSetupAuthorization::findByCode(request('authorization_code'));
-
+        
         abort_if($authorization->hasBeenUsedForWorkspace(), 403);
 
         $workspace = Workspace::create([

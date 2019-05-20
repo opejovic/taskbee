@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Billing\FakeSubscriptionGateway;
+use App\Models\Bundle;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Subscription;
@@ -17,9 +18,13 @@ class PlanTest extends TestCase
 	/** @test */
 	function plan_can_be_purchased()
 	{
-		$plan = factory(Plan::class)->create(['amount' => 3500]);
+		$plan = factory(Plan::class)->create([
+			'amount' => 3500,
+			'product' => factory(Bundle::class)->create()->stripe_id, 
+		]);
 		$subGateway = new FakeSubscriptionGateway;
 		$token = $subGateway->getValidTestToken();
+
 		$subscription = $plan->purchase('john@example.com', $token, $subGateway);
 
 		$this->assertCount(1, Subscription::all());

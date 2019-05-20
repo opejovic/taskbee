@@ -8,12 +8,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ViewWorkspaceBundlesTest extends TestCase
+class ViewSubscriptionPlans extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    function customers_can_view_available_workspace_bundles()
+    function customers_can_view_available_subscription_plans()
     {
         $this->withoutExceptionHandling();
         $basicBundle = factory(Bundle::class)->states('basic')->create(['stripe_id' => 'prod_BSCID123']);

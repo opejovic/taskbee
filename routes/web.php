@@ -22,4 +22,7 @@ Route::post('/workspace-setup/admin', 'AccountSetup\AdminsController@store')->na
 Route::post('/workspace-setup/workspace', 'AccountSetup\WorkspacesController@store')->name('store-workspace');
 Route::post('/workspace-setup/{workspace}/members', 'AccountSetup\InviteMembersController@store')->name('invite-members');
 
-Route::get('/workspaces/{workspace}', 'WorkspaceController@show')->name('workspaces.show');
+Route::get('/workspaces/{workspace}', 'WorkspacesController@show')->name('workspaces.show')->middleware('auth');
+
+Route::get('/invitations/{code}', 'InvitationsController@show')->name('invitations.show');
+Route::post('/register', 'Auth\RegisterController@register')->name('register');

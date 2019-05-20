@@ -34,9 +34,10 @@ class InitialWorkspaceSetupProcessTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('workspace-setup.create-admin');
 
-        $setupAuthorization->update(['admin_id' => 1]);
+        $admin = factory(User::class)->create(['role' => User::ADMIN]);
+        $setupAuthorization->update(['admin_id' => $admin->id]);
 
-        $response = $this->get("/workspace-setup/SAMPLEAUTHORIZATIONCODE123");
+        $response = $this->actingAs($admin)->get("/workspace-setup/SAMPLEAUTHORIZATIONCODE123");
         $response->assertStatus(200);
         $response->assertViewIs('workspace-setup.create-workspace');
 
@@ -44,7 +45,7 @@ class InitialWorkspaceSetupProcessTest extends TestCase
             'workspace_id' => 1,
         ]);
 
-        $response = $this->get("/workspace-setup/SAMPLEAUTHORIZATIONCODE123");
+        $response = $this->actingAs($admin)->get("/workspace-setup/SAMPLEAUTHORIZATIONCODE123");
         $response->assertStatus(200);
         $response->assertViewIs('workspace-setup.invite-members');
 
@@ -53,7 +54,7 @@ class InitialWorkspaceSetupProcessTest extends TestCase
             'members_limit' => 5,
         ]);
 
-        $response = $this->get("/workspace-setup/SAMPLEAUTHORIZATIONCODE123");
+        $response = $this->actingAs($admin)->get("/workspace-setup/SAMPLEAUTHORIZATIONCODE123");
         $response->assertStatus(404);
     }
 
@@ -113,6 +114,7 @@ class InitialWorkspaceSetupProcessTest extends TestCase
     /** @test */
     function customer_is_authorized_to_set_up_his_workspace_after_a_successful_account_setup()
     {
+        $this->withoutExceptionHandling();
         $admin = factory(User::class)->create(['role' => User::ADMIN]);
 
         $setupAuthorization = factory(WorkspaceSetupAuthorization::class)->create([
@@ -129,8 +131,9 @@ class InitialWorkspaceSetupProcessTest extends TestCase
             ->assertViewIs('workspace-setup.create-workspace');
 
         $response = $this->actingAs($admin)->from("/workspace-setup/SAMPLEAUTHORIZATIONCODE123")
-            ->json('POST', '/workspace-setup/SAMPLEAUTHORIZATIONCODE123/workspace', [
+            ->json('POST', '/workspace-setup/workspace', [
                 'name' => 'Sample Workspace Name',
+                'authorization_code' => $setupAuthorization->code,
             ]);
 
         $this->assertCount(1, Workspace::all());
@@ -168,10 +171,11 @@ class InitialWorkspaceSetupProcessTest extends TestCase
             ->assertViewIs('workspace-setup.invite-members');
 
         $response = $this->actingAs($admin)->from("/workspace-setup/SAMPLEAUTHORIZATIONCODE123")
-            ->json('POST', "/workspace-setup/SAMPLEAUTHORIZATIONCODE123/{$workspace->id}/members", [
+            ->json('POST', "/workspace-setup/{$workspace->id}/members", [
                 'first_name' => 'Jackie',
                 'last_name' => 'Doe',
                 'email' => 'jackie@example.com',
+                'authorization_code' => $setupAuthorization->code,
             ]);
 
         $invitation = Invitation::first();
