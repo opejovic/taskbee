@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Mail\SubscriptionPurchaseEmail;
+use App\Mail\InvitationEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 
@@ -16,12 +16,22 @@ class Invitation extends Model
     protected $guarded = [];
 
     /**
-     * Send the SubscriptionPurchaseEmail to the user that purchased subscription.
+     * Send the invitation email.
      *
      * @return void
      */
-    public function send($subscription)
+    public function send()
     {
-        Mail::to($this->email)->queue(new SubscriptionPurchaseEmail($subscription, $this));
+        Mail::to($this->email)->queue(new InvitationEmail($this));
+    }
+
+    /**
+     * Invitation belongs to Workspace
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class);
     }
 }

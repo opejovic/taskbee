@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubscriptionGateway::class, StripeSubscriptionGateway::class);
 
         $this->app->bind(AuthorizationCodeGenerator::class, RandomNumberGenerator::class);
+        $this->app->bind(InvitationCodeGenerator::class, RandomNumberGenerator::class);
     }
 
     /**

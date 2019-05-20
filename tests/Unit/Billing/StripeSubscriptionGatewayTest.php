@@ -8,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/** 
+* @group integration
+*/
 class StripeSubscriptionGatewayTest extends TestCase
 {
 	use RefreshDatabase;

@@ -11,7 +11,7 @@ $factory->define(Subscription::class, function (Faker $faker) {
     return [
         'stripe_id' => 'sub_FAKESTRIPEID123',
         'bundle_id' => function () use ($bundle) { 
-        	return $bundle->id; 
+        	return $bundle->stripe_id; // this could make our tests fail
         },
         'bundle_name' => $bundle->name,
         'customer' => 1,

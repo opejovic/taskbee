@@ -35,6 +35,7 @@ class SendSubscriptionPurchasedEmail
             'code' => AuthorizationCode::generate(),
             'subscription_id'=> $event->subscription->id,
             'plan_id'=> $event->subscription->plan_id,
+            'members_limit' => $event->subscription->bundle->members_limit,
         ])->send($event->subscription);
     }
 }

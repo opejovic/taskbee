@@ -59,4 +59,14 @@ class Subscription extends Model
             'expires_at' => $this->expires_at->format('Y-m-d'),
         ];
     }
+
+    /**
+     * Subscription belongs to Bundle
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function bundle()
+    {
+        return $this->belongsTo(Bundle::class, 'bundle_id', 'stripe_id');
+    }
 }

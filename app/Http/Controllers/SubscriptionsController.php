@@ -42,7 +42,7 @@ class SubscriptionsController extends Controller
                 request('payment_token'), 
                 $this->subscriptionGateway
             );
-
+            
 	    	return response($subscription, 201);
     	} catch (PaymentFailedException $e) {
     		return response([], 422);

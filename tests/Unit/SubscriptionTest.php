@@ -61,4 +61,12 @@ class SubscriptionTest extends TestCase
 
 	    $this->assertTrue($subscription->invitation->is($invitation));
 	}
+
+	/** @test */
+	function it_belongs_to_a_bundle()
+	{
+	    $subscription = factory(Subscription::class)->create();
+	    $this->assertInstanceOf('App\Models\Bundle', $subscription->bundle);
+	    
+	}
 }
