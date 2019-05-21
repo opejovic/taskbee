@@ -5,7 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Invite members to your workspace, {{ auth()->user()->first_name }} san.</div>
+                <div class="card-header">Invite members to your workspace, {{ auth()->user()->first_name }} san.
+                    <small class="form-text text-muted">You can invite up to {{ $authorization->members_limit }} members. ({{ $authorization->members_limit - $authorization->members_invited  }} remaining)</small></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('invite-members', $authorization->workspace_id) }}">

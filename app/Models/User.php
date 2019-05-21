@@ -52,4 +52,36 @@ class User extends Authenticatable
     {
         return $this->id == $workspace->created_by;
     }
+
+    /**
+     * User has many tasks assigned to him.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'user_responsible');
+    }
+
+    /**
+     * User created many tasks.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function tasksCreated()
+    {
+        return $this->hasMany(Task::class, 'created_by');
+    }
+
+    /**
+     * User belongs to Workspace
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class);
+    }
+
+
 }

@@ -52,7 +52,10 @@ class WorkspacesController extends Controller
         abort_unless(Auth::user()->workspace_id == $workspace->id 
             || Auth::user()->owns($workspace), 404);
 
-        return view('workspaces.show', ['workspace' => $workspace]);
+        return view('workspaces.show', [
+            'workspace' => $workspace,
+            'tasks' => $workspace->tasks
+        ]);
     }
 
     /**

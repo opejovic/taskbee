@@ -19,8 +19,6 @@ class CreateWorkspaceSetupAuthorizationsTable extends Migration
             $table->unsignedInteger('workspace_id')->nullable();
             $table->unsignedInteger('members_invited')->nullable();
             $table->unsignedInteger('members_limit')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
             $table->string('email');
             $table->string('user_role');
             $table->string('code');

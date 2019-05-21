@@ -13,8 +13,43 @@ class Workspace extends Model
      */
     protected $guarded = [];
 
+    /**
+     * Workspace belongs to Creator
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get all workspace members including the workspace creator.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     public function members()
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * Get all workspace members including the workspace creator.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function allMembers()
+    {
+        return $this->members->push($this->creator)->unique()->sortBy('first_name');
+    }
+
+    /**
+     * Workspace has many tasks.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
     }
 }
