@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AccountSetup;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\WorkspaceSetupAuthorization;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,7 @@ class AdminsController extends Controller
             'email' => request('email'),
             'password' => Hash::make(request('password')),
             'role' => User::ADMIN,
+            'email_verified_at' => Carbon::now(),
     	]);
 
     	$authorization->update([

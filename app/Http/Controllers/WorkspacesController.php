@@ -47,9 +47,10 @@ class WorkspacesController extends Controller
      */
     public function show($id)
     {
-        $workspace = Workspace::find($id)->firstOrFail();
+        $workspace = Workspace::findOrFail($id);
 
-        abort_if(Auth::user()->workspace_id !== $workspace->id, 404);
+        abort_unless(Auth::user()->workspace_id == $workspace->id 
+            || Auth::user()->owns($workspace), 404);
 
         return view('workspaces.show', ['workspace' => $workspace]);
     }

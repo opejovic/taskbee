@@ -41,4 +41,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Does user owns a workspace?
+     *
+     * @param $workspace
+     * @return bool
+     */
+    public function owns($workspace)
+    {
+        return $this->id == $workspace->created_by;
+    }
 }
