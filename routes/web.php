@@ -24,12 +24,12 @@ Route::group(['prefix' => 'workspace-setup', 'namespace' => 'AccountSetup'], fun
 	Route::post('{workspace}/members', 'InviteMembersController@store')->name('invite-members')->middleware('auth');
 });
 
-Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
+Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show')->middleware('guest');
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
-	Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create');
+	Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
 	Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
 	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy');
 });

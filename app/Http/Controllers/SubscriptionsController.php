@@ -6,6 +6,7 @@ use App\Billing\PaymentFailedException;
 use App\Billing\SubscriptionGateway;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -43,7 +44,7 @@ class SubscriptionsController extends Controller
                 $this->subscriptionGateway
             );
             
-	    	return response($subscription, 201);
+            return response($subscription, 201);
     	} catch (PaymentFailedException $e) {
     		return response([], 422);
     	}

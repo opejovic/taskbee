@@ -26,7 +26,7 @@
 
                         <fieldset class="form-group">
                             <label for="start_date">Start date</label>
-                            <input type="date" name="start_date" class="form-control" id="start_date" placeholder="Start date">
+                            <input type="date" name="start_date" class="form-control" id="start_date" placeholder="Start date" value="{{ now()->format('Y-m-d') }}">
                         </fieldset>
 
                         <fieldset class="form-group">

@@ -46,9 +46,6 @@ class StripeSubscriptionGatewayTest extends TestCase
 		}
 
 		$this->fail("Customer created even though the token provided was invalid!");
-	    
-
-	    // $this->assertTrue(Customer::first()->is($customer));
 	}
 
 	/** @test */
@@ -56,8 +53,8 @@ class StripeSubscriptionGatewayTest extends TestCase
 	{
 		// since this uses RefreshDatabase, it wont persist a customer to db table, 
 		// and the check for the existing customer in our local db will always return false.. 
-		//(So if we have a customer with email Jonh@example.com in our stripe customers, 
-		// running this test will create another customer with John@example.com email. 
+		//(So if we have a customer with email jonh@example.com in our stripe customers, 
+		// running this test will create another customer with john@example.com email. 
 		// But in production this will work.)
 
 	    $customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
@@ -77,7 +74,7 @@ class StripeSubscriptionGatewayTest extends TestCase
 	{
 	    $customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
 
-	    // Bundles and plans are created when the app admin runs the artisan command bundle-generate in terminal.
+	    // Bundles and plans are created when the app admin runs the artisan command generate-bundles.
 	    $bundle = $this->createBundle();
 	    $plan = $this->createPlanFor($bundle);
 

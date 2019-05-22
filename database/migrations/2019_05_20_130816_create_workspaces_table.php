@@ -19,7 +19,7 @@ class CreateWorkspacesTable extends Migration
             $table->unsignedInteger('created_by')->foreign();
             $table->unsignedInteger('members_invited')->nullable();
             $table->unsignedInteger('members_limit')->nullable();
-            $table->string('subscription_id');
+            $table->unsignedInteger('subscription_id');
             $table->timestamps();
         });
     }

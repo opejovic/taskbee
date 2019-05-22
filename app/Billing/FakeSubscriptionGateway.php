@@ -20,6 +20,20 @@ class FakeSubscriptionGateway implements SubscriptionGateway
 	}
 
 	/**
+	 * Create a customer and a subscription for that customer.
+	 *
+	 * @param $email
+	 * @param $token
+	 * @param App\Models\Plan $plan
+	 * @return array
+	 */
+	public function subscribe($email, $token, $plan)
+	{
+		$customer = $this->createCustomer($email, $token);
+		return $this->createSubscriptionFor($customer, $plan);
+	}
+
+	/**
 	 * Create a customer.
 	 *
 	 * @param $email
@@ -65,19 +79,5 @@ class FakeSubscriptionGateway implements SubscriptionGateway
 			'start_date' => Carbon::now(),
 			'expires_at' => Carbon::now()->addMonth(),
 		];
-	}
-
-	/**
-	 * Create a customer and a subscription for that customer.
-	 *
-	 * @param $email
-	 * @param $token
-	 * @param App\Models\Plan $plan
-	 * @return array
-	 */
-	public function subscribe($email, $token, $plan)
-	{
-		$customer = $this->createCustomer($email, $token);
-		return $this->createSubscriptionFor($customer, $plan);
 	}
 }

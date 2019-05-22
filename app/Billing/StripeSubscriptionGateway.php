@@ -22,6 +22,20 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	}
 
 	/**
+	 * Create a stripe customer and a subscription for that customer.
+	 *
+	 * @param $email
+	 * @param $token
+	 * @param App\Models\Plan $plan
+	 * @return \Stripe\Subscription
+	 */
+	public function subscribe($email, $token, $plan)
+	{
+		$customer = $this->createCustomer($email, $token);
+		return $this->createSubscriptionFor($customer, $plan);
+	}
+	
+	/**
 	 * Create a stripe customer and store it in the database.
 	 *
 	 * @param $email
@@ -72,19 +86,5 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 				],
 			]
 		], ['api_key' => $this->apiKey]);
-	}
-
-	/**
-	 * Create a stripe customer and a subscription for that customer.
-	 *
-	 * @param $email
-	 * @param $token
-	 * @param App\Models\Plan $plan
-	 * @return \Stripe\Subscription
-	 */
-	public function subscribe($email, $token, $plan)
-	{
-		$customer = $this->createCustomer($email, $token);
-		return $this->createSubscriptionFor($customer, $plan);
 	}
 }

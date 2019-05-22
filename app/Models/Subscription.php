@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\SubscriptionExpiredException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -67,6 +68,16 @@ class Subscription extends Model
      */
     public function bundle()
     {
-        return $this->belongsTo(Bundle::class, 'bundle_id', 'stripe_id');
+       return $this->belongsTo(Bundle::class, 'bundle_id', 'stripe_id');
+    }
+
+    /**
+     * Has subscription expired?
+     *
+     * @return bool
+     */
+    public function isExpired()
+    {
+        return now()->greaterThan($this->expires_at);
     }
 }

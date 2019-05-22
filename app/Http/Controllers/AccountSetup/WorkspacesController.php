@@ -27,7 +27,7 @@ class WorkspacesController extends Controller
         	'created_by' => Auth::user()->id,
         	'members_invited' => $authorization->members_invited,
         	'members_limit' => $authorization->members_limit,
-        	'subscription_id' => $authorization->plan_id,
+        	'subscription_id' => $authorization->subscription_id,
         ]);
 
         $authorization->update([

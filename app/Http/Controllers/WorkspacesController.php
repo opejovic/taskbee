@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\SubscriptionExpiredException;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,17 +46,17 @@ class WorkspacesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Workspace $workspace)
     {
-        $workspace = Workspace::findOrFail($id);
-
-        abort_unless(Auth::user()->workspace_id == $workspace->id 
-            || Auth::user()->owns($workspace), 404);
-
-        return view('workspaces.show', [
-            'workspace' => $workspace,
-            'tasks' => $workspace->tasks
-        ]);
+        try {
+            $this->authorize('update', $workspace);
+            return view('workspaces.show', [
+                'workspace' => $workspace,
+                'tasks' => $workspace->tasks
+            ]);    
+        } catch (SubscriptionExpiredException $e) {
+            return response("Subscription exipred. Please renew your subscription.", 423);
+        }
     }
 
     /**
@@ -89,6 +90,6 @@ class WorkspacesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // 
     }
 }

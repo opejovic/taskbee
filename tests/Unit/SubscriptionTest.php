@@ -69,4 +69,12 @@ class SubscriptionTest extends TestCase
 	    $this->assertInstanceOf('App\Models\Bundle', $subscription->bundle);
 	    
 	}
+
+	/** @test */
+	function it_knows_if_its_expired()
+	{
+	    $subscription = factory(Subscription::class)->states('expired')->create();
+
+	    $this->assertTrue($subscription->isExpired());
+	}
 }

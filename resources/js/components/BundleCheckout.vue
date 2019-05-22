@@ -63,7 +63,7 @@
                     payment_token: token.id,
                 }).then(response => {
                     console.log(response);
-                    // window.location = `/orders/${response.data.confirmation_number}`
+                    // window.location = `/workspace-setup/${response.data[1]}`
                 }).catch(response => {
                     this.processing = false
                 })

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Subscription;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
@@ -17,9 +18,23 @@ class CreateTasksTest extends TestCase
     /** @test */
     function unauthenticated_users_cannot_create_new_tasks()
     {
-        $this->post("/tasks", [])->assertRedirect('login');
+        $this->post("workspaces/1/tasks", [])->assertRedirect('login');
     }
 
+    /** @test */
+    function workspace_is_locked_and_tasks_cannot_be_created_if_subscription_is_expired()
+    {
+        $subscription = factory(Subscription::class)->states('expired')->create();
+        $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->id]);
+        $user = factory(User::class)->create(['workspace_id' => $workspace->id]);
+        $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/tasks/create");
+
+        $response->assertStatus(423); // locked
+        $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
+
+        $this->actingAs($user)->post("/workspaces/{$workspace->id}/tasks")->assertStatus(423);
+        $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
+    }
 
     /** @test */
     function team_members_can_assign_new_tasks_to_other_members()
@@ -56,6 +71,7 @@ class CreateTasksTest extends TestCase
         $johnsTask = factory(Task::class)->create([
             'created_by' => $john->id,
             'user_responsible' => $john->id,
+            'workspace_id' => $workspace->id
         ]);
 
         $this->assertCount(1, Task::all());

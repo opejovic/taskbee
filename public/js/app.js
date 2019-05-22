@@ -1827,7 +1827,7 @@ __webpack_require__.r(__webpack_exports__);
         email: token.email,
         payment_token: token.id
       }).then(function (response) {
-        console.log(response); // window.location = `/orders/${response.data.confirmation_number}`
+        console.log(response); // window.location = `/workspace-setup/${response.data[1]}`
       })["catch"](function (response) {
         _this.processing = false;
       });

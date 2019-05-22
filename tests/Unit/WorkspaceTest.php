@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Subscription;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
@@ -53,5 +54,14 @@ class WorkspaceTest extends TestCase
 	    $this->assertTrue($workspace->tasks->contains($taskOne));
 	    $this->assertTrue($workspace->tasks->contains($taskTwo));
 	    $this->assertFalse($workspace->tasks->contains($otherWorkspaceTask));
+	}
+
+	/** @test */
+	function it_has_a_subscription()
+	{
+		$subscription = factory(Subscription::class)->create();
+	    $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->id]);
+
+	    $this->assertTrue($workspace->subscription->is($subscription));
 	}
 }

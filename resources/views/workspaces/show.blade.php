@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="flex row justify-content-left">
+        <div class="text-center mb-2">
+            <a class="btn btn-primary" href="{{ route('tasks.create', $workspace) }}">{{ __('Add a task') }}</a>
+        </div>
         <div class="col-md-8">
-            
-            @foreach ($workspace->tasks as $task)
+            @forelse ($workspace->tasks as $task)
                 <div class="card">
                     <div class="card-header">Workspace name</div>
 
@@ -18,8 +20,9 @@
                     </div>
                 </div>
             <br>
-            @endforeach
-
+            @empty
+                <p>Sorry, there are no tasks created yet.</p>
+            @endforelse
         </div>
     </div>
 </div>

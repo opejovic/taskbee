@@ -27,7 +27,9 @@
                             <small id="emailHelp" class="form-text text-muted">We'll never share this email with anyone else.</small>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Invite</button>
+                        <a class="btn btn-secondary" href="{{ route('workspaces.show', $authorization->workspace_id) }}">Finish</a>
+                        
                     </form>
                 </div>
             </div>

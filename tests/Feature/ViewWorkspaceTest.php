@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\SubscriptionExpiredException;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,6 +18,18 @@ class ViewWorkspaceTest extends TestCase
     function guests_cannot_see_any_workspace_details()
     {
         $this->get("/workspaces/1")->assertRedirect('login');
+    }
+
+    /** @test */
+    function workspace_is_locked_and_cannot_be_viewed_if_the_subscription_is_expired()
+    {
+        $subscription = factory(Subscription::class)->states('expired')->create();
+        $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->id]);
+        $user = factory(User::class)->create(['workspace_id' => $workspace->id]);
+        $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}");
+
+        $response->assertStatus(423); // locked
+        $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
     }
 
     /** @test */

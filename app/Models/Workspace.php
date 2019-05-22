@@ -52,4 +52,14 @@ class Workspace extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    /**
+     * Workspace belongs to Subscription
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 }

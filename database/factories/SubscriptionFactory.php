@@ -24,3 +24,8 @@ $factory->define(Subscription::class, function (Faker $faker) {
         'expires_at' => Carbon::now()->addMonth(),
     ];
 });
+
+$factory->state(Subscription::class, 'expired', [
+    'start_date' => now()->subMonth(),
+    'expires_at' => now()->subDay(),
+]);
