@@ -87,5 +87,4 @@ class WorkspaceSetupAuthorization extends Model
     {
         return $this->members_invited >= $this->members_limit;
     }
-
 }

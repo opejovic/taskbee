@@ -77,7 +77,6 @@ class InitialWorkspaceSetupProcessTest extends TestCase
     /** @test */
     function customer_is_authorized_to_set_up_his_account_after_a_successful_subscription_purchase()
     {
-        $this->withoutExceptionHandling();
         $setupAuthorization = factory(WorkspaceSetupAuthorization::class)->create([
             'admin_id' => null,
             'workspace_id' => null,
@@ -175,14 +174,13 @@ class InitialWorkspaceSetupProcessTest extends TestCase
                 'first_name' => 'Jackie',
                 'last_name' => 'Doe',
                 'email' => 'jackie@example.com',
-                'authorization_code' => $setupAuthorization->code,
+                'authorization_code' => 'SAMPLEAUTHORIZATIONCODE123',
             ]);
 
         $invitation = Invitation::first();
         $this->assertNotNull($invitation);
         $this->assertEquals('jackie@example.com', $invitation->email);
         
-
         Mail::assertQueued(InvitationEmail::class, function ($mail) use ($invitation) {
             return $mail->hasTo('jackie@example.com') 
                 && $mail->invitation->is($invitation);

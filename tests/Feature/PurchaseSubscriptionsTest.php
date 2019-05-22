@@ -32,10 +32,11 @@ class PurchaseSubscriptionsTest extends TestCase
         ]);
     }
 
+    // TODO: Let the users chose if they want to be charged automatically or pay via invoice
+
     /** @test */
     function customer_can_subscribe_to_a_bundle_with_valid_token()
     {
-        $this->withoutExceptionHandling();
         Mail::fake();
         AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 

@@ -30,6 +30,6 @@ class InvitationEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails/invitation-email')->subject("You're invited to join TaskMonkey");
+        return $this->markdown('emails.invitation-email')->subject("You're invited to join TaskMonkey");
     }
 }

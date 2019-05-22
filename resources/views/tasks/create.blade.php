@@ -26,12 +26,20 @@
 
                         <fieldset class="form-group">
                             <label for="start_date">Start date</label>
-                            <input type="date" name="start_date" class="form-control" id="start_date" placeholder="Start date" value="{{ now()->format('Y-m-d') }}">
+                            <input type="date" 
+                                   name="start_date" 
+                                   class="form-control" 
+                                   id="start_date" 
+                                   placeholder="Start date">
                         </fieldset>
 
                         <fieldset class="form-group">
                             <label for="finish_date">Finish date</label>
-                            <input type="date" name="finish_date" class="form-control" id="finish_date" placeholder="Finish date">
+                            <input type="date" 
+                                   name="finish_date"
+                                   class="form-control" 
+                                   id="finish_date" 
+                                   placeholder="Finish date">
                         </fieldset>
 
                         <fieldset class="form-group">

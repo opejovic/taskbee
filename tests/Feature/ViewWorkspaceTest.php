@@ -59,6 +59,6 @@ class ViewWorkspaceTest extends TestCase
         
         $response = $this->actingAs($member)->get("/workspaces/{$workspace->id}");
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
     }
 }

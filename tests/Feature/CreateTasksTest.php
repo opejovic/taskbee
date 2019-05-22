@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Mail\TaskCreatedEmail;
 use App\Models\Subscription;
 use App\Models\Task;
 use App\Models\User;
@@ -9,11 +10,14 @@ use App\Models\Workspace;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class CreateTasksTest extends TestCase
 {
     use RefreshDatabase;
+
+    // todo: 8. Every team member can also change any task attribute or edit the name etc.
 
     /** @test */
     function unauthenticated_users_cannot_create_new_tasks()
@@ -39,6 +43,8 @@ class CreateTasksTest extends TestCase
     /** @test */
     function team_members_can_assign_new_tasks_to_other_members()
     {
+        Mail::fake();
+
         $workspace = factory(Workspace::class)->create();
         $taskCreator = factory(User::class)->states('member')->create(['workspace_id' => $workspace->id]);
         $member = factory(User::class)->states('member')->create(['workspace_id' => $workspace->id]);
@@ -47,19 +53,24 @@ class CreateTasksTest extends TestCase
         $response = $this->actingAs($taskCreator)
             ->json('POST', "workspaces/{$workspace->id}/tasks", 
                 [
-                    'name'               => 'Create a YoY sales report for vaccuum cleaners.',
+                    'name'               => 'Create a YoY sales report.',
                     'user_responsible'   => $member->id,
-                    'start_date'         => Carbon::now(),
-                    'finish_date'        => Carbon::now()->addWeek(),
+                    'start_date'         => '2019-05-12',
+                    'finish_date'        => '2019-05-25',
                     'status'             => Task::PLANNED,
                 ]
             );
 
         $response->assertStatus(201);
         $this->assertCount(1, Task::all());
-        $task = $member->tasks()->where('name', 'Create a YoY sales report for vaccuum cleaners.')->first();
+        $task = $member->tasks()->where('name', 'Create a YoY sales report.')->first();
         $this->assertNotNull($task);
         $this->assertTrue($taskCreator->tasksCreated()->first()->is($task));
+
+        Mail::assertQueued(TaskCreatedEmail::class, function ($mail) use ($task, $member) {
+            return $mail->hasTo($member->email) 
+                && $mail->task->is($task);
+        });
     }
 
     /** @test */
@@ -79,6 +90,4 @@ class CreateTasksTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(0, $john->tasks);
     }
-
-    // todo: 8. Every team member can also change any task attribute or edit the name etc.
 }

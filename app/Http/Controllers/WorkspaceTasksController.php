@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\SubscriptionExpiredException;
+use App\Mail\TaskCreatedEmail;
 use App\Models\Task;
 use App\Models\Workspace;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class WorkspaceTasksController extends Controller
 {
@@ -41,8 +44,8 @@ class WorkspaceTasksController extends Controller
     {
         try {
             $this->authorize('update', $workspace);
-            
-            $task = Task::create([
+
+            Task::create([
                 'created_by' => Auth::user()->id,
                 'workspace_id' => $workspace->id,
                 'name' => request('name'),
@@ -51,6 +54,8 @@ class WorkspaceTasksController extends Controller
                 'finish_date' => request('finish_date'),
                 'status' => request('status'),
             ]);
+
+            Mail::to($task->assignee->email)->queue(new TaskCreatedEmail($task));
 
             if (request()->wantsJson()) {
                 return response([], 201);

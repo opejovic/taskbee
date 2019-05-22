@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Workspace;
 use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

@@ -7,22 +7,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SubscriptionPurchasedEmail extends Mailable
+class TaskCreatedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subscription;
-    public $setupAuthorization;
+    public $task;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($subscription, $setupAuthorization)
+    public function __construct($task)
     {
-        $this->subscription = $subscription;
-        $this->setupAuthorization = $setupAuthorization;
+        $this->task = $task;
     }
 
     /**
@@ -32,7 +30,6 @@ class SubscriptionPurchasedEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.subscription-purchased')
-            ->subject("Successful subscription at TaskMonkey!");
+        return $this->markdown('emails.task-created');
     }
 }

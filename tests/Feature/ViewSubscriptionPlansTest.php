@@ -15,7 +15,6 @@ class ViewSubscriptionPlans extends TestCase
     /** @test */
     function customers_can_view_available_subscription_plans()
     {
-        $this->withoutExceptionHandling();
         $basicBundle = factory(Bundle::class)->states('basic')->create(['stripe_id' => 'prod_BSCID123']);
         $advancedBundle = factory(Bundle::class)->states('advanced')->create(['stripe_id' => 'prod_ADVID123']);
         $proBundle = factory(Bundle::class)->states('pro')->create(['stripe_id' => 'prod_PROID123']);
@@ -24,10 +23,8 @@ class ViewSubscriptionPlans extends TestCase
         $advancedPlan = factory(Plan::class)->states('advanced')->create(['product' => $advancedBundle->stripe_id]);
         $proPlan = factory(Plan::class)->states('pro')->create(['product' => $proBundle->stripe_id]);
 
-        // Act: Customer visits the workspace bundles page.
         $response = $this->get('/bundles');
 
-        // Assert: Customer can see the workspace bundles and the details of each bundle.
         $response->assertStatus(200);
         $response->assertViewIs('subscription-plans.index');
 
