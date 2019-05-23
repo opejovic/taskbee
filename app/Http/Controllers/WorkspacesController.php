@@ -50,10 +50,7 @@ class WorkspacesController extends Controller
     {
         try {
             $this->authorize('update', $workspace);
-            return view('workspaces.show', [
-                'workspace' => $workspace,
-                'tasks' => $workspace->tasks
-            ]);    
+            return view('workspaces.show', ['workspace' => $workspace]);    
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription exipred. Please renew your subscription.", 423);
         }

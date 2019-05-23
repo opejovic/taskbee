@@ -19,10 +19,10 @@ class CreateWorkspaceSetupAuthorizationsTable extends Migration
             $table->unsignedInteger('workspace_id')->nullable();
             $table->unsignedInteger('members_invited')->nullable();
             $table->unsignedInteger('members_limit')->nullable();
+            $table->unsignedInteger('subscription_id');
             $table->string('email');
             $table->string('user_role');
             $table->string('code');
-            $table->string('subscription_id');
             $table->string('plan_id');
             $table->timestamps();
         });

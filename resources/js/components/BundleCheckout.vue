@@ -5,8 +5,15 @@
            :class="{ 'btn-loading': processing }"
            :disabled="processing"
            >
-           Purchase bundle
+            <span class="spinner-border spinner-border-sm" 
+                role="status" 
+                aria-hidden="true" 
+                v-show="processing"
+                >
+            </span>
+            <span v-text="state"></span>
         </button>
+
     </div>
 </template>
 
@@ -17,10 +24,19 @@
             return {
                 stripeHandler: null,
                 processing: false,
+                spinning: false,
             }
         },
 
         computed: {
+            state() {
+                if (this.processing) {
+                    return 'Processing...';
+                }
+
+                return 'Purchase bundle';
+            },
+
             description() {
                 return `Purchase ${this.plan.name} bundle.`
             },
@@ -62,8 +78,7 @@
                     email: token.email,
                     payment_token: token.id,
                 }).then(response => {
-                    console.log(response);
-                    // window.location = `/workspace-setup/${response.data[1]}`
+                    window.location = `/workspace-setup/${response.data[1]}`
                 }).catch(response => {
                     this.processing = false
                 })

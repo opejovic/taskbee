@@ -75,6 +75,6 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('workspaces.show', $user->workspace_id));
+        return redirect(route('tasks.index', $user->workspace_id));
     }
 }

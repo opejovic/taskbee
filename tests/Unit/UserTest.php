@@ -47,4 +47,15 @@ class UserTest extends TestCase
 
 	    $this->assertTrue($user->workspace->is($workspace));
 	}
+
+	/** @test */
+	function can_get_full_name()
+	{
+	    $user = factory(User::class)->create([
+	    	'first_name' => 'Dane',
+	    	'last_name' => 'Boghart',
+	    ]);
+	 
+	 	$this->assertEquals('Dane Boghart', $user->full_name);   
+	}
 }

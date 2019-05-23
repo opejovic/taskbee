@@ -1775,15 +1775,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['plan'],
   data: function data() {
     return {
       stripeHandler: null,
-      processing: false
+      processing: false,
+      spinning: false
     };
   },
   computed: {
+    state: function state() {
+      if (this.processing) {
+        return 'Processing...';
+      }
+
+      return 'Purchase bundle';
+    },
     description: function description() {
       return "Purchase ".concat(this.plan.name, " bundle.");
     },
@@ -1827,7 +1842,7 @@ __webpack_require__.r(__webpack_exports__);
         email: token.email,
         payment_token: token.id
       }).then(function (response) {
-        console.log(response); // window.location = `/workspace-setup/${response.data[1]}`
+        window.location = "/workspace-setup/".concat(response.data[1]);
       })["catch"](function (response) {
         _this.processing = false;
       });
@@ -37148,7 +37163,22 @@ var render = function() {
         attrs: { disabled: _vm.processing },
         on: { click: _vm.openStripe }
       },
-      [_vm._v("\n       Purchase bundle\n    ")]
+      [
+        _c("span", {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.processing,
+              expression: "processing"
+            }
+          ],
+          staticClass: "spinner-border spinner-border-sm",
+          attrs: { role: "status", "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", { domProps: { textContent: _vm._s(_vm.state) } })
+      ]
     )
   ])
 }

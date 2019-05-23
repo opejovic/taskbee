@@ -1,16 +1,16 @@
 @component('mail::message')
-# Hello, {{ $task->assignee->first_name }},
+# Hello, {{ $task->assignee->first_name }}
 
-{{ $task->creator->first_name }} assigned you a new task.
+I have assigned you a new task.
 
-<strong>{{ $task->name }}</strong>
+Name: <strong>{{ $task->name }}</strong>
 
-Starting date of the task is <strong>{{ $task->formatted_start_date }}</strong>. It should be finished by <strong>{{ $task->formatted_finish_date }}</strong>
+Starting date of the task is <strong>{{ $task->formatted_start_date }}</strong><br>
+It should be finished by <strong>{{ $task->formatted_finish_date }}</strong>
 
 @component('mail::button', ['url' => ''])
 Check it out
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+{{ $task->creator->first_name }}, <strong>{{ $task->assignee->workspace->name }}</strong>.
 @endcomponent

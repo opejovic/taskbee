@@ -43,8 +43,12 @@ class SubscriptionsController extends Controller
                 request('payment_token'), 
                 $this->subscriptionGateway
             );
-            
-            return response($subscription, 201);
+
+            $authorization = WorkspaceSetupAuthorization::where(
+                'subscription_id', $subscription->id
+            )->first()->code;
+
+            return response([$subscription, $authorization], 201);
     	} catch (PaymentFailedException $e) {
     		return response([], 422);
     	}

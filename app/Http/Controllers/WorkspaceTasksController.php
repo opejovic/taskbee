@@ -14,6 +14,35 @@ use Illuminate\Support\Facades\Mail;
 class WorkspaceTasksController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Workspace $workspace)
+    {
+        try {
+            $this->authorize('update', $workspace);
+            
+            $tasks = $workspace->tasks;
+            
+            if (request()->has('my')) {
+                $tasks = $workspace->tasks()->where('user_responsible', Auth::user()->id)->get();
+            } 
+
+            if (request()->has('by')) {
+                $tasks = $workspace->tasks()->where('created_by', Auth::user()->id)->get();
+            } 
+
+            return view('tasks.index', [
+                'workspace' => $workspace,
+                'tasks' => $tasks
+            ]);
+        } catch (SubscriptionExpiredException $e) {
+            return response("Subscription exipred. Please renew your subscription.", 423);
+        }
+    }
+
+    /**
      * summary
      *
      * @return void
@@ -45,7 +74,7 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
 
-            Task::create([
+            $task = Task::create([
                 'created_by' => Auth::user()->id,
                 'workspace_id' => $workspace->id,
                 'name' => request('name'),
@@ -61,7 +90,7 @@ class WorkspaceTasksController extends Controller
                 return response([], 201);
             }
 
-            return redirect(route('workspaces.show', $workspace));
+            return redirect(route('tasks.index', $workspace));
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription exipred. Please renew your subscription.", 423);
         }

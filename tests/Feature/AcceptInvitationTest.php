@@ -68,6 +68,6 @@ class AcceptInvitationTest extends TestCase
         $this->assertTrue($invitation->fresh()->hasBeenUsed());
         $member = $workspace->members()->where('email', 'jae@example.com')->first();
         $this->assertNotNull($member);
-        $response->assertRedirect("/workspaces/{$workspace->id}");
+        $response->assertRedirect("/workspaces/{$workspace->id}/tasks");
     }
 }

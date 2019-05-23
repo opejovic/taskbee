@@ -49,7 +49,7 @@ class CreateTasksTest extends TestCase
         $taskCreator = factory(User::class)->states('member')->create(['workspace_id' => $workspace->id]);
         $member = factory(User::class)->states('member')->create(['workspace_id' => $workspace->id]);
         $this->assertCount(0, Task::all());
-        
+
         $response = $this->actingAs($taskCreator)
             ->json('POST', "workspaces/{$workspace->id}/tasks", 
                 [

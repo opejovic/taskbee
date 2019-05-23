@@ -14,8 +14,8 @@ Auth::routes();
 
 Route::get('home', 'HomeController@index')->name('home');
 
-Route::get('bundles', 'SubscriptionPlansController@index');
-Route::post('bundles/{plan}/purchase', 'SubscriptionsController@store');
+Route::get('bundles', 'SubscriptionPlansController@index')->middleware('guest');
+Route::post('bundles/{plan}/purchase', 'SubscriptionsController@store')->middleware('guest');
 
 Route::group(['prefix' => 'workspace-setup', 'namespace' => 'AccountSetup'], function () {
 	Route::get('{authorization}', 'InitialSetupController@show')->name('workspace-setup.show');
@@ -25,11 +25,12 @@ Route::group(['prefix' => 'workspace-setup', 'namespace' => 'AccountSetup'], fun
 });
 
 Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show')->middleware('guest');
-Route::post('register', 'Auth\RegisterController@register')->name('register');
+Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
+	Route::get('{workspace}/tasks', 'WorkspaceTasksController@index')->name('tasks.index');
 	Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
 	Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
-	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy');
+	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
 });
