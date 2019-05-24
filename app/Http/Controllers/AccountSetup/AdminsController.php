@@ -40,7 +40,6 @@ class AdminsController extends Controller
 
     	Auth::login($admin);
 
-    	// return redirect(route('workspace-setup.create-workspace', $authorization)); 
     	return back();
     }
 }

@@ -16,24 +16,26 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
                 {{-- Refactor this --}}
-                <li class="nav-item">
-                    <a class="nav-link" 
-                        href="/workspaces/{{ auth()->user()->workspace_id ?: App\Models\Workspace::where('created_by', auth()->user()->id)->first()->id }}/tasks">
-                        {{ __('All tasks') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" 
-                        href="/workspaces/{{ auth()->user()->workspace_id ?: App\Models\Workspace::where('created_by', auth()->user()->id)->first()->id }}/tasks?my">
-                        {{ __('My Tasks') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" 
-                        href="/workspaces/{{ auth()->user()->workspace_id ?: App\Models\Workspace::where('created_by', auth()->user()->id)->first()->id }}/tasks?by=me">
-                        {{ __('Tasks I have created') }}
-                    </a>
-                </li>
+                @auth
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks">
+                            {{ __('All tasks') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?my">
+                            {{ __('My Tasks') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?by=me">
+                            {{ __('Tasks I have created') }}
+                        </a>
+                    </li>
+                @endauth
 
                 <!-- Authentication Links -->
                 @guest
