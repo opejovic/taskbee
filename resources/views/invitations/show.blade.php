@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="/register">
+                    <form method="POST" action="{{ route('invitees.register') }}">
                         @csrf
                         
                         <input type="hidden" name="invitation_code" value="{{ $invitation->code }}">

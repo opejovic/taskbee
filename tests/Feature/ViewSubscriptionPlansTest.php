@@ -16,12 +16,12 @@ class ViewSubscriptionPlans extends TestCase
     function customers_can_view_available_subscription_plans()
     {
         $basicBundle = factory(Bundle::class)->states('basic')->create(['stripe_id' => 'prod_BSCID123']);
-        $advancedBundle = factory(Bundle::class)->states('advanced')->create(['stripe_id' => 'prod_ADVID123']);
-        $proBundle = factory(Bundle::class)->states('pro')->create(['stripe_id' => 'prod_PROID123']);
+        $advancedBundle = factory(Bundle::class)->states('standard')->create(['stripe_id' => 'prod_ADVID123']);
+        $proBundle = factory(Bundle::class)->states('premium')->create(['stripe_id' => 'prod_PROID123']);
 
         $basicPlan = factory(Plan::class)->states('basic')->create(['product' => $basicBundle->stripe_id]);
-        $advancedPlan = factory(Plan::class)->states('advanced')->create(['product' => $advancedBundle->stripe_id]);
-        $proPlan = factory(Plan::class)->states('pro')->create(['product' => $proBundle->stripe_id]);
+        $advancedPlan = factory(Plan::class)->states('standard')->create(['product' => $advancedBundle->stripe_id]);
+        $proPlan = factory(Plan::class)->states('premium')->create(['product' => $proBundle->stripe_id]);
 
         $response = $this->get('/bundles');
 

@@ -15,15 +15,6 @@ class Subscription extends Model
     protected $guarded = [];
     
     /**
-     * The event map for the model.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'created' => \App\Events\SubscriptionPurchased::class,
-    ];
-
-    /**
      * Get the invitation associated with the subscription.
      */
     public function invitation()

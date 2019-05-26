@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         factory(App\Models\Bundle::class)->states('basic')->create();
-        factory(App\Models\Bundle::class)->states('advanced')->create();
-        factory(App\Models\Bundle::class)->states('pro')->create();
+        factory(App\Models\Bundle::class)->states('standard')->create();
+        factory(App\Models\Bundle::class)->states('premium')->create();
     }
 }

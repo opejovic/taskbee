@@ -22,12 +22,13 @@ class CreateSubscriptionsTable extends Migration
             $table->string('email');
             $table->string('billing');
             $table->string('plan_id');
+            $table->string('plan_name')->nullable();
             $table->unsignedInteger('amount');
             $table->string('status');
-            $table->date('start_date');
-            $table->date('expires_at');
-            $table->date('cancelled_at')->nullable();
-            $table->date('ended_at')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
+            $table->timestamp('ended_at')->nullable();
             $table->timestamps();
         });
     }

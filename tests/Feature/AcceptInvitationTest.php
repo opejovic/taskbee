@@ -14,6 +14,17 @@ class AcceptInvitationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    function testing_json_decode()
+    {
+        $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
+        // $collect = collect($json);
+
+        // dd($collect);
+        dd($json->data->object->display_items[0]->plan->id);
+        // dd($json->data->object->display_items[0]->plan->active);
+    }
+
+    /** @test */
     function viewing_unused_invitations()
     {
         $invitation = factory(Invitation::class)->create([
@@ -57,11 +68,11 @@ class AcceptInvitationTest extends TestCase
             'workspace_id' => $workspace->id,
         ]);
 
-        $response = $this->json('POST', '/register', [
+        $response = $this->json('POST', '/register-invitees', [
             'first_name' => 'Jae',
             'last_name' => 'Sremmurd',
             'email' => 'jae@example.com',
-            'password' => Hash::make(request('password')),
+            'password' => 'password',
             'invitation_code' => $invitation->code,
         ]);
 

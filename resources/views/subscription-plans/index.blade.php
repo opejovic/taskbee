@@ -20,7 +20,12 @@
                 </div>
 
                 <div class="card-footer">
-                	<bundle-checkout :plan="{{ $plan }}"></bundle-checkout>
+                	{{-- <bundle-checkout :plan="{{ $plan }}"></bundle-checkout> --}}
+                    @auth
+                        <subscription-checkout :plan="{{ $plan }}"></subscription-checkout>
+                    @else
+                        <a href="">Sign in</a> or <a href="">Register</a> in order to purchase the bundle. 
+                    @endauth
                 </div>
             </div>
         </div>
@@ -30,5 +35,6 @@
 @endsection
 
 @push('beforeScripts')
-	<script src="https://checkout.stripe.com/checkout.js"></script>
+	{{-- <script src="https://checkout.stripe.com/checkout.js"></script> --}}
+    <script src="https://js.stripe.com/v3/"></script>
 @endpush

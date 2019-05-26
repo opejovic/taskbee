@@ -10,6 +10,7 @@ use App\Models\Bundle;
 use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\User;
 use App\Models\WorkspaceSetupAuthorization;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,21 +33,31 @@ class PurchaseSubscriptionsTest extends TestCase
         ]);
     }
 
-    // TODO: Let the users chose if they want to be charged automatically or pay via invoice
+    /** @test */
+    function guests_cannot_purchase_a_bundle_subscription()
+    {
+        $response = $this->json('POST', "bundles/{$this->plan->id}/checkout", [])->assertStatus(401);
+    }
 
     /** @test */
-    function customer_can_subscribe_to_a_bundle_with_valid_token()
+    function authenticated_users_can_are_subscribe_to_a_bundle_with_successful_purchase()
     {
+        // Work in progress
+        $this->withoutExceptionHandling();
         Mail::fake();
         AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 
-        $response = $this->json('POST', "/bundles/{$this->plan->id}/purchase", [
+        $user = factory(User::class)->create();
+
+        $plan = $this->SetupStripe();
+
+        $response = $this->actingAs($user)->json('POST', "/bundles/{$plan->id}/checkout", [
             'email' => 'jane@example.com',
-            'payment_token' => $this->subscriptionGateway->getValidTestToken(),
+            'tok' => $tok,
         ]);
         
-        $response->assertStatus(201);
-        $subscription = $this->plan->subscriptions()->where('email', 'jane@example.com')->first();
+        dd($response);
+        $subscription = $plan->subscriptions()->where('email', 'jane@example.com')->first();
         $this->assertNotNull($subscription);
         $this->assertEquals(2500, $subscription->amount);
         $this->assertEquals($subscription->expires_at, Carbon::now()->addMonth());
@@ -101,5 +112,34 @@ class PurchaseSubscriptionsTest extends TestCase
         $response->assertJsonValidationErrors('payment_token');
         $this->assertCount(0, Customer::all());
         $this->assertCount(0, Subscription::all());
+    }
+
+    private function setupStripe()
+    {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $basicBundle = \Stripe\Product::create([
+            "name" => 'Testing Workspace Bundle',
+            "type" => "service",
+            "metadata" => [
+                "members_limit" => 5,
+            ],
+        ]);
+
+        $basicPlan = \Stripe\Plan::create([
+            "amount" => 3995,
+            "interval" => "month",
+            "product" => $basicBundle['id'],
+            "currency" => "eur",
+        ]);
+
+        return Plan::create([
+            "name" => $basicPlan['nickname'],
+            "amount" => $basicPlan['amount'],
+            "interval" => "month",
+            "product" => $basicBundle['id'],
+            "currency" => "eur",
+            "stripe_id" => $basicPlan['id'],
+        ]);
     }
 }

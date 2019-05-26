@@ -33,7 +33,8 @@ class WorkspacesController extends Controller
         Auth::user()->update(['workspace_id' => $workspace->id]);
 
         $authorization->update([
-        	'workspace_id' => $workspace->id,
+        	'admin_id' => Auth::user()->id,
+            'workspace_id' => $workspace->id,
         ]);
 
         return back();

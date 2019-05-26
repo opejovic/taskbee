@@ -18,3 +18,12 @@ $factory->define(WorkspaceSetupAuthorization::class, function (Faker $faker) {
 		},
     ];
 });
+
+
+$factory->state(WorkspaceSetupAuthorization::class, 'used', [
+    'admin_id' => 1,
+    'workspace_id' => 1,
+    'members_invited' => 5,
+    'members_limit' => 5,
+    'code' => 'SAMPLEAUTHORIZATIONCODE123'
+]);

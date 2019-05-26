@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="flex row justify-content-between">
-        <div class="text-left mb-2">
+        <div class="text-center mb-2">
             <a class="btn btn-primary btn-lg" href="{{ route('tasks.create', $workspace) }}">
                 {{ __('Add task') }}
             </a>
@@ -32,7 +32,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <p>Sorry, no data to display.</p>
+                        <td>Sorry, there are no tasks created yet.</td>
                     </tr>
                 @endforelse
             </tbody>

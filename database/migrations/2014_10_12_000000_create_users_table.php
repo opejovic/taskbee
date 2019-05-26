@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('role');
+            $table->string('role')->nullable(); // this should be created as a morphTo (workspace_roles_table)
             $table->unsignedInteger('workspace_id')->nullable();
             $table->string('first_name');
             $table->string('last_name');

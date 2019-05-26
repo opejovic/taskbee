@@ -24,6 +24,17 @@ class StripeSubscriptionGatewayTest extends TestCase
 	/** @test */
 	function customer_is_created_if_a_valid_payment_token_is_provided()
 	{
+		dd(\Stripe\Checkout\Session::create([
+          'payment_method_types' => ['card'],
+          'subscription_data' => [
+            'items' => [[
+              'plan' => 'plan_F809L6rksIcZzw',
+            ]],
+          ],
+          'success_url' => 'https://example.com/success',
+          'cancel_url' => 'https://example.com/cancel',
+        ], ['api_key' => config('services.stripe.secret')]));
+
 	    $customer = $this->subGateway->createCustomer('jane@example.com', $this->validToken());
 
 		$this->assertNotNull(\Stripe\Customer::retrieve(
@@ -79,7 +90,7 @@ class StripeSubscriptionGatewayTest extends TestCase
 	    $plan = $this->createPlanFor($bundle);
 
 	    $sub = $this->subGateway->createSubscriptionFor($customer, $plan);
-
+	    dd($sub);
 	    $this->assertEquals(2500, $sub['plan']['amount']);
 	   	$this->assertEquals('active', $sub->status);
 	   	$this->assertEquals($customer->id, $sub['customer']);

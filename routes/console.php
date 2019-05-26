@@ -17,18 +17,18 @@ use App\Models\Plan;
 Artisan::command('generate-bundles', function () {
     \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-    // basic bundle and plan creation
+    // Basic Bundle and Plan creation
     $basicBundle = \Stripe\Product::create([
 		"name" => 'Basic Workspace Bundle',
 		"type" => "service",
 	  	"metadata" => [
 	  		"members_limit" => 5,
-	  		"price" => 3995,
 	  	],
 	]);
 
     $basicPlan = \Stripe\Plan::create([
-        "amount" => $basicBundle['metadata']['price'],
+        "nickname" => "Basic Monthly",
+        "amount" => 3995,
         "interval" => "month",
         "product" => $basicBundle['id'],
         "currency" => "eur",
@@ -38,78 +38,92 @@ Artisan::command('generate-bundles', function () {
     	'stripe_id' => $basicBundle['id'],
     	'name' => $basicBundle['name'],
     	'members_limit' => $basicBundle['metadata']['members_limit'],
-    	'price' => $basicBundle['metadata']['price'],
+    	'price' => $basicPlan['amount'],
     ]);
 
     Plan::create([
-        "amount" => $basicBundle['metadata']['price'],
+        "name" => $basicPlan['nickname'],
+        "amount" => $basicPlan['amount'],
         "interval" => "month",
         "product" => $basicBundle['id'],
         "currency" => "eur",
         "stripe_id" => $basicPlan['id'],
     ]);
 
-    // advanced bundle and plan creation
-    $advancedBundle = \Stripe\Product::create([
+    // Advanced Bundle and Plan creation
+    $standardBundle = \Stripe\Product::create([
          "name" => 'Advanced Workspace Bundle',
          "type" => "service",
              "metadata" => [
-                 "members_limit" => 12,
-                 "price" => 6995,
+                 "members_limit" => 10,
              ],
     ]);
 
-    $advancedPlan = \Stripe\Plan::create([
-        "amount" => $advancedBundle['metadata']['price'],
+    $standardPlan = \Stripe\Plan::create([
+        "nickname" => "Standard Monthly",
+        "amount" => 6995,
         "interval" => "month",
-        "product" => $advancedBundle['id'],
+        "product" => $standardBundle['id'],
         "currency" => "eur",
     ]);
 
     Bundle::create([
-        'stripe_id' => $advancedBundle['id'],
-        'name' => $advancedBundle['name'],
-        'members_limit' => $advancedBundle['metadata']['members_limit'],
-        'price' => $advancedBundle['metadata']['price'],
+        'stripe_id' => $standardBundle['id'],
+        'name' => $standardBundle['name'],
+        'members_limit' => $standardBundle['metadata']['members_limit'],
+        'price' => $standardPlan['amount'],
     ]);
 
     Plan::create([
-        "amount" => $advancedBundle['metadata']['price'],
+        "name" => $standardPlan['nickname'],
+        "amount" => $standardPlan['amount'],
         "interval" => "month",
-        "product" => $advancedBundle['id'],
+        "product" => $standardBundle['id'],
         "currency" => "eur",
-        "stripe_id" => $advancedPlan['id'],
+        "stripe_id" => $standardPlan['id'],
     ]);
 
-    // pro bundle and plan creation
-    $proBundle = \Stripe\Product::create([
-         "name" => 'Pro Workspace Bundle',
+    // Premium Bundle and Plan creation
+    $premiumBundle = \Stripe\Product::create([
+         "name" => 'Premium Workspace Bundle',
          "type" => "service",
              "metadata" => [
                  "members_limit" => 20,
-                 "price" => 9995,
              ],
     ]);
 
-    $proPlan = \Stripe\Plan::create([
-        "amount" => $proBundle['metadata']['price'],
+    $premiumPlan = \Stripe\Plan::create([
+        "nickname" => "Premium Monthly",
+        "amount" => 9995,
         "interval" => "month",
-        "product" => $proBundle['id'],
+        "product" => $premiumBundle['id'],
         "currency" => "eur",
     ]);
 
     Bundle::create([
-        'stripe_id' => $proBundle['id'],
-        'name' => $proBundle['name'],
-        'members_limit' => $proBundle['metadata']['members_limit'],
-        'price' => $proBundle['metadata']['price'],
+        'stripe_id' => $premiumBundle['id'],
+        'name' => $premiumBundle['name'],
+        'members_limit' => $premiumBundle['metadata']['members_limit'],
+        'price' => $premiumPlan['amount'],
     ]);
 
     Plan::create([
-        "amount" => $proBundle['metadata']['price'],
+        "name" => $premiumPlan['nickname'],
+        "amount" => $premiumPlan['amount'],
         "interval" => "month",
-        "product" => $proBundle['id'],
+        "product" => $premiumBundle['id'],
         "currency" => "eur",
-        "stripe_id" => $proPlan['id'],
+        "stripe_id" => $premiumPlan['id'],
     ]);
-})->describe('Generate Bundles and subscription plans');
+
+    // Generate webhook endpoint for completed checkout session. Ngrok url is for testing only.
+    // In production, we would use the real POST url here.  
+    \Stripe\WebhookEndpoint::create([
+      "url" => config('services.ngrok.url'),
+      "enabled_events" => ["checkout.session.completed"]
+    ]);
+
+})->describe('Generate Bundles and Subscription plans');
+
+
+

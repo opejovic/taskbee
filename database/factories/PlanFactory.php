@@ -8,6 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(Plan::class, function (Faker $faker) {
     return [
         'amount' => 2000,
+        'name' => 'Some Plan Name',
         'interval' => 'month',
         'product' => 'prod_BUNDLE123',
         'currency' => 'eur',
@@ -23,7 +24,7 @@ $factory->state(Plan::class, 'basic', [
     'stripe_id' => 'plan_BASIC123',
 ]);
 
-$factory->state(Plan::class, 'advanced', [
+$factory->state(Plan::class, 'standard', [
     'amount' => 6995,
     'interval' => 'month',
     'product' => 'prod_ADVANCED123',
@@ -31,7 +32,7 @@ $factory->state(Plan::class, 'advanced', [
     'stripe_id' => 'plan_ADVANCED123',
 ]);
 
-$factory->state(Plan::class, 'pro', [
+$factory->state(Plan::class, 'premium', [
     'amount' => 9995,
     'interval' => 'month',
     'product' => 'prod_PRO123',

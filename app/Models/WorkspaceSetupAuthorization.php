@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\AuthorizationCode;
 use App\Mail\SubscriptionPurchasedEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
@@ -24,6 +25,22 @@ class WorkspaceSetupAuthorization extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public static function generateFor($user)
+    {
+        return self::create([
+            'email' => $user->email,
+            'user_role' => User::ADMIN,
+            'members_invited' => 1,
+            'code' => AuthorizationCode::generate(),
+        ]);
+    }
 
     /**
      * Sends an email to the customer that purchsed a subscription.

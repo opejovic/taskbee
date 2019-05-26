@@ -17,6 +17,7 @@
             <ul class="navbar-nav ml-auto">
                 {{-- Refactor this --}}
                 @auth
+                    @if (auth()->user()->workspace_id !== null)
                     <li class="nav-item">
                         <a class="nav-link" 
                             href="/workspaces/{{ auth()->user()->workspace_id }}/tasks">
@@ -35,6 +36,7 @@
                             {{ __('Tasks I have created') }}
                         </a>
                     </li>
+                    @endif
                 @endauth
 
                 <!-- Authentication Links -->

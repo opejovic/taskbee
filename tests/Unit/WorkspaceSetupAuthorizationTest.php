@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,22 +48,13 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 	}
 
 	/** @test */
-	function can_tell_if_it_has_been_used_for_admin_creation()
+	function it_can_be_generated_for_user()
 	{
-	    $usedSetupAuthorization = factory(WorkspaceSetupAuthorization::class)->create([
-	    	'admin_id' => 1,
-	    	'code' => 'TESTCODE123',
-	    	'subscription_id' => 345,
-	    ]);
-
-	    $unusedSetupAuthorization = factory(WorkspaceSetupAuthorization::class)->create([
-	    	'admin_id' => null,
-	    	'code' => 'TESTCODE456',
-	    	'subscription_id' => 123,
-	    ]);
-
-	    $this->assertTrue($usedSetupAuthorization->hasBeenUsedForAdmin());
-	    $this->assertFalse($unusedSetupAuthorization->hasBeenUsedForAdmin());
+	    $user = factory(User::class)->create();	
+	    $authorization = WorkspaceSetupAuthorization::generateFor($user);
+	    $this->assertNotNull($authorization);
+	    $this->assertEquals(1, WorkspaceSetupAuthorization::all());
+	    $this->assertTrue($user->authorizations->contains($authorization));
 	}
 
 	/** @test */

@@ -4,7 +4,14 @@ namespace App\Billing;
 
 use App\Billing\PaymentFailedException;
 use App\Billing\SubscriptionGateway;
+use App\Facades\AuthorizationCode;
+use App\Models\Bundle;
 use App\Models\Customer;
+use App\Models\Subscription;
+use App\Models\User;
+use App\Models\WorkspaceSetupAuthorization;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Stripe\Error\InvalidRequest;
 
 class StripeSubscriptionGateway implements SubscriptionGateway
@@ -22,69 +29,47 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	}
 
 	/**
-	 * Create a stripe customer and a subscription for that customer.
+	 * Fulfills the process of subscribing the customer after a successful payment.
 	 *
-	 * @param $email
-	 * @param $token
-	 * @param App\Models\Plan $plan
-	 * @return \Stripe\Subscription
+	 * @param json $session
+	 * @return void
 	 */
-	public function subscribe($email, $token, $plan)
+	public function fulfill($session)
 	{
-		$customer = $this->createCustomer($email, $token);
-		return $this->createSubscriptionFor($customer, $plan);
-	}
-	
-	/**
-	 * Create a stripe customer and store it in the database.
-	 *
-	 * @param $email
-	 * @param $token
-	 * @return \Stripe\Customer
-	 */
-	public function createCustomer($email, $token)
-	{
-		try {
-			// check if the customer with the given email exists
-			if ($customer = Customer::where('email', $email)->first()) {
-				return \Stripe\Customer::retrieve($customer->stripe_id,
-					['api_key' => $this->apiKey]);
-			}
+	    $customer = \Stripe\Customer::retrieve($session->customer);
 
-			// create new stripe customer
-			$stripeCustomer = \Stripe\Customer::create([
-				"email" => $email,
-			  	"source" => $token // obtained with Stripe.js
-			], ['api_key' => $this->apiKey]);
-
-			// create new customer in our db
+	    if (! Customer::where('email', $customer['email'])->exists()) {
 			Customer::create([
-				'email' => $email,
-				'stripe_id' => $stripeCustomer->id
+				'email' => $customer['email'],
+				'stripe_id' =>$customer['id'],
 			]);
-
-			return $stripeCustomer;
-		} catch (InvalidRequest $e) {
-			throw new PaymentFailedException;
 		}
-	}
 
-	/**
-	 * Create a stripe subscription for a customer.
-	 *
-	 * @param \Stripe\Customer $customer
-	 * @param App\Models\Plan $plan
-	 * @return \Stripe\Subscription
-	 */
-	public function createSubscriptionFor($customer, $plan)
-	{
-		return \Stripe\Subscription::create([
-			"customer" => $customer->id,
-			"items" => [
-				[
-				  "plan" => $plan->stripe_id ?: $plan->id, // for testing only (prod will be $plan->stripe_id)
-				],
-			]
-		], ['api_key' => $this->apiKey]);
+		$subscription = \Stripe\Subscription::retrieve($session->subscription);
+
+		$sub = Subscription::create([
+			'stripe_id'   => $subscription['id'],
+            'bundle_id'   => $subscription['plan']['product'],
+            'plan_id'     => $subscription['plan']['id'],
+            'plan_name'   => $subscription['plan']['nickname'],
+            'bundle_name' => Bundle::where('stripe_id', $subscription['plan']['product'])->first()->name,
+            'customer'    => $subscription['customer'],
+            'email'       => $customer['email'],
+            'billing' 	  => $subscription['billing'],
+            'amount' 	  => $subscription['plan']['amount'],
+            'status' 	  => $subscription['status'],
+            'start_date'  => Carbon::createFromTimestamp($subscription['current_period_start']),
+            'expires_at'  => Carbon::createFromTimestamp($subscription['current_period_end']),
+		]);
+
+        WorkspaceSetupAuthorization::create([
+            'email' => $customer['email'],
+            'user_role' => User::ADMIN,
+            'members_invited' => 1,
+            'code' => AuthorizationCode::generate(),
+            'subscription_id'=> $sub->id,
+            'plan_id'=> $subscription['plan']['id'],
+            'members_limit' => $sub->bundle->members_limit,
+        ])->send($sub);
 	}
 }

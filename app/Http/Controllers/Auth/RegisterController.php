@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Invitation;
 use App\Models\User;
 use Carbon\Carbon;
@@ -44,11 +45,49 @@ class RegisterController extends Controller
     }
 
     /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
      * @return \App\Models\User
      */
     protected function register()
+    {
+        request()->validate([
+            'first_name' => ['required'],
+            'last_name' => ['required'],
+            'email' => ['required', 'email', 'unique:users'],
+            'password' => ['required'],
+        ]);
+
+        $user = User::create([
+            'first_name' => request('first_name'),
+            'last_name' => request('last_name'),
+            'email' => request('email'),
+            'password' => Hash::make(request('password')),
+            'email_verified_at' => Carbon::now(),
+        ]);
+
+        Auth::login($user);
+
+        return redirect('home');
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @return \App\Models\User
+     */
+    protected function registerInvitees()
     {
         $invitation = Invitation::findByCode(request('invitation_code'));
 

@@ -44,4 +44,9 @@ return [
         ],
     ],
 
+    // Testing only
+    'ngrok' => [
+        'url' => env('NGROK_URL'),
+    ]
+
 ];

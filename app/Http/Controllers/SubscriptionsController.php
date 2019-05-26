@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Billing\PaymentFailedException;
+use App\Billing\StripeSubscriptionGateway;
 use App\Billing\SubscriptionGateway;
+use App\Facades\AuthorizationCode;
+use App\Models\Customer;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class SubscriptionsController extends Controller
@@ -19,38 +23,32 @@ class SubscriptionsController extends Controller
      *
      * @return void
      */
-	public function __construct(SubscriptionGateway $subscriptionGateway)
-	{
-		$this->subscriptionGateway = $subscriptionGateway;
-	}
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  App\Models\Plan $plan
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Plan $plan)
+    public function __construct(SubscriptionGateway $subscriptionGateway)
     {
-    	request()->validate([
-    		'email' => ['required', 'email'],
-    		'payment_token' => ['required'],
-    	]);
+      $this->subscriptionGateway = $subscriptionGateway;
+  	}
 
-    	try {
-            $subscription = $plan->purchase(
-                request('email'), 
-                request('payment_token'), 
-                $this->subscriptionGateway
-            );
+    public function checkout(Plan $plan)
+    {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-            $authorization = WorkspaceSetupAuthorization::where(
-                'subscription_id', $subscription->id
-            )->first()->code;
+        return \Stripe\Checkout\Session::create([
+        	'customer_email' => Auth::user()->email,
+            'payment_method_types' => ['card'],
+            'subscription_data' => [
+                'items' => [[
+                    'plan' => $plan->stripe_id,
+                ]],
+            ],
+            'success_url' => 'http://127.0.0.1:8000/success',
+            'cancel_url' => 'https://example.com/cancel',
+        ]);
+    }
 
-            return response([$subscription, $authorization], 201);
-    	} catch (PaymentFailedException $e) {
-    		return response([], 422);
-    	}
+    public function success()
+    {
+    	$authorization = WorkspaceSetupAuthorization::where('email', auth()->user()->email)->latest()->first()->code;
+
+    	return redirect(route('workspace-setup.show', $authorization));
     }
 }

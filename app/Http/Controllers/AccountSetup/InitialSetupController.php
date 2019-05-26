@@ -18,11 +18,8 @@ class InitialSetupController extends Controller
     {
     	abort_if($authorization->hasBeenUsed(), 404);
 
-        if (! $authorization->hasBeenUsedForAdmin()) {
-            return view('workspace-setup.create-admin', ['authorization' => $authorization]);
-        } 
 
-        if ($authorization->hasBeenUsedForAdmin() && ! $authorization->hasBeenUsedForWorkspace()) {
+        if (! $authorization->hasBeenUsedForWorkspace()) {
             return view('workspace-setup.create-workspace', ['authorization' => $authorization]);
         }
 

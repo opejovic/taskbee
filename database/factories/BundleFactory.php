@@ -21,16 +21,16 @@ $factory->state(Bundle::class, 'basic', [
 	'price' => Bundle::BASIC_PRICE,
 ]);
 
-$factory->state(Bundle::class, 'advanced', [
-	'stripe_id' => 'prod_ADVANCED123',
-	'name' => Bundle::ADVANCED,
+$factory->state(Bundle::class, 'standard', [
+	'stripe_id' => 'prod_STANDARD123',
+	'name' => Bundle::STANDARD,
 	'members_limit' => 12,
-	'price' => Bundle::ADVANCED_PRICE,
+	'price' => Bundle::STANDARD_PRICE,
 ]);
 
-$factory->state(Bundle::class, 'pro', [
+$factory->state(Bundle::class, 'premium', [
 	'stripe_id' => 'prod_PRO123',
-	'name' => Bundle::PRO,
+	'name' => Bundle::PREMIUM,
 	'members_limit' => 20,
-	'price' => Bundle::PRO_PRICE,
+	'price' => Bundle::PREMIUM_PRICE,
 ]);

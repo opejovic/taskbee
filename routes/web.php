@@ -12,20 +12,28 @@
 */
 Auth::routes();
 
+Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
+
+
+Route::post('bundles/{plan}/checkout', 'SubscriptionsController@checkout')->middleware('auth');
+Route::get('success', 'SubscriptionsController@success')->middleware('auth');
+
+Route::post('checkout-webhook', 'WebhookController@checkout')->name('checkout');
+
+	
 Route::get('home', 'HomeController@index')->name('home');
 
-Route::get('bundles', 'SubscriptionPlansController@index')->middleware('guest');
+Route::get('bundles', 'SubscriptionPlansController@index');
 Route::post('bundles/{plan}/purchase', 'SubscriptionsController@store')->middleware('guest');
 
-Route::group(['prefix' => 'workspace-setup', 'namespace' => 'AccountSetup'], function () {
+Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
 	Route::get('{authorization}', 'InitialSetupController@show')->name('workspace-setup.show');
-	Route::post('admin', 'AdminsController@store')->name('store-admin');
-	Route::post('workspace', 'WorkspacesController@store')->name('store-workspace')->middleware('auth');
-	Route::post('{workspace}/members', 'InviteMembersController@store')->name('invite-members')->middleware('auth');
+	Route::post('workspace', 'WorkspacesController@store')->name('store-workspace');
+	Route::post('{workspace}/members', 'InviteMembersController@store')->name('invite-members');
 });
 
 Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show')->middleware('guest');
-Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
+Route::post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register')->middleware('guest');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
