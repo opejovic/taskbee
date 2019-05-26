@@ -8,16 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bundle extends Model
 {
-    /**
-     * Class constants.
-     *
-     */
-    const BASIC = 'Basic Workspace Bundle';
-    const STANDARD = 'Standard Worksspace Bundle';
-    const PREMIUM = 'Premium Workspace Bundle';
-    const BASIC_PRICE = 3995;
-    const STANDARD_PRICE = 6995;
-    const PREMIUM_PRICE = 9995;
+
 
     /**
      * Attributes that are not mass assignable.

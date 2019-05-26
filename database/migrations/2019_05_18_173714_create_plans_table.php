@@ -18,7 +18,7 @@ class CreatePlansTable extends Migration
             $table->string('name')->nullable();
             $table->integer('amount');
             $table->string('interval');
-            $table->string('product');
+            $table->string('members_limit');
             $table->string('currency');
             $table->string('stripe_id');
             $table->timestamps();
