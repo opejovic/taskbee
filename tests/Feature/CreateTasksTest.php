@@ -29,7 +29,7 @@ class CreateTasksTest extends TestCase
     function workspace_is_locked_and_tasks_cannot_be_created_if_subscription_is_expired()
     {
         $subscription = factory(Subscription::class)->states('expired')->create();
-        $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->id]);
+        $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
         $user = factory(User::class)->create(['workspace_id' => $workspace->id]);
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/tasks/create");
 

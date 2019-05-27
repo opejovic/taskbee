@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Subscriptions;
+namespace App\Billing;
 
 use App\Models\Plan;
 
@@ -23,20 +23,6 @@ class StripePlansGateway
 	}
 
 	/**
-	 * Create a StripeProduct
-	 *
-	 * @return Stripe\Stripe\Product
-	 */
-	public function product()
-	{
-	    return \Stripe\Product::create([
-	        "name" => 'Workspace Bundle',
-	        "statement_descriptor" => 'TaskMonkey Workspace',
-	        "type" => "service",
-	    ], ['api_key' => $this->apiKey]);
-	}
-
-	/**
 	 * Returns the collection of created Stripe plans.
 	 *
 	 * @return Illuminate\Database\Eloquent\Collection
@@ -51,6 +37,20 @@ class StripePlansGateway
 			$this->premium($product), 
 			$this->perUser($product)]
 		);
+	}
+
+	/**
+	 * Create a StripeProduct
+	 *
+	 * @return Stripe\Stripe\Product
+	 */
+	public function product()
+	{
+	    return \Stripe\Product::create([
+	        "name" => 'Workspace Bundle',
+	        "statement_descriptor" => 'TaskMonkey Workspace',
+	        "type" => "service",
+	    ], ['api_key' => $this->apiKey]);
 	}
 
 	/**
@@ -88,7 +88,7 @@ class StripePlansGateway
 			Plan::BASIC, 
 			Plan::BASIC_PRICE,
 			Plan::BASIC_MEMBERS_LIMIT,
-			$product
+			$product,
 		);
 	}
 
@@ -104,7 +104,7 @@ class StripePlansGateway
 			Plan::STANDARD, 
 			Plan::STANDARD_PRICE,
 			Plan::STANDARD_MEMBERS_LIMIT,
-			$product
+			$product,
 		);
 	}
 
@@ -120,7 +120,7 @@ class StripePlansGateway
 			Plan::PREMIUM, 
 			Plan::PREMIUM_PRICE,
 			Plan::PREMIUM_MEMBERS_LIMIT,
-			$product
+			$product,
 		);
 	}
 
@@ -136,7 +136,7 @@ class StripePlansGateway
 			Plan::PER_USER, 
 			Plan::PER_USER_PRICE,
 			Plan::PER_USER_LIMIT,
-			$product
+			$product,
 		);
 	}
 }

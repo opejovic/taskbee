@@ -47,7 +47,12 @@ class SubscriptionsController extends Controller
 
     public function success()
     {
-    	$authorization = WorkspaceSetupAuthorization::where('email', auth()->user()->email)->latest()->first()->code;
+        // Can retrieve the latest subscription from stripe, passing in the Users customer_id, and find workspace authorization by its.
+
+    	$authorization = WorkspaceSetupAuthorization::where('email', auth()->user()->email)
+        ->latest()
+        ->first()
+        ->code;
 
     	return redirect(route('workspace-setup.show', $authorization));
     }

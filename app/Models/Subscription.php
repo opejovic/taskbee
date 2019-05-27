@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Exceptions\SubscriptionExpiredException;
+use App\Models\WorkspaceSetupAuthorization;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,16 @@ class Subscription extends Model
     protected $guarded = [];
     
     /**
+     * Subscription has an owner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
+
+    /**
      * Get the invitation associated with the subscription.
      */
     public function invitation()
@@ -23,16 +34,37 @@ class Subscription extends Model
     }
 
     /**
-     * Cancel the subscription.
+     * Create a subscription from StripeSubscription.
      *
+     * @param Stripe\Subscription $subscription
      * @return void
      */
-    public function cancel()
+    public static function buildFrom($subscription, $email)
     {
-    	$this->update([
-            'cancelled_at' => Carbon::now(),
-            'status' => 'cancelled', 
-        ]);
+        return self::create([
+            'stripe_id'   => $subscription['id'],
+            'product_id'  => $subscription['plan']['product'],
+            'plan_id'     => $subscription['plan']['id'],
+            'plan_name'   => $subscription['plan']['nickname'],
+            'customer'    => $subscription['customer'],
+            'email'       => $email,
+            'billing'     => $subscription['billing'],
+            'amount'      => $subscription['plan']['amount'],
+            'status'      => $subscription['status'],
+            'start_date'  => Carbon::createFromTimestamp($subscription['current_period_start']),
+            'expires_at'  => Carbon::createFromTimestamp($subscription['current_period_end']),
+        ])->getAuthorization();
+    }
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function getAuthorization()
+    {
+        WorkspaceSetupAuthorization::authorize($this);
     }
 
     /**
@@ -53,13 +85,13 @@ class Subscription extends Model
     }
 
     /**
-     * Subscription belongs to Bundle
+     * Subscription belongs to a Plan
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function bundle()
+    public function plan()
     {
-       return $this->belongsTo(Bundle::class, 'bundle_id', 'stripe_id');
+       return $this->belongsTo(Plan::class, 'plan_id', 'stripe_id');
     }
 
     /**

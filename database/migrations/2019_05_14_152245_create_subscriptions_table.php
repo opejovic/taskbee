@@ -15,14 +15,13 @@ class CreateSubscriptionsTable extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('stripe_id')->nullable();
-            $table->string('bundle_id')->nullable();
-            $table->string('bundle_name');
+            $table->string('stripe_id');
+            $table->string('product_id');
+            $table->string('plan_id');
+            $table->string('plan_name');
             $table->string('customer');
             $table->string('email');
             $table->string('billing');
-            $table->string('plan_id');
-            $table->string('plan_name')->nullable();
             $table->unsignedInteger('amount');
             $table->string('status');
             $table->timestamp('start_date')->nullable();

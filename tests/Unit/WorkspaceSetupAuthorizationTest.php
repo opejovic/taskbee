@@ -1,17 +1,48 @@
 <?php
 
-namespace Tests\Unit;
+namespace Unit;
 
+use App\Facades\AuthorizationCode;
+use App\Mail\SubscriptionPurchasedEmail;
+use App\Models\Plan;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class WorkspaceSetupAuthorizationTest extends TestCase
 {
 	use RefreshDatabase;
+
+	/** @test */
+	function can_authorize_subscriptions()
+	{
+		Mail::fake();
+		AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
+
+	    $subscription = factory(Subscription::class)->create([
+	    	'plan_id' => factory(Plan::class)->create()->stripe_id,
+	    	'email' => factory(User::class)->create(['email' => 'jane@example.com'])->email
+	    ]);
+
+	    $this->assertCount(0, WorkspaceSetupAuthorization::all());
+
+	    WorkspaceSetupAuthorization::authorize($subscription);
+
+	    $setupAuthorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription->stripe_id)->first();
+
+	    $this->assertNotNull($setupAuthorization);
+
+	    Mail::assertQueued(SubscriptionPurchasedEmail::class, function($mail) use ($subscription, $setupAuthorization) {
+            return $mail->hasTo('jane@example.com')
+                && $mail->setupAuthorization->id == $setupAuthorization->id
+                && $mail->subscription->id == $subscription->id;
+        });
+	}
 
 	/** @test */
 	function workspace_setup_authorization_can_be_retrieved_by_its_code()
@@ -45,16 +76,6 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 	    $this->assertTrue($usedSetupAuthorization->hasBeenUsed());
 	    $this->assertFalse($unusedSetupAuthorization->hasBeenUsed());
 	    
-	}
-
-	/** @test */
-	function it_can_be_generated_for_user()
-	{
-	    $user = factory(User::class)->create();	
-	    $authorization = WorkspaceSetupAuthorization::generateFor($user);
-	    $this->assertNotNull($authorization);
-	    $this->assertEquals(1, WorkspaceSetupAuthorization::all());
-	    $this->assertTrue($user->authorizations->contains($authorization));
 	}
 
 	/** @test */

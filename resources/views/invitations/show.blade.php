@@ -16,12 +16,11 @@
                         <input type="hidden" name="invitation_code" value="{{ $invitation->code }}">
                         
                         <div class="form-group">
-                            <label for="email">First name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="{{ $invitation->first_name }}">
+                            <label for="email">Name</label>
+                            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter your first name">
                         </div>
                         <div class="form-group">
-                            <label for="email">Last name</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="{{ $invitation->last_name }}">
+                            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter your last name">
                         </div>
                         <div class="form-group">
                             <label for="email">Email address</label>

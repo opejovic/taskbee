@@ -13,16 +13,16 @@ class AcceptInvitationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    function testing_json_decode()
-    {
-        $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
-        // $collect = collect($json);
+    // /** @test */
+    // function testing_json_decode()
+    // {
+    //     $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
+    //     // $collect = collect($json);
 
-        // dd($collect);
-        dd($json->data->object->display_items[0]->plan->id);
-        // dd($json->data->object->display_items[0]->plan->active);
-    }
+    //     // dd($collect);
+    //     dd($json->data->object->display_items[0]->plan->id);
+    //     // dd($json->data->object->display_items[0]->plan->active);
+    // }
 
     /** @test */
     function viewing_unused_invitations()

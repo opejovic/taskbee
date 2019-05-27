@@ -30,7 +30,7 @@
         computed: {
             state() {
                 if (this.processing) {
-                    return 'Processing...';
+                    return 'Proceeding to checkout...';
                 }
 
                 return 'Purchase bundle';
@@ -53,7 +53,9 @@
             initStripe() {
                 const stripe = Stripe(process.env.MIX_STRIPE_KEY);
 
-                axios.post(`/bundles/${this.plan.id}/checkout`, {
+                this.processing = true;
+                
+                axios.post(`/plans/${this.plan.id}/checkout`, {
                 }).then(response => {
                     stripe.redirectToCheckout({
                       // Make the id field from the Checkout Session creation API response
@@ -61,7 +63,6 @@
                       // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
                       sessionId: response.data.id
                     }).then((result) => {
-                        console.log(result);
                       // If `redirectToCheckout` fails due to a browser or network
                       // error, display the localized error message to your customer
                       // using `result.error.message`.

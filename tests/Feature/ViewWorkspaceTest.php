@@ -24,7 +24,7 @@ class ViewWorkspaceTest extends TestCase
     function workspace_is_locked_and_cannot_be_viewed_if_the_subscription_is_expired()
     {
         $subscription = factory(Subscription::class)->states('expired')->create();
-        $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->id]);
+        $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
         $user = factory(User::class)->create(['workspace_id' => $workspace->id]);
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}");
 

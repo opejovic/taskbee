@@ -65,9 +65,8 @@ class InitialWorkspaceSetupProcessTest extends TestCase
     }
 
     /** @test */
-    function user_is_authorized_to_set_up_his_workspace_after_a_successful_bundle_purchase()
+    function user_is_authorized_to_set_up_his_workspace_after_a_successful_subscription_plan_purchase()
     {
-        $this->withoutExceptionHandling();
         $user = factory(User::class)->create();
 
         $setupAuthorization = factory(WorkspaceSetupAuthorization::class)->create([

@@ -13,19 +13,14 @@
 Auth::routes();
 
 Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
+Route::get('home', 'HomeController@index')->name('home');
 
-
-Route::post('bundles/{plan}/checkout', 'SubscriptionsController@checkout')->middleware('auth');
+Route::get('plans', 'SubscriptionPlansController@index');
+Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout')->middleware('auth');
 Route::get('success', 'SubscriptionsController@success')->middleware('auth');
 
 Route::post('checkout-webhook', 'WebhookController@checkout')->name('checkout');
-
 	
-Route::get('home', 'HomeController@index')->name('home');
-
-Route::get('bundles', 'SubscriptionPlansController@index');
-Route::post('bundles/{plan}/purchase', 'SubscriptionsController@store')->middleware('guest');
-
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
 	Route::get('{authorization}', 'InitialSetupController@show')->name('workspace-setup.show');
 	Route::post('workspace', 'WorkspacesController@store')->name('store-workspace');

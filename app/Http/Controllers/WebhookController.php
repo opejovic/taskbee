@@ -51,17 +51,17 @@ class WebhookController extends Controller
                 $subscriptionGateway->fulfill($session);
                 break;
             
-            // ... handle the payment_intent.succeeded event
-            case 'payment_intent.succeeded':
-                $paymentIntent = $event->data->object; // contains a StripePaymentIntent
-                http_response_code(200);
-                break;
+            // // ... handle the payment_intent.succeeded event
+            // case 'payment_intent.succeeded':
+            //     $paymentIntent = $event->data->object; // contains a StripePaymentIntent
+            //     http_response_code(200);
+            //     break;
 
-            // ... handle the charge.succeeded event
-            case 'charge.succeeded':
-                $chargeSucceeded = $event->data->object; // contains a StripeCharge
-                http_response_code(200);
-                break;
+            // // ... handle the charge.succeeded event
+            // case 'charge.succeeded':
+            //     $chargeSucceeded = $event->data->object; // contains a StripeCharge
+            //     http_response_code(200);
+            //     break;
 
             // ... handle other event types
             default:

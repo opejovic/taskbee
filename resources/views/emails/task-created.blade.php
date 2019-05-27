@@ -11,6 +11,7 @@ It should be finished by <strong>{{ $task->formatted_finish_date }}</strong>
 @component('mail::button', ['url' => ''])
 Check it out
 @endcomponent
-
-{{ $task->creator->first_name }}, <strong>{{ $task->assignee->workspace->name }}</strong>.
+Thanks,<br>
+{{ $task->creator->first_name }}<br>
+<small><strong>{{ $task->assignee->workspace->name }}</strong></small>
 @endcomponent

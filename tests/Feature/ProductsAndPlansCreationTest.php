@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/** 
+* @group integration
+*/
 class ProductsAndPlansCreationTest extends TestCase
 {
     use RefreshDatabase;
@@ -48,11 +51,11 @@ class ProductsAndPlansCreationTest extends TestCase
         $this->artisan('generate-plans');
 
         // Assert: the subscription plans exist in the db and on the stripe server.
-        // $this->assertCount(4, Plan::all());
-        // $this->assertNotNull($basicPlan = Plan::whereName('Basic Monthly')->first());
-        // $this->assertNotNull($standardPlan = Plan::whereName('Standard Monthly')->first());
-        // $this->assertNotNull($premiumPlan = Plan::whereName('Premium Monthly')->first());
-        // $this->assertNotNull($perUserPlan = Plan::whereName('Per User Monthly')->first());
+        $this->assertCount(4, Plan::all());
+        $this->assertNotNull($basicPlan = Plan::whereName('Basic Monthly')->first());
+        $this->assertNotNull($standardPlan = Plan::whereName('Standard Monthly')->first());
+        $this->assertNotNull($premiumPlan = Plan::whereName('Premium Monthly')->first());
+        $this->assertNotNull($perUserPlan = Plan::whereName('Per User Monthly')->first());
 
         $stripePlans = \Stripe\Plan::all([
             "limit" => 10,

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Bundle;
 use App\Models\Plan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,29 +14,28 @@ class ViewSubscriptionPlans extends TestCase
     /** @test */
     function customers_can_view_available_subscription_plans()
     {
-        $basicBundle = factory(Bundle::class)->states('basic')->create(['stripe_id' => 'prod_BSCID123']);
-        $advancedBundle = factory(Bundle::class)->states('standard')->create(['stripe_id' => 'prod_ADVID123']);
-        $proBundle = factory(Bundle::class)->states('premium')->create(['stripe_id' => 'prod_PROID123']);
+        $basicPlan = factory(Plan::class)->states('basic')->create();
+        $advancedPlan = factory(Plan::class)->states('standard')->create();
+        $proPlan = factory(Plan::class)->states('premium')->create();
+        $perUserPlan = factory(Plan::class)->states('perUser')->create();
 
-        $basicPlan = factory(Plan::class)->states('basic')->create(['product' => $basicBundle->stripe_id]);
-        $advancedPlan = factory(Plan::class)->states('standard')->create(['product' => $advancedBundle->stripe_id]);
-        $proPlan = factory(Plan::class)->states('premium')->create(['product' => $proBundle->stripe_id]);
-
-        $response = $this->get('/bundles');
+        $response = $this->get('/plans');
 
         $response->assertStatus(200);
         $response->assertViewIs('subscription-plans.index');
 
-        $response->assertSee($basicPlan->bundle->name);
-        $response->assertSee($basicPlan->bundle->members_limit);
-        $response->assertSee($basicPlan->amount);
+        $response->assertSee($basicPlan->name);
+        $response->assertSee($basicPlan->members_limit);
+        $response->assertSee($basicPlan->amountInEur);
 
-        $response->assertSee($advancedPlan->bundle->name);
-        $response->assertSee($advancedPlan->bundle->members_limit);
-        $response->assertSee($advancedPlan->amount);
+        $response->assertSee($advancedPlan->name);
+        $response->assertSee($advancedPlan->members_limit);
+        $response->assertSee($advancedPlan->amountInEur);
 
-        $response->assertSee($proPlan->bundle->name);
-        $response->assertSee($proPlan->bundle->members_limit);
-        $response->assertSee($proPlan->amount);
+        $response->assertSee($proPlan->name);
+        $response->assertSee($proPlan->members_limit);
+        $response->assertSee($proPlan->amountInEur);
+
+        $response->assertDontSee($perUserPlan->name);
     }
 }

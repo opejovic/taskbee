@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Subscribing;
+namespace Tests\Unit\Billing;
 
 use App\Subscriptions\StripePlansGateway;
 use Carbon\Carbon;
@@ -8,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+/**
+* @group integration
+*/
 class StripePlansGatewayTest extends TestCase
 {
 	use RefreshDatabase;

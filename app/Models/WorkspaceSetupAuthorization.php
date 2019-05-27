@@ -27,19 +27,22 @@ class WorkspaceSetupAuthorization extends Model
     protected $guarded = [];
 
     /**
-     * summary
+     * Create an authorization for subscription.
      *
-     * @return void
-     * @author 
+     * @param App\Models\Subscription $subscription
+     * @return void 
      */
-    public static function generateFor($user)
+    public static function authorize($subscription)
     {
-        return self::create([
-            'email' => $user->email,
-            'user_role' => User::ADMIN,
+        self::create([
+            'email' => $subscription->email,
+            'customer' => $subscription->customer,
             'members_invited' => 1,
             'code' => AuthorizationCode::generate(),
-        ]);
+            'subscription_id'=> $subscription->stripe_id,
+            'plan_id'=> $subscription->plan_id,
+            'members_limit' => $subscription->plan->members_limit,
+        ])->send($subscription);
     }
 
     /**

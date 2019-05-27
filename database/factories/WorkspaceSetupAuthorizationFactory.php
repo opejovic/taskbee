@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(WorkspaceSetupAuthorization::class, function (Faker $faker) {
     return [
         'email' => $faker->email,
-		'user_role' => App\Models\User::ADMIN,
+        'customer' => 'cus_FAKECUS123',
 		'code' => 'AUTHORIZATIONCODE1234',
 		'subscription_id' => function () {
 			return factory(App\Models\Subscription::class)->create()->id;
@@ -16,6 +16,7 @@ $factory->define(WorkspaceSetupAuthorization::class, function (Faker $faker) {
 		'plan_id' => function () {
 			return factory(App\Models\Plan::class)->create()->stripe_id;
 		},
+        'members_limit' => 5,
     ];
 });
 

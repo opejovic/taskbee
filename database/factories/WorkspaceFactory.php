@@ -14,7 +14,7 @@ $factory->define(Workspace::class, function (Faker $faker) {
         'members_invited' => 1,
         'members_limit' => 5,
         'subscription_id' => function() {
-        	return factory(App\Models\Subscription::class)->create()->id;
+        	return factory(App\Models\Subscription::class)->create()->stripe_id;
         }
     ];
 });

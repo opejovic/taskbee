@@ -40,7 +40,7 @@ class PurchaseSubscriptionsTest extends TestCase
     }
 
     /** @test */
-    function authenticated_users_can_are_subscribe_to_a_bundle_with_successful_purchase()
+    function authenticated_users_can_subscribe_to_a_plan_with_successful_purchase()
     {
         // Work in progress
         $this->withoutExceptionHandling();
@@ -51,7 +51,7 @@ class PurchaseSubscriptionsTest extends TestCase
 
         $plan = $this->SetupStripe();
 
-        $response = $this->actingAs($user)->json('POST', "/bundles/{$plan->id}/checkout", [
+        $response = $this->actingAs($user)->json('POST', "/plans/{$plan->id}/checkout", [
             'email' => 'jane@example.com',
             'tok' => $tok,
         ]);

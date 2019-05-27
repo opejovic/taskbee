@@ -1,7 +1,7 @@
 @component('mail::message')
-# Hello {{ $subscription->first_name }},
+# Hello {{ $subscription->owner->first_name }},
 
-You have successfully purchased a subscription for a TaskMonkey <strong>{{ $subscription->bundle->name }}</strong>.
+You have successfully purchased a <strong>{{ $subscription->plan_name }}</strong> subscription plan.
 
 You can setup your account by visiting the link below.
 

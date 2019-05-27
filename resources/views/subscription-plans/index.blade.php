@@ -7,14 +7,14 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
-                	<strong>{{ $plan->bundle->name }}</strong>
+                	<strong>{{ $plan->name }}</strong>
                 </div>
 
                 <div class="card-body">
-                	Members limit: {{ $plan->bundle->members_limit }}
+                	Members limit: {{ $plan->members_limit }}
             		<hr>
             		<div class="display-4">
-						$ {{ $plan->amount / 100 }}
+						€ {{ $plan->amount / 100 }}
             		</div>
                     Monthly
                 </div>

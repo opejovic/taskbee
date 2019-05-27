@@ -37,7 +37,7 @@ class Plan extends Model
      */
     public static function assemble($data)
     {
-        $plans = $data->map(function ($plans) {
+        $data->map(function ($plans) {
             return [
                 'name' => $plans['nickname'],
                 'amount' => $plans['amount'],
@@ -46,9 +46,9 @@ class Plan extends Model
                 'currency' => $plans['currency'],
                 'stripe_id' => $plans['id'],
             ]; 
-        })->toArray();
-
-        self::insert($plans);
+        })->each(function ($plan) { 
+            self::create($plan); 
+        });
     }
 
     /**
@@ -95,5 +95,16 @@ class Plan extends Model
             'start_date' => Carbon::now(),
             'expires_at' => Carbon::now()->addMonth(),
         ]);
+    }
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function getAmountInEurAttribute()
+    {
+        return number_format($this->ammount / 100);
     }
 }

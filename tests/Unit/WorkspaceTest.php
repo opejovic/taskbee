@@ -60,7 +60,7 @@ class WorkspaceTest extends TestCase
 	function it_has_a_subscription()
 	{
 		$subscription = factory(Subscription::class)->create();
-	    $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->id]);
+	    $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
 
 	    $this->assertTrue($workspace->subscription->is($subscription));
 	}
