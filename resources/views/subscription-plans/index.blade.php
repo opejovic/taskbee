@@ -35,6 +35,5 @@
 @endsection
 
 @push('beforeScripts')
-	{{-- <script src="https://checkout.stripe.com/checkout.js"></script> --}}
     <script src="https://js.stripe.com/v3/"></script>
 @endpush

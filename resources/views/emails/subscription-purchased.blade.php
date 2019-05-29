@@ -1,11 +1,11 @@
 @component('mail::message')
-# Hello {{ $subscription->owner->first_name }},
+# Hello {{ $authorization->subscription->owner->first_name }},
 
-You have successfully purchased a <strong>{{ $subscription->plan_name }}</strong> subscription plan.
+You have successfully purchased a <strong>{{ $authorization->subscription->plan_name }}</strong> subscription plan.
 
 You can setup your account by visiting the link below.
 
-@component('mail::button', ['url' => "http://127.0.0.1:8000/workspace-setup/{$setupAuthorization->code}"])
+@component('mail::button', ['url' => "http://127.0.0.1:8000/workspace-setup/{$authorization->code}"])
     Setup workspace
 @endcomponent
 

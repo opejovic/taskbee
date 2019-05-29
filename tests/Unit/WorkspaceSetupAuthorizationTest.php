@@ -117,4 +117,13 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 	    $this->assertTrue($usedSetupAuthorization->hasBeenUsedForMemberInvites());
 	    $this->assertFalse($unusedSetupAuthorization->hasBeenUsedForMemberInvites());
 	}
+
+	/** @test */
+	function it_has_one_subscription()
+	{
+		$subscription = factory(Subscription::class)->create();
+	    $authorization = factory(WorkspaceSetupAuthorization::class)->create(['subscription_id' => $subscription->stripe_id]);
+
+	    $this->assertInstanceOf('App\Models\Subscription', $authorization->subscription);
+	}
 }

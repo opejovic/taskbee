@@ -11,18 +11,16 @@ class SubscriptionPurchasedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subscription;
-    public $setupAuthorization;
+    public $authorization;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($subscription, $setupAuthorization)
+    public function __construct($authorization)
     {
-        $this->subscription = $subscription;
-        $this->setupAuthorization = $setupAuthorization;
+        $this->authorization = $authorization;
     }
 
     /**

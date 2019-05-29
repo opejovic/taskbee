@@ -36,4 +36,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
 	Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
 	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
+
+	Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });

@@ -45,7 +45,7 @@ class WebhookController extends Controller
             case 'checkout.session.completed':
                 $session = $event->data->object; // contains a StripeSession
                 
-                $subscriptionGateway = $subscriptionGateway = new StripeSubscriptionGateway(
+                $subscriptionGateway = new StripeSubscriptionGateway(
                     \Stripe\Stripe::setApiKey(config('services.stripe.secret'))
                 );
                 $subscriptionGateway->fulfill($session);

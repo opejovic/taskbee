@@ -27,6 +27,17 @@ class WorkspaceSetupAuthorization extends Model
     protected $guarded = [];
 
     /**
+     * Authorization has one subscription
+     *
+     * @return void
+     * @author 
+     */
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class, 'stripe_id', 'subscription_id');
+    }
+
+    /**
      * Create an authorization for subscription.
      *
      * @param App\Models\Subscription $subscription
@@ -42,7 +53,7 @@ class WorkspaceSetupAuthorization extends Model
             'subscription_id'=> $subscription->stripe_id,
             'plan_id'=> $subscription->plan_id,
             'members_limit' => $subscription->plan->members_limit,
-        ])->send($subscription);
+        ])->send();
     }
 
     /**
@@ -50,9 +61,9 @@ class WorkspaceSetupAuthorization extends Model
      *
      * @param App\Models\Subscription $subscription
      */
-    public function send($subscription)
+    public function send()
     {
-        Mail::to($subscription->email)->queue(new SubscriptionPurchasedEmail($subscription, $this));
+        Mail::to($this->email)->queue(new SubscriptionPurchasedEmail($this));
     }
 
     /**
