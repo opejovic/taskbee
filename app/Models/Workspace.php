@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Workspace;
+use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Workspace extends Model
 {

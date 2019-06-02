@@ -14,7 +14,7 @@
                 	Members limit: {{ $plan->members_limit }}
             		<hr>
             		<div class="display-4">
-						€ {{ $plan->amount / 100 }}
+						€ {{ number_format(($plan->amount * $plan->members_limit / 100) + 10, 2) }}
             		</div>
                     Monthly
                 </div>

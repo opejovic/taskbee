@@ -13,11 +13,11 @@ class WebhookController extends Controller
      * @return void
      * @author 
      */
-    public function checkout()
+    public function handle()
     {
         // Set your secret key: remember to change this to your live secret key in production
         // See your keys here: https://dashboard.stripe.com/account/apikeys
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        $apiKey = \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         // You can find your endpoint's secret in your webhook settings
         $endpoint_secret = config('services.stripe.webhook.secret');
@@ -44,16 +44,13 @@ class WebhookController extends Controller
             // ... handle the checkout.session.completed event
             case 'checkout.session.completed':
                 $session = $event->data->object; // contains a StripeSession
-                
-                $subscriptionGateway = new StripeSubscriptionGateway(
-                    \Stripe\Stripe::setApiKey(config('services.stripe.secret'))
-                );
+                $subscriptionGateway = new StripeSubscriptionGateway($apiKey);
                 $subscriptionGateway->fulfill($session);
                 break;
             
-            // // ... handle the payment_intent.succeeded event
-            // case 'payment_intent.succeeded':
-            //     $paymentIntent = $event->data->object; // contains a StripePaymentIntent
+            // ... handle the payment_intent.succeeded event
+            // case 'invoice.payment_succeeded':
+            //     $invoice = $event->data->object; // contains a StripePaymentIntent
             //     http_response_code(200);
             //     break;
 

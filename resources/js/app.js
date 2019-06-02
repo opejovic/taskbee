@@ -21,6 +21,7 @@ window.Vue = require('vue');
 
 Vue.component('bundle-checkout', require('./components/BundleCheckout.vue').default);
 Vue.component('subscription-checkout', require('./components/SubscriptionCheckout.vue').default);
+Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -16,44 +16,54 @@ use Illuminate\Support\Facades\Mail;
 
 class SubscriptionsController extends Controller
 {
-	private $subscriptionGateway;
-
     /**
-     * Create a new controller instance.
+     * Create a Stripe checkout session.
      *
-     * @return void
+     * @return Stripe\Checkout\Session
      */
-    public function __construct(SubscriptionGateway $subscriptionGateway)
-    {
-      $this->subscriptionGateway = $subscriptionGateway;
-  	}
-
     public function checkout(Plan $plan)
     {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        return \Stripe\Checkout\Session::create([
+        $session = \Stripe\Checkout\Session::create([
         	'customer_email' => Auth::user()->email,
+            'cancel_url' => "http://127.0.0.1:8000/plans",
+            'expand' => ['subscription'],
             'payment_method_types' => ['card'],
             'subscription_data' => [
-                'items' => [[
-                    'plan' => $plan->stripe_id,
-                ]],
+                'items' => [
+                    [
+                        'plan' => Plan::where('name', 'Base Fee')->first()->stripe_id, // base fee
+                    ],
+                    [
+                        'plan' => $plan->stripe_id,
+                        'quantity' => $plan->members_limit,
+                    ],
+                ],
             ],
             'success_url' => 'http://127.0.0.1:8000/success',
-            'cancel_url' => 'https://example.com/cancel',
         ]);
+
+        session(['sub' => $session]);
+
+        return $session;
     }
 
+    /**
+     * Redirect customer after successful subscription.
+     *
+     * @return Illuminate\Routing\redirect
+     */
     public function success()
     {
-        // Can retrieve the latest subscription from stripe, passing in the Users customer_id, and find workspace authorization by its.
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-    	$authorization = WorkspaceSetupAuthorization::where('email', auth()->user()->email)
-        ->latest()
-        ->first()
-        ->code;
+        // Get a StripeSubscription from Checkout Session.
+        $sub = \Stripe\Checkout\Session::retrieve(request()->session()->get('sub')->id)['subscription'];
 
-    	return redirect(route('workspace-setup.show', $authorization));
+        // Get authorization code for that Subscription.
+        $authorization = WorkspaceSetupAuthorization::where('subscription_id', $sub)->first()->code;
+    	
+        return redirect(route('workspace-setup.show', $authorization));
     }
 }

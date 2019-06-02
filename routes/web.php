@@ -18,8 +18,9 @@ Route::get('home', 'HomeController@index')->name('home');
 Route::get('plans', 'SubscriptionPlansController@index');
 Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout')->middleware('auth');
 Route::get('success', 'SubscriptionsController@success')->middleware('auth');
+Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store')->middleware('auth');
 
-Route::post('checkout-webhook', 'WebhookController@checkout')->name('checkout');
+Route::post('stripe-webhook', 'WebhookController@handle')->name('webhook.handle');
 	
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
 	Route::get('{authorization}', 'InitialSetupController@show')->name('workspace-setup.show');

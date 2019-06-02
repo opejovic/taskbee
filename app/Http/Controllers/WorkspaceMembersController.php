@@ -19,6 +19,7 @@ class WorkspaceMembersController extends Controller
     	return view('workspace-members.index', [
     		'members' => $workspace->allMembers(),
     		'plan' => Plan::whereName('Per User Monthly')->first(),
+            'workspace' => $workspace,
     	]);
     }
 }

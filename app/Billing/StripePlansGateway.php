@@ -32,6 +32,7 @@ class StripePlansGateway
 		$product = $this->product();
 
 		return collect([
+			$this->baseFee($product), 
 			$this->basic($product), 
 			$this->standard($product), 
 			$this->premium($product), 
@@ -74,6 +75,22 @@ class StripePlansGateway
 	        "metadata" => ["members_limit" => $members_limit],
 	        "product" => $product['id'],
 	    ], ['api_key' => $this->apiKey]);
+	}
+
+	/**
+	 * Create a Base Fee Montly StripePlan.
+	 *
+	 * @param Stripe\Stripe\Product $product
+	 * @return Stripe\Stripe\Plan
+	 */
+	public function baseFee($product)
+	{
+	    return $this->plan(
+			"Base Fee", 
+			Plan::BASE_FEE,
+			null,
+			$product,
+		);
 	}
 
 	/**
@@ -125,7 +142,7 @@ class StripePlansGateway
 	}
 
 	/**
-	 * Create a Premium Montly StripePlan.
+	 * Create a Per User Montly StripePlan.
 	 *
 	 * @param Stripe\Stripe\Product $product
 	 * @return Stripe\Stripe\Plan

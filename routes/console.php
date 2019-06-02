@@ -28,7 +28,7 @@ Artisan::command('generate-plans', function () {
     // Create Stripe product and subscription plans
     (new StripePlansGateway(config('services.stripe.secret')))->generate();
 
-    if (Plan::count() == 4) {
+    if (Plan::count() == 5) {
         $this->info('Done!');
     } else {
         $this->error('Something went wrong.');

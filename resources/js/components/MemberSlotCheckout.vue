@@ -19,7 +19,7 @@
 
 <script>
     export default {
-        props: ['plan'],
+        props: ['plan', 'workspace'],
         data() {
             return {
                 processing: false,
@@ -30,14 +30,10 @@
         computed: {
             state() {
                 if (this.processing) {
-                    return 'Proceeding to checkout...';
+                    return 'Processing your request...';
                 }
 
-                if (this.plan.name == 'Per User Monthly') {
-                    return 'Add another user to your team';
-                }
-
-                return 'Purchase Bundle';
+                return 'Buy a member slot';
             },
 
             description() {
@@ -59,19 +55,14 @@
 
                 this.processing = true;
                 
-                axios.post(`/plans/${this.plan.id}/checkout`, {
+                axios.post(`/workspaces/${this.workspace.id}/add-slot`, {
+
                 }).then(response => {
-                    stripe.redirectToCheckout({
-                      // Make the id field from the Checkout Session creation API response
-                      // available to this file, so you can provide it as parameter here
-                      // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-                      sessionId: response.data.id
-                    }).then((result) => {
-                      // If `redirectToCheckout` fails due to a browser or network
-                      // error, display the localized error message to your customer
-                      // using `result.error.message`.
-                    });
-                });
+                    this.processing = false;
+                    window.location = `/workspace-setup/${response.data}`
+                }).catch(response => {
+                    this.processing = false
+                })
             },
 
     },

@@ -15,7 +15,10 @@ class SubscriptionPlansController extends Controller
      */
     public function index()
     {
-    	$plans = Plan::all()->except(Plan::whereName("Per User Monthly")->first()->id);
+    	$plans = Plan::all()->except([
+            Plan::whereName("Per User Monthly")->first()->id, 
+            Plan::whereName("Base Fee")->first()->id
+        ]);
 
 		return view('subscription-plans.index', ['plans' => $plans]);
     }

@@ -5,6 +5,8 @@ namespace App\Billing;
 use App\Billing\SubscriptionGateway;
 use App\Models\Customer;
 use App\Models\Subscription;
+use App\Models\Workspace;
+use App\Models\WorkspaceSetupAuthorization;
 
 class StripeSubscriptionGateway implements SubscriptionGateway
 {
@@ -28,8 +30,33 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	 */
 	public function fulfill($session)
 	{
+		if ($this->subscriptionPaid($session->subscription)) {
+			$this->setupSubscription($session);	
+		}
+	}
+
+	/**
+	 * Is subscription paid for?
+	 *
+	 * @return bool
+	 */
+	public function subscriptionPaid($subscription)
+	{
+	    return \Stripe\Subscription::retrieve([
+					'id' => $subscription,
+					'expand' => ['latest_invoice']
+    			])['latest_invoice']['paid'];
+	}
+
+	/**
+	 * Store subscription in the db.
+	 *
+	 */
+	private function setupSubscription($session)
+	{
 	    $customer = \Stripe\Customer::retrieve($session->customer);
 
+	    // If the customer with the given email doesent exist, create it.
 	    if (! Customer::where('email', $customer['email'])->exists()) {
 			Customer::create([
 				'email' => $customer['email'],
@@ -38,7 +65,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 		}
 
 		Subscription::buildFrom(
-			\Stripe\Subscription::retrieve($session->subscription), 
+			\Stripe\Subscription::retrieve($session->subscription),
 			$customer['email']
 		);
 	}

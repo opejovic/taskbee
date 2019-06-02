@@ -13,16 +13,56 @@ class AcceptInvitationTest extends TestCase
 {
     use RefreshDatabase;
 
-    // /** @test */
-    // function testing_json_decode()
-    // {
-    //     $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
-    //     // $collect = collect($json);
+    /** @test */
+    function testing_json_decode()
+    {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
+        $collect = collect($json);
 
-    //     // dd($collect);
-    //     dd($json->data->object->display_items[0]->plan->id);
-    //     // dd($json->data->object->display_items[0]->plan->active);
-    // }
+        dd($json);
+        dd($json->data->object->display_items[0]->plan->active);
+    //     $basicBundle = \Stripe\Product::create([
+    //     "name" => 'Basic Workspace Bundle',
+    //     "type" => "service",
+    //     "metadata" => [
+    //         "members_limit" => 5,
+    //         ],
+    //     ]);
+
+    // $basicFeePlan = \Stripe\Plan::create([
+    //     "nickname" => "Base fee",
+    //     "amount" => 1000,
+    //     "interval" => "month",
+    //     "product" => $basicBundle['id'],
+    //     "currency" => "eur",
+    // ]);
+
+    // $perMonth = \Stripe\Plan::create([
+    //     "nickname" => "Per Month basic",
+    //     "amount" => 500,
+    //     "interval" => "month",
+    //     "product" => $basicBundle['id'],
+    //     "currency" => "eur",
+    // ]);
+
+    // $customer = \Stripe\Customer::create([
+    //     "description" => "Customer for jenny.rosen@example.com",
+    //     "source" => "tok_visa" // obtained with Stripe.js
+    // ]);
+
+    // \Stripe\Subscription::create([
+    //   "customer" => $customer['id'],
+    //   "items" => [
+    //         [
+    //           "plan" => $basicFeePlan['id'],
+    //         ],     
+    //         [ 
+    //           "plan" => $perMonth['id'],
+    //           "quantity" => "5",
+    //         ]
+    //     ]]);
+    }
 
     /** @test */
     function viewing_unused_invitations()
