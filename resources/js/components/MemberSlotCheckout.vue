@@ -35,36 +35,22 @@
 
                 return 'Buy a member slot';
             },
-
-            description() {
-                return `Purchase ${this.plan.name} bundle.`
-            },
-            totalPrice() {
-                return this.plan.amount
-            },
-            priceInDollars() {
-                return (this.plan.amount / 100).toFixed(2)
-            },
-            totalPriceInDollars() {
-                return (this.plan.amount / 100).toFixed(2)
-            },
         },
         methods: {
             initStripe() {
                 const stripe = Stripe(process.env.MIX_STRIPE_KEY);
-
                 this.processing = true;
-                
-                axios.post(`/workspaces/${this.workspace.id}/add-slot`, {
 
+                axios.post(`/workspaces/${this.workspace.id}/add-slot`, {
+                    //
                 }).then(response => {
                     this.processing = false;
-                    window.location = `/workspace-setup/${response.data}`
+                    window.location = response.data.hosted_invoice_url;
+                    // window.location = `/workspace-setup/${response.data[0]}`
                 }).catch(response => {
                     this.processing = false
                 })
             },
-
-    },
-};
+        },
+    };
 </script>

@@ -33,9 +33,6 @@ class SubscriptionsController extends Controller
             'subscription_data' => [
                 'items' => [
                     [
-                        'plan' => Plan::where('name', 'Base Fee')->first()->stripe_id, // base fee
-                    ],
-                    [
                         'plan' => $plan->stripe_id,
                         'quantity' => $plan->members_limit,
                     ],

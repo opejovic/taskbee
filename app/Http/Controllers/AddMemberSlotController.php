@@ -17,19 +17,27 @@ class AddMemberSlotController extends Controller
         $stripeSub = \Stripe\Subscription::retrieve($subscription->stripe_id);
 
         // increment current stripe subscription item (current subscription plan) quantity.
-        $subItem = $stripeSub['items']['data'][1];
-        \Stripe\SubscriptionItem::update(
-            $subItem['id'],
+        \Stripe\Subscription::update($stripeSub['id'], [
+          'cancel_at_period_end' => false,
+          'items' => [
             [
-                'quantity' => $subItem['quantity'] + 1,
-            ]
-        );
+              'id' => $stripeSub['items']['data'][0]['id'],
+              'quantity' => $stripeSub['quantity'] + 1,
+            ],
+          ],
+        ]);
 
-        $authorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription->stripe_id)->first();
-        $authorization->increment('members_limit');
+        // Create and pay an invoice for added member
+        $invoice = \Stripe\Invoice::create([
+            "customer" => $stripeSub['customer'],
+            "subscription" => $stripeSub['id'],
+            "description" => 'Add additional member slot'
+        ]);
 
-        Workspace::where('subscription_id', $subscription->stripe_id)->first()->increment('members_limit');
+        $finalizedInvoice = $invoice->finalizeInvoice();
 
-        return response($authorization->code, 200);
+        // Customer is redirected to the stripe Hosted invoice payment page.
+        // After the successful payment, Workspace members limit is incremented, as well as WSA.
+        return response($finalizedInvoice, 200);
     }
 }

@@ -65,4 +65,18 @@ class Workspace extends Model
     {
         return $this->belongsTo(Subscription::class, 'subscription_id', 'stripe_id');
     }
+
+    /**
+     * Increments members limit number by 1.
+     *
+     * @return void
+     */
+    public static function addSlot($subscription)
+    {
+        self::where('subscription_id', $subscription)->first()->increment('members_limit');
+
+        // Is this really needed? Perhaps, after adding slot, we fire an event -> and notify the user he can now invite additional team member.
+        $authorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription)->first();
+        $authorization->increment('members_limit');
+    }
 }

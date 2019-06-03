@@ -17,7 +17,6 @@ class ViewSubscriptionPlans extends TestCase
         $basicPlan = factory(Plan::class)->states('basic')->create();
         $advancedPlan = factory(Plan::class)->states('standard')->create();
         $proPlan = factory(Plan::class)->states('premium')->create();
-        $perUserPlan = factory(Plan::class)->states('perUser')->create();
 
         $response = $this->get('/plans');
 
@@ -35,7 +34,5 @@ class ViewSubscriptionPlans extends TestCase
         $response->assertSee($proPlan->name);
         $response->assertSee($proPlan->members_limit);
         $response->assertSee($proPlan->amountInEur);
-
-        $response->assertDontSee($perUserPlan->name);
     }
 }

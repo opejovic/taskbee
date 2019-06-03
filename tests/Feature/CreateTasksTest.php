@@ -17,20 +17,6 @@ class CreateTasksTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    function somemeomeroemre()
-    {
-        
-
-        \Stripe\Stripe::setApiKey("sk_test_zefYcEDQBOnOHu6MCWitZtuc");
-
-        \Stripe\SubscriptionItem::create([
-          "subscription" => "sub_F9W0vVisi5Lq8j",
-          "plan" => "plan_F9VSaMIGwQJvRX",
-          "quantity" => 1,
-        ]);
-    }
-
     // todo: 8. Every team member can also change any task attribute or edit the name etc.
 
     /** @test */

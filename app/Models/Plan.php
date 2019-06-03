@@ -12,8 +12,6 @@ class Plan extends Model
      * Class constants.
      *
      */
-    const BASE_FEE = 1000;
-
     const BASIC = 'Basic Monthly';
     const BASIC_PRICE = 799; // per user
     const BASIC_MEMBERS_LIMIT = 5;
@@ -25,10 +23,6 @@ class Plan extends Model
     const PREMIUM = 'Premium Monthly';
     const PREMIUM_PRICE = 599;
     const PREMIUM_MEMBERS_LIMIT = 15;
-    
-    const PER_USER = 'Per User Monthly';
-    const PER_USER_PRICE = 799;
-    const PER_USER_LIMIT = 1;
 
 
     protected $guarded = [];

@@ -69,4 +69,18 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 			$customer['email']
 		);
 	}
+
+	/**
+	 * Handles the invoice payment succeeded event.
+	 *
+	 * @return void
+	 * @author 
+	 */
+	public function handleInvoice($invoice)
+	{
+	    if (! $invoice->description == "Add additional member slot") return;
+
+	    Workspace::addSlot($invoice->subscription);
+        // need to notify the customer that he can now invite additional member.
+	}
 }

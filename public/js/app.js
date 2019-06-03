@@ -1898,18 +1898,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return 'Buy a member slot';
-    },
-    description: function description() {
-      return "Purchase ".concat(this.plan.name, " bundle.");
-    },
-    totalPrice: function totalPrice() {
-      return this.plan.amount;
-    },
-    priceInDollars: function priceInDollars() {
-      return (this.plan.amount / 100).toFixed(2);
-    },
-    totalPriceInDollars: function totalPriceInDollars() {
-      return (this.plan.amount / 100).toFixed(2);
     }
   },
   methods: {
@@ -1918,9 +1906,10 @@ __webpack_require__.r(__webpack_exports__);
 
       var stripe = Stripe("pk_test_6n20kHXbCh2dAQyclp00yXWG");
       this.processing = true;
-      axios.post("/workspaces/".concat(this.workspace.id, "/add-slot"), {}).then(function (response) {
+      axios.post("/workspaces/".concat(this.workspace.id, "/add-slot"), {//
+      }).then(function (response) {
         _this.processing = false;
-        window.location = "/workspace-setup/".concat(response.data);
+        window.location = response.data.hosted_invoice_url; // window.location = `/workspace-setup/${response.data[0]}`
       })["catch"](function (response) {
         _this.processing = false;
       });

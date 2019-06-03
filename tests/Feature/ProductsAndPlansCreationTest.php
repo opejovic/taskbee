@@ -19,30 +19,24 @@ class ProductsAndPlansCreationTest extends TestCase
     /** @test */
     function initial_product_and_plans_creation()
     {
-        // Arrange: define plans for product
+        // Predefined subuscription plans for the application
         $plans = [
             'basic' => [
                 'name' => 'Basic Monthly',
-                'members_limit' => 5,
-                'price' => 3995,
+                'members_limit' => 5, // quantity
+                'price' => 799,
             ],
 
             'standard' => [
                 'name' => 'Standard Monthly',
-                'members_limit' => 10,
-                'price' => 6995,
+                'members_limit' => 10, // quantity
+                'price' => 699,
             ],
 
             'premium' => [
                 'name' => 'Premium Monthly',
-                'members_limit' => 15,
-                'price' => 9995,            
-            ],
-
-            'per_user' => [
-                'name' => 'Per User Monthly',
-                'members_limit' => 15,
-                'price' => 9995,            
+                'members_limit' => 15, // quantity
+                'price' => 499,            
             ],
         ];
 
@@ -51,27 +45,36 @@ class ProductsAndPlansCreationTest extends TestCase
         $this->artisan('generate-plans');
 
         // Assert: the subscription plans exist in the db and on the stripe server.
-        $this->assertCount(4, Plan::all());
+        $this->assertCount(3, Plan::all());
         $this->assertNotNull($basicPlan = Plan::whereName('Basic Monthly')->first());
         $this->assertNotNull($standardPlan = Plan::whereName('Standard Monthly')->first());
         $this->assertNotNull($premiumPlan = Plan::whereName('Premium Monthly')->first());
-        $this->assertNotNull($perUserPlan = Plan::whereName('Per User Monthly')->first());
 
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         $stripePlans = \Stripe\Plan::all([
             "limit" => 10,
-            "created" => [
-                "gte" => $created_at,
-            ],
-        ], ['api_key' => config('services.stripe.secret')]);
-
-        $this->assertCount(4, $stripePlans['data']);
+            "created" => 
+                [
+                    "gte" => $created_at,
+                ],
+            "expand" => ['data.product']
+        ]);
+        $this->assertCount(3, $stripePlans['data']);
         $this->assertArraySubset(
             [
-                'Per User Monthly',
                 'Premium Monthly',
                 'Standard Monthly',
                 'Basic Monthly',
             ], collect($stripePlans['data'])->pluck('nickname')->toArray(),
         );
+        
+        // Delete the product and plans from stripe after finished test
+        $product = \Stripe\Product::retrieve($stripePlans['data'][0]['product']['id']);
+
+        collect($stripePlans['data'])->each(function ($plan) {
+            $plan->delete();
+        });
+
+        $product->delete();
     }
 }

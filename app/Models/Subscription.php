@@ -43,13 +43,13 @@ class Subscription extends Model
     {
         return self::create([
             'stripe_id'   => $subscription['id'],
-            'product_id'  => $subscription['items']['data'][1]['plan']['product'],
-            'plan_id'     => $subscription['items']['data'][1]['plan']['id'],
-            'plan_name'   => $subscription['items']['data'][1]['plan']['nickname'],
+            'product_id'  => $subscription['plan']['product'],
+            'plan_id'     => $subscription['plan']['id'],
+            'plan_name'   => $subscription['plan']['nickname'],
             'customer'    => $subscription['customer'],
             'email'       => $email,
             'billing'     => $subscription['billing'],
-            'amount'      => $subscription['items']['data'][1]['plan']['amount'] * $subscription['items']['data'][1]['quantity'],
+            'amount'      => $subscription['plan']['amount'] * $subscription['quantity'],
             'status'      => $subscription['status'],
             'start_date'  => Carbon::createFromTimestamp($subscription['current_period_start']),
             'expires_at'  => Carbon::createFromTimestamp($subscription['current_period_end']),
