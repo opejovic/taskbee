@@ -2,9 +2,10 @@
 
 namespace App\Policies;
 
+use App\Exceptions\SubscriptionCanceledException;
+use App\Exceptions\SubscriptionExpiredException;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Exceptions\SubscriptionExpiredException;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class WorkspacePolicy
@@ -47,6 +48,10 @@ class WorkspacePolicy
 
             if ($workspace->subscription->isExpired()) {
                 throw new SubscriptionExpiredException;
+            }
+
+            if ($workspace->subscription->isCanceled()) {
+                throw new SubscriptionCanceledException;
             }
 
             return true;

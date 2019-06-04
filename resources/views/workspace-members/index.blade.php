@@ -3,7 +3,11 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <member-slot-checkout :workspace="{{ $workspace }}"></member-slot-checkout>
+
+        @if (auth()->user()->owns($workspace))
+            <member-slot-checkout :workspace="{{ $workspace }}"></member-slot-checkout>
+        @endif
+        
         @forelse($members as $member)
             <div class="col-md-2">
                 <div class="card">
@@ -13,9 +17,9 @@
                         Some data about the user
                     </div>
                 </div>
+            </div>
                 @empty
                     Woooosh, all empty.
-            </div>
         @endforelse
     </div>
 </div>

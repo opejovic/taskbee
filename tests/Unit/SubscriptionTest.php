@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Mail\SubscriptionExpiredEmail;
 use App\Models\Bundle;
 use App\Models\Invitation;
 use App\Models\Plan;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class SubscriptionTest extends TestCase
@@ -52,9 +54,18 @@ class SubscriptionTest extends TestCase
 	/** @test */
 	function it_can_tell_if_its_expired()
 	{
-		$subscription = factory(Subscription::class)->states('expired')->create();
+		$subscriptionUnpaid = factory(Subscription::class)->states('unpaid')->create();
+		$subscriptionPastDue = factory(Subscription::class)->states('past_due')->create();
 
-		$this->assertTrue($subscription->isExpired());
+		$this->assertTrue($subscriptionUnpaid->isExpired());
+		$this->assertTrue($subscriptionPastDue->isExpired());
+	}
+
+	/** @test */
+	function it_can_tell_if_its_canceled()
+	{
+		$subscription = factory(Subscription::class)->states('canceled')->create();
+		$this->assertTrue($subscription->isCanceled());
 	}
 
 	private function stripeSubscription()

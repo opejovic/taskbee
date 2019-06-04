@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bundle;
 use App\Models\Plan;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 
 class SubscriptionPlansController extends Controller

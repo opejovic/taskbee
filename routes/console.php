@@ -38,12 +38,16 @@ Artisan::command('generate-plans', function () {
 
 Artisan::command('stripe-webhook', function () {
     
-    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
     \Stripe\WebhookEndpoint::create([
-      "url" => config('services.ngrok.url'),
-      "enabled_events" => ["checkout.session.completed"]
-    ]);
+        "url" => config('services.ngrok.url'),
+        "enabled_events" => [
+            "customer.subscription.created",
+            "customer.subscription.updated",
+            "customer.subscription.deleted",
+            "invoice.payment_succeeded",
+            "checkout.session.completed",
+        ]
+    ], ['api_key' => config('services.stripe.secret')]);
 
 })->describe('Generate a stripe webhook.');
 

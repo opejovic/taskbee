@@ -21,7 +21,14 @@ $factory->define(Subscription::class, function (Faker $faker) {
     ];
 });
 
-$factory->state(Subscription::class, 'expired', [
-    'start_date' => now()->subMonth(),
-    'expires_at' => now()->subDay(),
+$factory->state(Subscription::class, 'unpaid', [
+    'status' => Subscription::UNPAID,
+]);
+
+$factory->state(Subscription::class, 'past_due', [
+    'status' => Subscription::PAST_DUE,
+]);
+
+$factory->state(Subscription::class, 'canceled', [
+    'status' => Subscription::CANCELED,
 ]);

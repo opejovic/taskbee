@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\SubscriptionCanceledException;
 use App\Exceptions\SubscriptionExpiredException;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
@@ -53,6 +54,8 @@ class WorkspacesController extends Controller
             return view('workspaces.show', ['workspace' => $workspace]);    
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription exipred. Please renew your subscription.", 423);
+        } catch (SubscriptionCanceledException $e) {
+            return response("You have canceled your subscription.", 423);
         }
     }
 

@@ -3,12 +3,23 @@
 namespace App\Models;
 
 use App\Exceptions\SubscriptionExpiredException;
+use App\Mail\SubscriptionExpiredEmail;
 use App\Models\WorkspaceSetupAuthorization;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class Subscription extends Model
 {
+    /**
+     * Class constants.
+     *
+     */
+    const ACTIVE = 'active';
+    const UNPAID = 'unpaid';
+    const CANCELED = 'canceled';
+    const PAST_DUE = 'past_due';
+
     /**
      * Attributes that are not mass assignable.
      *
@@ -67,6 +78,18 @@ class Subscription extends Model
     }
 
     /**
+     * Change the status of the subscription.
+     *
+     * @return void
+     */
+    public static function changeStatus($subscription)
+    {
+        $sub = self::where('stripe_id', $subscription['id'])->first();
+        $sub->update(['status' => $subscription->status]);
+        Mail::to($sub->email)->queue(new SubscriptionExpiredEmail($sub));
+    }
+
+    /**
      * Cast subscription to array.
      *
      * @return array
@@ -100,6 +123,16 @@ class Subscription extends Model
      */
     public function isExpired()
     {
-        return now()->greaterThan($this->expires_at);
+        return collect([self::UNPAID, self::PAST_DUE])->contains($this->status);
+    }
+
+    /**
+     * Has subscription been canceled?
+     *
+     * @return bool
+     */
+    public function isCanceled()
+    {
+        return $this->status == self::CANCELED;
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Invitation;
+use App\Models\Subscription;
 use App\Models\Workspace;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,16 +14,21 @@ class AcceptInvitationTest extends TestCase
 {
     use RefreshDatabase;
 
-    // /** @test */
-    // function testing_json_decode()
-    // {
-    //     \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-    //     $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
-    //     $collect = collect($json);
+    /** @test */
+    function testing_json_decode()
+    {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        $sub = \Stripe\Subscription::retrieve('sub_FC8CValtLHwOjU');
+        $sub->cancel();
 
-    //     dd($json);
-    //     dd($json->data->object->display_items[0]->plan->active);
-    // }
+        // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        // $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
+        // $collect = collect($json);
+
+        // $sub = $json->data->object;
+        // dd($sub->customer);
+
+    }
 
     /** @test */
     function viewing_unused_invitations()

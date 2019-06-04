@@ -8,10 +8,8 @@ use Illuminate\Http\Request;
 class WebhookController extends Controller
 {
     /**
-     * summary
+     * Handles the stripe webhooks.
      *
-     * @return void
-     * @author 
      */
     public function handle()
     {
@@ -43,16 +41,40 @@ class WebhookController extends Controller
         $subscriptionGateway = new StripeSubscriptionGateway($apiKey);
         
         switch ($event->type) {
-            // ... handle the checkout.session.completed event
-            case 'checkout.session.completed':
-                $session = $event->data->object; // contains a StripeSession
-                $subscriptionGateway->fulfill($session);
+            // ... handle the customer.subscription.created event
+            case 'customer.subscription.created':
+                $subscription = $event->data->object; // contains a StripeSession
+                $subscriptionGateway->fulfill($subscription);
+                http_response_code(200);
                 break;
             
             // ... handle the invoice.payment_succeeded event
             case 'invoice.payment_succeeded':
                 $invoice = $event->data->object; // contains a StripePaymentIntent
                 $subscriptionGateway->handleInvoice($invoice);
+                http_response_code(200);
+                break;
+
+            // ... handle the subscription updated event
+            case 'customer.subscription.updated':
+                $subscription = $event->data->object; // contains a StripePaymentIntent
+                // if subscription status is unpaid - lock the workspace access untill its paid
+                $subscriptionGateway->inspect($subscription);
+                http_response_code(200);
+                break;
+
+            // ... handle the subscription deleted event
+            case 'customer.subscription.deleted':
+                $subscription = $event->data->object; // contains a StripePaymentIntent
+                // if subscription status is deleted - lock the workspace access
+                // -- Make a new method on subGateway - cancel().
+                $subscriptionGateway->inspect($subscription);
+                http_response_code(200);
+                break;
+
+            // ... handle the checkout.session.completed event
+            case 'checkout.session.completed':
+                $session = $event->data->object; // contains a StripeSession
                 http_response_code(200);
                 break;
 

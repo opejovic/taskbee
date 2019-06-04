@@ -14,17 +14,16 @@
                 	Members limit: {{ $plan->members_limit }}
             		<hr>
             		<div class="display-4">
-						€ {{ number_format(($plan->amount * $plan->members_limit / 100) + 10, 2) }}
+						€ {{ number_format(($plan->amount * $plan->members_limit / 100), 2) }}
             		</div>
                     Monthly
                 </div>
 
                 <div class="card-footer">
-                	{{-- <bundle-checkout :plan="{{ $plan }}"></bundle-checkout> --}}
                     @auth
                         <subscription-checkout :plan="{{ $plan }}"></subscription-checkout>
                     @else
-                        <a href="">Sign in</a> or <a href="">Register</a> in order to purchase the bundle. 
+                        <a href="{{ route('login') }}">Sign in</a> or <a href="{{ route('register') }}">Register</a> in order to purchase the bundle. 
                     @endauth
                 </div>
             </div>

@@ -28,10 +28,10 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	 * @param json $session
 	 * @return void
 	 */
-	public function fulfill($session)
+	public function fulfill($subscription)
 	{
-		if ($this->subscriptionPaid($session->subscription)) {
-			$this->setupSubscription($session);	
+		if ($this->subscriptionPaid($subscription)) {
+			$this->setupSubscription($subscription);	
 		}
 	}
 
@@ -43,7 +43,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	public function subscriptionPaid($subscription)
 	{
 	    return \Stripe\Subscription::retrieve([
-					'id' => $subscription,
+					'id' => $subscription->id,
 					'expand' => ['latest_invoice']
     			])['latest_invoice']['paid'];
 	}
@@ -52,9 +52,9 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	 * Store subscription in the db.
 	 *
 	 */
-	private function setupSubscription($session)
+	public function setupSubscription($subscription)
 	{
-	    $customer = \Stripe\Customer::retrieve($session->customer);
+	    $customer = \Stripe\Customer::retrieve($subscription->customer);
 
 	    // If the customer with the given email doesent exist, create it.
 	    if (! Customer::where('email', $customer['email'])->exists()) {
@@ -65,7 +65,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 		}
 
 		Subscription::buildFrom(
-			\Stripe\Subscription::retrieve($session->subscription),
+			\Stripe\Subscription::retrieve($subscription->id),
 			$customer['email']
 		);
 	}
@@ -78,9 +78,39 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 	 */
 	public function handleInvoice($invoice)
 	{
-	    if (! $invoice->description == "Add additional member slot") return;
+		switch ($invoice->description) {
+            // ... handle the Add additional member slot payment
+            case 'Add additional member slot':
+				Workspace::addSlot($invoice->subscription);
+                break;
+            
+            // ... handle the subscription renewal invoice.payment_succeeded for 
+            case 'Renew subscription':
+                // Subscription::renew($invoice->subscription);
+                break;
 
-	    Workspace::addSlot($invoice->subscription);
+            default:
+                // Unexpected event type
+                exit();
+	    }
+	    // Add additional checks for the paid invoice
         // need to notify the customer that he can now invite additional member.
+	}
+
+	/**
+	 * Inspects the subscription status, after the subscription updated event,
+	 * and updates subscription locally.
+	 *
+	 * @return void
+	 */
+	public function inspect($subscription)
+	{
+	    if (collect([
+	    	Subscription::PAST_DUE,
+	    	Subscription::UNPAID,
+	    	Subscription::CANCELED
+	    ])->contains($subscription->status)) {
+	    	Subscription::changeStatus($subscription);
+	    }
 	}
 }
