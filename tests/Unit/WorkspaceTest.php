@@ -64,4 +64,16 @@ class WorkspaceTest extends TestCase
 
 	    $this->assertTrue($workspace->subscription->is($subscription));
 	}
+
+	/** @test */
+	function it_can_add_a_member()
+	{
+	    $workspace = factory(Workspace::class)->create();
+	    $member = factory(User::class)->create();
+	    $this->assertCount(0, $workspace->members);
+
+	    $workspace->addMember($member);
+
+	    $this->assertTrue($workspace->fresh()->members->contains($member));
+	}
 }

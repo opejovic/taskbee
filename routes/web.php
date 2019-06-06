@@ -16,9 +16,11 @@ Route::post('register', 'Auth\RegisterController@register')->name('register')->m
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::get('plans', 'SubscriptionPlansController@index');
+
 Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout')->middleware('auth');
 Route::get('success', 'SubscriptionsController@success')->middleware('auth');
 Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store')->middleware('auth');
+
 Route::post('workspaces/{workspace}/renew', 'RenewSubscriptionsController@store')->middleware('auth');
 Route::get('workspaces/{workspace}/subscription-expired', 'RenewSubscriptionsController@show')->name('subscription-expired.show')->middleware('auth');
 
@@ -30,8 +32,9 @@ Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace'
 	Route::post('{workspace}/members', 'InviteMembersController@store')->name('invite-members');
 });
 
-Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show')->middleware('guest');
+Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
 Route::post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register')->middleware('guest');
+Route::post('accept-invitation', 'AcceptInvitationsController@store')->name('accept-invitation.store')->middleware('auth');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');

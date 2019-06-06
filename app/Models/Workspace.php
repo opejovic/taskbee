@@ -33,7 +33,7 @@ class Workspace extends Model
      */
     public function members()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'workspace_user');
     }
 
     /**
@@ -78,5 +78,16 @@ class Workspace extends Model
         // Is this really needed? Perhaps, after adding slot, we fire an event -> and notify the user he can now invite additional team member.
         $authorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription)->first();
         $authorization->increment('members_limit');
+    }
+
+    /**
+     * Add a member to the workspace.
+     *
+     * @return void
+     * @author 
+     */
+    public function addMember($member)
+    {
+        $this->members()->attach($member);
     }
 }

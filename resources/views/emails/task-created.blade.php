@@ -13,5 +13,5 @@ Check it out
 @endcomponent
 Thanks,<br>
 {{ $task->creator->first_name }}<br>
-<small><strong>{{ $task->assignee->workspace->name }}</strong></small>
+<small><strong>{{ $task->workspace->name }}</strong></small>
 @endcomponent

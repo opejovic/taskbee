@@ -111,6 +111,7 @@ class RegisterController extends Controller
         ]);
 
         $invitation->update(['user_id' => $user->id]);
+        $invitation->workspace->addMember($user);
 
         Auth::login($user);
 

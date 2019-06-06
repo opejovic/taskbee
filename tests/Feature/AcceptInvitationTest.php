@@ -2,12 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Facades\InvitationCode;
 use App\Models\Invitation;
 use App\Models\Subscription;
+use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class AcceptInvitationTest extends TestCase
@@ -86,5 +89,33 @@ class AcceptInvitationTest extends TestCase
         $member = $workspace->members()->where('email', 'jae@example.com')->first();
         $this->assertNotNull($member);
         $response->assertRedirect("/workspaces/{$workspace->id}/tasks");
+    }
+
+    /** @test */
+    function existing_users_can_accept_invitations_for_other_workspaces()
+    {
+        $this->withoutExceptionHandling();
+        $workspace = factory(Workspace::class)->create();
+        $otherWorkspace = factory(Workspace::class)->create();
+        $existingUser = factory(User::class)->create([
+            'email' => 'jae@example.com',
+        ]);
+        $otherWorkspace->addMember($existingUser);
+
+        $invitation = factory(Invitation::class)->create([
+            'email' => 'jae@example.com',
+            'user_id' => null,
+            'code' => 'INVITATIONCODE123',
+            'workspace_id' => $workspace->id,
+        ]);
+
+        $response = $this->actingAs($existingUser)->json('POST', '/accept-invitation', [
+            'invitation_code' => $invitation->code,
+        ]);
+
+        $this->assertTrue($invitation->fresh()->hasBeenUsed());
+        $member = $workspace->members()->where('email', 'jae@example.com')->first();
+        $this->assertNotNull($member);
+        $this->assertEquals(2, $existingUser->workspaces->count());
     }
 }

@@ -30,7 +30,7 @@ class WorkspacesController extends Controller
         	'subscription_id' => $authorization->subscription_id,
         ]);
 
-        Auth::user()->update(['workspace_id' => $workspace->id]);
+        $workspace->members()->attach(Auth::user());
 
         $authorization->update([
         	'admin_id' => Auth::user()->id,

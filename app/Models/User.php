@@ -84,6 +84,16 @@ class User extends Authenticatable
     }
 
     /**
+     * User belongs to many Workspaces.
+     *
+     * @return void
+     */
+    public function workspaces()
+    {
+        return $this->belongsToMany(Workspace::class, 'workspace_user');
+    }
+
+    /**
      * Get the users full name.
      *
      * @return string

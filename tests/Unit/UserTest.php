@@ -49,6 +49,21 @@ class UserTest extends TestCase
 	}
 
 	/** @test */
+	function can_belong_to_many_workspaces()
+	{
+	    $workspaceA = factory(Workspace::class)->create();
+	    $workspaceB = factory(Workspace::class)->create();
+
+	    $user = factory(User::class)->states('member')->create();
+
+	    $user->workspaces()->attach($workspaceA);
+	    $user->workspaces()->attach($workspaceB);
+
+	    $this->assertTrue($user->workspaces->contains($workspaceA));
+	    $this->assertTrue($user->workspaces->contains($workspaceB));
+	}
+
+	/** @test */
 	function can_get_full_name()
 	{
 	    $user = factory(User::class)->create([

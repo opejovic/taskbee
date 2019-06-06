@@ -50,6 +50,17 @@ class Task extends Model
      * @return void
      * @author 
      */
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class);
+    }
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
     public function getFormattedStartDateAttribute()
     {
         return $this->start_date->format('F j, Y');
