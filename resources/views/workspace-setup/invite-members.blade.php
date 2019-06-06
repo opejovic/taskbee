@@ -15,16 +15,34 @@
 
                         <div class="form-group">
                             <label for="first_name">First name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter members first name">
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" placeholder="Enter members first name" required>
+
+                            @error('first_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="last_name">Last name</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter members last name">
+                            <input type="text" class="form-control  @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Enter members last name" required>
+
+                            @error('last_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="email">Email address</label>
-                            <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
                             <small id="emailHelp" class="form-text text-muted">We'll never share this email with anyone else.</small>
+
+                            @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         
                         <button type="submit" class="btn btn-primary">Invite</button>

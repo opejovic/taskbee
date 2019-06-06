@@ -19,7 +19,7 @@
 
 <script>
     export default {
-        props: ['plan', 'workspace'],
+        props: ['workspace'],
         data() {
             return {
                 processing: false,
@@ -30,26 +30,43 @@
         computed: {
             state() {
                 if (this.processing) {
-                    return 'Processing your request...';
+                    return 'Proceeding to checkout...';
                 }
 
-                return 'Buy a member slot';
+                return 'Renew subscription';
+            },
+
+            description() {
+                return `Purchase ${this.plan.name} bundle.`
+            },
+            totalPrice() {
+                return this.plan.amount
+            },
+            priceInDollars() {
+                return (this.plan.amount / 100).toFixed(2)
+            },
+            totalPriceInDollars() {
+                return (this.plan.amount / 100).toFixed(2)
             },
         },
         methods: {
             initStripe() {
-                const stripe = Stripe(process.env.MIX_STRIPE_KEY);
-                this.processing = true;
+                const stripe = Stripe("{{ config('service.stripe.key') }}");
 
-                axios.post(`/workspaces/${this.workspace.id}/add-slot`, {
+                this.processing = true;
+                axios.post(`/workspaces/${this.workspace.id}/renew`, {
                     //
                 }).then(response => {
-                    window.location = response.data.hosted_invoice_url;
+                    this.processing = false
+                    console.log(response);
+                    window.location = response.data;
                     // window.location = `/workspace-setup/${response.data[0]}`
                 }).catch(response => {
                     this.processing = false
                 })
+                
             },
+
         },
     };
 </script>

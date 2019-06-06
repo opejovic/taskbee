@@ -54,7 +54,7 @@ class InitialWorkspaceSetupProcessTest extends TestCase
     }
 
     /** @test */
-    function user_is_cannot_view_initial_workspace_setup_page_with_an_used_authorization_code()
+    function user_cannot_view_initial_workspace_setup_page_with_an_used_authorization_code()
     {
         $user = factory(User::class)->create();
         $authorization = factory(WorkspaceSetupAuthorization::class)->states('used')->create();
@@ -65,7 +65,7 @@ class InitialWorkspaceSetupProcessTest extends TestCase
     }
 
     /** @test */
-    function user_is_authorized_to_set_up_his_workspace_after_a_successful_subscription_plan_purchase()
+    function user_is_authorized_to_set_up_his_workspace_after_a_successful_subscription_purchase()
     {
         $user = factory(User::class)->create();
 

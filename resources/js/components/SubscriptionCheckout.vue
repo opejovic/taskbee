@@ -33,10 +33,6 @@
                     return 'Proceeding to checkout...';
                 }
 
-                if (this.plan.name == 'Per User Monthly') {
-                    return 'Add another user to your team';
-                }
-
                 return 'Purchase Bundle';
             },
 
@@ -55,7 +51,7 @@
         },
         methods: {
             initStripe() {
-                const stripe = Stripe(process.env.MIX_STRIPE_KEY);
+                const stripe = Stripe('pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE');
 
                 this.processing = true;
                 

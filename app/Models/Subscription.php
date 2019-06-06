@@ -82,11 +82,23 @@ class Subscription extends Model
      *
      * @return void
      */
-    public static function changeStatus($subscription)
+    public static function expire($subscription)
     {
         $sub = self::where('stripe_id', $subscription['id'])->first();
         $sub->update(['status' => $subscription->status]);
         Mail::to($sub->email)->queue(new SubscriptionExpiredEmail($sub));
+    }
+
+    /**
+     * Renews the subscription.
+     *
+     * @return void
+     */
+    public static function renew($subscription)
+    {
+        $sub = self::where('stripe_id', $subscription['id'])->first();
+        $sub->update(['status' => $subscription->status]);
+        // Mail::to($sub->email)->queue(new SubscriptionRenewedEmail($sub));
     }
 
     /**

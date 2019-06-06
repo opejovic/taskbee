@@ -84,9 +84,9 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 				Workspace::addSlot($invoice->subscription);
                 break;
             
-            // ... handle the subscription renewal invoice.payment_succeeded for 
+            // ... handle the invoice.payment_succeeded event for subscription renewal 
             case 'Renew subscription':
-                // Subscription::renew($invoice->subscription);
+                Subscription::renew($invoice->subscription);
                 break;
 
             default:

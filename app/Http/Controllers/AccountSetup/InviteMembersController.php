@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class InviteMembersController extends Controller
 {
@@ -24,7 +25,18 @@ class InviteMembersController extends Controller
 
         abort_if($authorization->hasBeenUsedForMemberInvites(), 403);
 
-       // abort_unless(Auth::user()->owns($workspace), 403);
+        request()->validate([
+            'first_name' => ['required', 'alpha', 'min:2'],
+            'last_name' => ['required', 'alpha', 'min:2'],
+            'email' => [
+                'required', 
+                'email',
+                // Same user cant be invited to the workspace twice
+                Rule::unique('invitations')->where(function ($query) use ($workspace) {
+                    return ! $query->where('workspace_id', $workspace->id);
+            })
+            ],
+        ]);
 
     	$invitation = Invitation::create([
     		'first_name' => request('first_name'),
