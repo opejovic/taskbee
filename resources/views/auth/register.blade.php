@@ -3,20 +3,23 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">Create your account</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
-
-                        <div class="form-group">
-                            <label for="email">Name</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter your first name">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter your last name">
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="first_name">First name</label>
+                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter your first name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="last_name">Last name</label>
+                                <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter your last name">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="email">Email address</label>
