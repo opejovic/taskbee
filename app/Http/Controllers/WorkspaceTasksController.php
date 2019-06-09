@@ -23,7 +23,7 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
             
-            $tasks = $workspace->tasks;
+            $tasks = $workspace->tasks()->with('creator', 'assignee')->get();
             
             if (request()->has('my')) {
                 $tasks = $workspace->tasks()->where('user_responsible', Auth::user()->id)->get();

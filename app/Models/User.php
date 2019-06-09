@@ -43,6 +43,12 @@ class User extends Authenticatable
     ];
 
     /**
+     * summary
+     *
+     */
+    protected $appends = ['full_name'];
+
+    /**
      * Does user owns a workspace?
      *
      * @param $workspace

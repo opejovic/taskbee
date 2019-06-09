@@ -23,6 +23,8 @@ Vue.component('bundle-checkout', require('./components/BundleCheckout.vue').defa
 Vue.component('subscription-checkout', require('./components/SubscriptionCheckout.vue').default);
 Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.vue').default);
 Vue.component('renew-subscription', require('./components/RenewSubscription.vue').default);
+Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
+Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

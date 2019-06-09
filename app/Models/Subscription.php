@@ -100,24 +100,7 @@ class Subscription extends Model
         $sub->update(['status' => $subscription->status]);
         // Mail::to($sub->email)->queue(new SubscriptionRenewedEmail($sub));
     }
-
-    /**
-     * Cast subscription to array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return [
-            'email' => $this->email,
-            'bundle_name' => $this->bundle_name,
-            'amount' => $this->amount,
-            'status' => $this->status,
-            'start_date' => $this->start_date->format('Y-m-d'),
-            'expires_at' => $this->expires_at->format('Y-m-d'),
-        ];
-    }
-
+    
     /**
      * Subscription belongs to a Plan
      *

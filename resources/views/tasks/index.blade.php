@@ -4,12 +4,11 @@
 <div class="container">
     <div class="flex row justify-content-between">
         <div class="text-center mb-2">
-            <a class="btn btn-primary btn-lg" href="{{ route('tasks.create', $workspace) }}">
-                {{ __('Add task') }}
-            </a>
+            <new-task :workspace="{{ $workspace }}"></new-task>
         </div>
 
-        <table class="table col-md-10">
+        <tasks-table :tasks="{{ $tasks }}"></tasks-table>
+        {{-- <table class="table col-md-10">
             <thead>
                 <tr>
                     <th scope="col">Task</th>
@@ -20,7 +19,7 @@
                     <th scope="col">Finish date</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody> 
                 @forelse ($tasks as $task)
                     <tr>
                         <td>{{ $task->name }}</td>
@@ -36,7 +35,7 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>
+        </table> --}}
     </div>
 </div>
 @endsection
