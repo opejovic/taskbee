@@ -130,7 +130,7 @@
                 } 
 
                 if (! this.userResponsible) {
-                 this.errors.push("responsibility");   
+                    this.errors.push("responsibility");   
                 }
                 
                 if (! this.startDate) {
@@ -145,8 +145,6 @@
                     this.errors.push("status");  
                 } 
 
-                console.log(this.errors.includes("Description is required"));
-                
                 if( ! this.errors.length) return this.addTask();
                 e.preventDefault();
             },
@@ -159,8 +157,8 @@
                     finish_date: this.finishDate,
                     status: this.taskStatus,
                 }).then(response => {
+                    this.$emit('task-added');
                     $('#addTaskModal').modal('hide');
-                    this.$emit('taskAdded');
                     // flash a message to the user
                 }).catch(response => {
                     //

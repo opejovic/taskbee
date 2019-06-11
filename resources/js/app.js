@@ -19,12 +19,12 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('bundle-checkout', require('./components/BundleCheckout.vue').default);
 Vue.component('subscription-checkout', require('./components/SubscriptionCheckout.vue').default);
 Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.vue').default);
 Vue.component('renew-subscription', require('./components/RenewSubscription.vue').default);
 Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
 Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
+Vue.component('tasks', require('./components/tasks/Tasks.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

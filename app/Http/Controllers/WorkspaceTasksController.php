@@ -33,6 +33,10 @@ class WorkspaceTasksController extends Controller
                 $tasks = $workspace->tasks()->where('created_by', Auth::user()->id)->get();
             } 
 
+            if (request()->wantsJson()) {
+                return response([$workspace, $tasks], 200);
+            }
+
             return view('tasks.index', [
                 'workspace' => $workspace,
                 'tasks' => $tasks
