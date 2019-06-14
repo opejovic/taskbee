@@ -16,10 +16,15 @@ class ViewTasksTest extends TestCase
     /** @test */
     function workspace_members_can_see_all_workspace_tasks_and_their_properties()
     {
+        $this->withoutExceptionHandling();
         $workspace = factory(Workspace::class)->create();
-        $don = factory(User::class)->create(['workspace_id' => $workspace->id]);
-        $jackie = factory(User::class)->create(['workspace_id' => $workspace->id]);
+        $don = factory(User::class)->create();
+        $jackie = factory(User::class)->create();
         $task = factory(Task::class)->create(['workspace_id' => $workspace->id]);
+
+        $workspace->members()->attach($don);
+        $workspace->members()->attach($jackie);
+
 
         $this->actingAs($don)->get("/workspaces/{$workspace->id}/tasks")
             ->assertSee($task->name)

@@ -78,6 +78,14 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
 
+            request()->validate([
+                'name' => ['required', 'min:3'],
+                'user_responsible' => ['required'],
+                'start_date' => ['required'],
+                'finish_date' => ['required'],
+                'status' => ['required'],
+            ]);
+
             $task = Task::create([
                 'created_by' => Auth::user()->id,
                 'workspace_id' => $workspace->id,

@@ -25,7 +25,6 @@
             </tbody>
         </table>        
     </div>
-
 </template>
 
 <script>
@@ -34,38 +33,39 @@
 
     export default {
       props: ['workspace'],
-        // props: ['tasks'],
-        data() {
-            return {
-                items: [],
-            }
+
+      data() {
+        return {
+            items: [],
+        }
+    },
+
+    methods: {
+        formattedDate(date) {
+            return moment(date).format("LL");
         },
 
-        methods: {
-            formattedDate(date) {
-                return moment(date).format("LL");
-            },
-
-            fetchTasks() {
-                axios.get(`/workspaces/${this.workspace.id}/tasks`)
-                .then(response => {
-                    // handle success
-                    // assign tasks to the items data.
-                    this.items = response.data[1];
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                });
-            },
-
-            refresh() {
-                this.fetchTasks();
-            },    
+        fetchTasks() {
+            axios
+            .get(`/workspaces/${this.workspace.id}/tasks`)
+            .then(response => {
+                // handle success
+                // assign tasks to the items data.
+                this.items = response.data[1];
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
         },
 
-        created() {
+        refresh() {
             this.fetchTasks();
-        },
-    }
+        },    
+    },
+
+    created() {
+        this.fetchTasks();
+    },
+}
 </script>

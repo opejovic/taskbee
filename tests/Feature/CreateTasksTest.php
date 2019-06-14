@@ -28,16 +28,16 @@ class CreateTasksTest extends TestCase
     /** @test */
     function workspace_is_locked_and_tasks_cannot_be_created_if_subscription_is_expired()
     {
-        $subscription = factory(Subscription::class)->states('expired')->create();
+        $subscription = factory(Subscription::class)->states('unpaid')->create();
         $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
-        $user = factory(User::class)->create(['workspace_id' => $workspace->id]);
-        $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/tasks/create");
-
-        $response->assertStatus(423); // locked
-        $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
-
-        $this->actingAs($user)->post("/workspaces/{$workspace->id}/tasks")->assertStatus(423);
-        $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
+        $user = factory(User::class)->create();
+        $workspace->members()->attach($user);
+        
+        $this->actingAs($user)->get("/workspaces/{$workspace->id}/tasks/create")
+            ->assertStatus(423); // locked
+        
+        $this->actingAs($user)->post("/workspaces/{$workspace->id}/tasks")
+            ->assertStatus(423); // locked
     }
 
     /** @test */
@@ -46,8 +46,10 @@ class CreateTasksTest extends TestCase
         Mail::fake();
 
         $workspace = factory(Workspace::class)->create();
-        $taskCreator = factory(User::class)->states('member')->create(['workspace_id' => $workspace->id]);
-        $member = factory(User::class)->states('member')->create(['workspace_id' => $workspace->id]);
+        $taskCreator = factory(User::class)->states('member')->create();
+        $member = factory(User::class)->states('member')->create();
+        $workspace->members()->attach($taskCreator);
+        $workspace->members()->attach($member);
         $this->assertCount(0, Task::all());
 
         $response = $this->actingAs($taskCreator)
@@ -77,8 +79,11 @@ class CreateTasksTest extends TestCase
     function team_members_can_delete_any_task_belonging_to_their_workspace()
     {
         $workspace = factory(Workspace::class)->create();
-        $john = factory(User::class)->create(['workspace_id' => $workspace->id]);
-        $jane = factory(User::class)->create(['workspace_id' => $workspace->id]);
+        $john = factory(User::class)->create();
+        $jane = factory(User::class)->create();
+        $workspace->members()->attach($john);
+        $workspace->members()->attach($jane);
+
         $johnsTask = factory(Task::class)->create([
             'created_by' => $john->id,
             'user_responsible' => $john->id,

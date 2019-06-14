@@ -1981,6 +1981,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 //
 //
 //
@@ -2084,73 +2090,119 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var Errors =
+/*#__PURE__*/
+function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "has",
+    value: function has(field) {
+      return this.errors.hasOwnProperty(field);
+    }
+  }, {
+    key: "any",
+    value: function any() {
+      if (Object.keys(this.errors).length > 0) {
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      if (field) {
+        delete this.errors[field];
+        return;
+      }
+
+      this.errors = {};
+    }
+  }]);
+
+  return Errors;
+}();
+
+;
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['workspace'],
   data: function data() {
     return {
       show: true,
       members: this.workspace.members,
-      description: null,
-      userResponsible: null,
-      startDate: null,
-      finishDate: null,
-      taskStatus: null,
-      errors: []
+      name: '',
+      user_responsible: '',
+      start_date: '',
+      finish_date: '',
+      status: '',
+      errors: new Errors()
     };
   },
   methods: {
-    formClass: function formClass(attr) {
-      return this.errors.includes(attr) ? 'form-control is-invalid' : 'form-control';
-    },
-    checkForm: function checkForm(e) {
-      this.errors = [];
-
-      if (!this.description) {
-        this.errors.push("description");
-      }
-
-      if (!this.userResponsible) {
-        this.errors.push("responsibility");
-      }
-
-      if (!this.startDate) {
-        this.errors.push("start");
-      }
-
-      if (!this.finishDate) {
-        this.errors.push("finish");
-      }
-
-      if (!this.taskStatus) {
-        this.errors.push("status");
-      }
-
-      if (!this.errors.length) return this.addTask();
-      e.preventDefault();
-    },
     addTask: function addTask() {
       var _this = this;
 
-      axios.post("/workspaces/".concat(this.workspace.id, "/tasks"), {
-        name: this.description,
-        user_responsible: this.userResponsible,
-        start_date: this.startDate,
-        finish_date: this.finishDate,
-        status: this.taskStatus
-      }).then(function (response) {
+      axios.post("/workspaces/".concat(this.workspace.id, "/tasks"), this.$data).then(function (response) {
         _this.$emit('task-added');
 
         $('#addTaskModal').modal('hide'); // flash a message to the user
-      })["catch"](function (response) {//
+      })["catch"](function (error) {
+        _this.errors.record(error.response.data.errors);
       });
     },
     clear: function clear() {
-      this.description = null;
-      this.userResponsible = null;
-      this.startDate = null;
-      this.finishDate = null;
-      this.taskStatus = null;
-      this.errors = [];
+      this.name = '';
+      this.user_responsible = '';
+      this.start_date = '';
+      this.finish_date = '';
+      this.status = '';
+      this.errors.clear();
     }
   },
   mounted: function mounted() {
@@ -2158,45 +2210,6 @@ __webpack_require__.r(__webpack_exports__);
     $('#addTaskModal').on('hidden.bs.modal', function (e) {
       self.clear();
     });
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tasks/Tasks.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tasks/Tasks.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _NewTask_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewTask.vue */ "./resources/js/components/tasks/NewTask.vue");
-/* harmony import */ var _TasksTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TasksTable */ "./resources/js/components/tasks/TasksTable.vue");
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['workspace'],
-  data: function data() {
-    return {
-      tasks: [],
-      isRefreshed: false
-    };
-  },
-  methods: {
-    refresh: function refresh() {
-      isRefreshed = true;
-    }
-  },
-  mounted: function mounted() {//	
   }
 });
 
@@ -2243,12 +2256,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['workspace'],
-  // props: ['tasks'],
   data: function data() {
     return {
       items: []
@@ -55369,261 +55380,388 @@ var render = function() {
               _vm._m(0),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body text-left" }, [
-                _c("form", [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.description,
-                          expression: "description"
-                        }
-                      ],
-                      class: _vm.formClass("description"),
-                      attrs: {
-                        type: "text",
-                        name: "name",
-                        id: "name",
-                        placeholder: "Task description",
-                        required: ""
-                      },
-                      domProps: { value: _vm.description },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.description = $event.target.value
-                        }
+                _c(
+                  "form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.addTask($event)
                       }
-                    }),
-                    _vm._v(" "),
-                    _vm._m(1)
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "user_responsible" } }, [
-                      _vm._v("Person responsible for task completion")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "name" } }, [
+                        _vm._v("Describe the task")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
                         directives: [
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.userResponsible,
-                            expression: "userResponsible"
+                            value: _vm.name,
+                            expression: "name"
                           }
                         ],
-                        class: _vm.formClass("responsibility"),
+                        class: _vm.errors.has("name")
+                          ? "form-control is-invalid"
+                          : "form-control",
                         attrs: {
-                          id: "user_responsible",
-                          name: "user_responsible"
+                          type: "text",
+                          name: "name",
+                          id: "name",
+                          placeholder: "Task description"
                         },
+                        domProps: { value: _vm.name },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.userResponsible = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
+                          keydown: function($event) {
+                            return _vm.errors.clear("name")
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.name = $event.target.value
                           }
                         }
-                      },
-                      _vm._l(_vm.members, function(member) {
-                        return _c(
-                          "option",
-                          { domProps: { value: member.id } },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(member.first_name) +
-                                " " +
-                                _vm._s(member.last_name) +
-                                "\n                            "
-                            )
-                          ]
-                        )
                       }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _vm._m(2)
-                  ]),
-                  _vm._v(" "),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "start_date" } }, [
-                      _vm._v("Start date")
+                      _vm._v(" "),
+                      _vm.errors.has("name")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _c("strong", {
+                                domProps: {
+                                  textContent: _vm._s(_vm.errors.get("name"))
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "user_responsible" } }, [
+                        _vm._v("Who has to complete the task?")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
                         {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.startDate,
-                          expression: "startDate"
-                        }
-                      ],
-                      class: _vm.formClass("start"),
-                      attrs: {
-                        type: "date",
-                        name: "start_date",
-                        id: "start_date",
-                        placeholder: "Start date"
-                      },
-                      domProps: { value: _vm.startDate },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.user_responsible,
+                              expression: "user_responsible"
+                            }
+                          ],
+                          class: _vm.errors.has("user_responsible")
+                            ? "form-control is-invalid"
+                            : "form-control",
+                          on: {
+                            click: function($event) {
+                              return _vm.errors.clear("user_responsible")
+                            },
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.user_responsible = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
                           }
-                          _vm.startDate = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm._m(3)
-                  ]),
-                  _vm._v(" "),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "finish_date" } }, [
-                      _vm._v("Finish date")
+                        },
+                        [
+                          _c("option", { attrs: { value: "", disabled: "" } }, [
+                            _vm._v("Choose one...")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.members, function(member) {
+                            return _c(
+                              "option",
+                              { domProps: { value: member.id } },
+                              [
+                                _vm._v(
+                                  "\n                                    " +
+                                    _vm._s(member.first_name) +
+                                    " " +
+                                    _vm._s(member.last_name) +
+                                    "\n                                "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
+                      _vm.errors.has("user_responsible")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _c("strong", {
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.errors.get("user_responsible")
+                                  )
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.finishDate,
-                          expression: "finishDate"
-                        }
-                      ],
-                      class: _vm.formClass("finish"),
-                      attrs: {
-                        type: "date",
-                        name: "finish_date",
-                        id: "finish_date",
-                        placeholder: "Finish date"
-                      },
-                      domProps: { value: _vm.finishDate },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.finishDate = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm._m(4)
-                  ]),
-                  _vm._v(" "),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "status" } }, [
-                      _vm._v("Task status")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
+                    _c("fieldset", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "start_date" } }, [
+                        _vm._v("Start date")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
                         directives: [
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.taskStatus,
-                            expression: "taskStatus"
+                            value: _vm.start_date,
+                            expression: "start_date"
                           }
                         ],
-                        class: _vm.formClass("status"),
-                        attrs: { id: "status", name: "status", required: "" },
+                        class: _vm.errors.has("start_date")
+                          ? "form-control is-invalid"
+                          : "form-control",
+                        attrs: {
+                          type: "date",
+                          name: "start_date",
+                          id: "start_date",
+                          placeholder: "Start date"
+                        },
+                        domProps: { value: _vm.start_date },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.taskStatus = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
+                          click: function($event) {
+                            return _vm.errors.clear("start_date")
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.start_date = $event.target.value
                           }
                         }
-                      },
-                      [
-                        _c("option", { attrs: { value: "Planned" } }, [
-                          _vm._v(
-                            "\n                               Planned\n                            "
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("start_date")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _c("strong", {
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.errors.get("start_date")
+                                  )
+                                }
+                              })
+                            ]
                           )
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "In progress" } }, [
-                          _vm._v(
-                            "\n                                In Progress\n                            "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "Waiting" } }, [
-                          _vm._v(
-                            "\n                                Waiting\n                            "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "Testing" } }, [
-                          _vm._v(
-                            "\n                                Testing\n                            "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "Done" } }, [
-                          _vm._v(
-                            "\n                                Done\n                            "
-                          )
-                        ])
-                      ]
-                    ),
+                        : _vm._e()
+                    ]),
                     _vm._v(" "),
-                    _vm._m(5)
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c("small", [
-                  _vm._v("The member responsible will be notified.")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: { type: "button", "data-dismiss": "modal" }
-                  },
-                  [_vm._v("Close")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
-                    on: { click: _vm.checkForm }
-                  },
-                  [_vm._v("Add task")]
+                    _c("fieldset", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "finish_date" } }, [
+                        _vm._v("Finish date")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.finish_date,
+                            expression: "finish_date"
+                          }
+                        ],
+                        class: _vm.errors.has("finish_date")
+                          ? "form-control is-invalid"
+                          : "form-control",
+                        attrs: {
+                          type: "date",
+                          name: "finish_date",
+                          id: "finish_date",
+                          placeholder: "Finish date"
+                        },
+                        domProps: { value: _vm.finish_date },
+                        on: {
+                          click: function($event) {
+                            return _vm.errors.clear("finish_date")
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.finish_date = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("finish_date")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _c("strong", {
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.errors.get("finish_date")
+                                  )
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("fieldset", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "status" } }, [
+                        _vm._v("Task status")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.status,
+                              expression: "status"
+                            }
+                          ],
+                          class: _vm.errors.has("status")
+                            ? "form-control is-invalid"
+                            : "form-control",
+                          attrs: { id: "status", name: "status" },
+                          on: {
+                            click: function($event) {
+                              return _vm.errors.clear("status")
+                            },
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.status = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "", disabled: "" } }, [
+                            _vm._v(
+                              "\n                                 Choose one...\n                                 "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Planned" } }, [
+                            _vm._v(
+                              "\n                                     Planned\n                                 "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "In progress" } }, [
+                            _vm._v(
+                              "\n                                    In Progress\n                                "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Waiting" } }, [
+                            _vm._v(
+                              "\n                                    Waiting\n                                "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Testing" } }, [
+                            _vm._v(
+                              "\n                                    Testing\n                                "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Done" } }, [
+                            _vm._v(
+                              "\n                                    Done\n                                "
+                            )
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm.errors.has("status")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _c("strong", {
+                                domProps: {
+                                  textContent: _vm._s(_vm.errors.get("status"))
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c("small", [
+                        _vm._v("The member responsible will be notified.")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Close")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit", disabled: _vm.errors.any() }
+                        },
+                        [_vm._v("Submit")]
+                      )
+                    ])
+                  ]
                 )
               ])
             ])
@@ -55642,7 +55780,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "addTaskModalLabel" } },
-        [_vm._v("Add new task")]
+        [_vm._v("Add task information")]
       ),
       _vm._v(" "),
       _c(
@@ -55658,94 +55796,8 @@ var staticRenderFns = [
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("Task description is required")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("Person responsible is required.")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("You must provide the start date.")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("You must provide the finish date.")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("Task status is required.")])]
-    )
   }
 ]
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tasks/Tasks.vue?vue&type=template&id=0e180e32&":
-/*!**************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tasks/Tasks.vue?vue&type=template&id=0e180e32& ***!
-  \**************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "flex row justify-content-between" },
-    [
-      _c("new-task", {
-        attrs: { workspace: _vm.workspace },
-        on: { "task-added": _vm.refresh }
-      }),
-      _vm._v(" "),
-      _c("tasks-table", { attrs: { workspace: _vm.workspace } })
-    ],
-    1
-  )
-}
-var staticRenderFns = []
 render._withStripped = true
 
 
@@ -68009,7 +68061,6 @@ Vue.component('member-slot-checkout', __webpack_require__(/*! ./components/Membe
 Vue.component('renew-subscription', __webpack_require__(/*! ./components/RenewSubscription.vue */ "./resources/js/components/RenewSubscription.vue")["default"]);
 Vue.component('new-task', __webpack_require__(/*! ./components/tasks/NewTask.vue */ "./resources/js/components/tasks/NewTask.vue")["default"]);
 Vue.component('tasks-table', __webpack_require__(/*! ./components/tasks/TasksTable.vue */ "./resources/js/components/tasks/TasksTable.vue")["default"]);
-Vue.component('tasks', __webpack_require__(/*! ./components/tasks/Tasks.vue */ "./resources/js/components/tasks/Tasks.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -68351,75 +68402,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewTask_vue_vue_type_template_id_167e612e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewTask_vue_vue_type_template_id_167e612e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/tasks/Tasks.vue":
-/*!*************************************************!*\
-  !*** ./resources/js/components/tasks/Tasks.vue ***!
-  \*************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Tasks_vue_vue_type_template_id_0e180e32___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Tasks.vue?vue&type=template&id=0e180e32& */ "./resources/js/components/tasks/Tasks.vue?vue&type=template&id=0e180e32&");
-/* harmony import */ var _Tasks_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tasks.vue?vue&type=script&lang=js& */ "./resources/js/components/tasks/Tasks.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Tasks_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Tasks_vue_vue_type_template_id_0e180e32___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Tasks_vue_vue_type_template_id_0e180e32___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/tasks/Tasks.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/tasks/Tasks.vue?vue&type=script&lang=js&":
-/*!**************************************************************************!*\
-  !*** ./resources/js/components/tasks/Tasks.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Tasks_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Tasks.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tasks/Tasks.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Tasks_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/tasks/Tasks.vue?vue&type=template&id=0e180e32&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/components/tasks/Tasks.vue?vue&type=template&id=0e180e32& ***!
-  \********************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Tasks_vue_vue_type_template_id_0e180e32___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Tasks.vue?vue&type=template&id=0e180e32& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tasks/Tasks.vue?vue&type=template&id=0e180e32&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Tasks_vue_vue_type_template_id_0e180e32___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Tasks_vue_vue_type_template_id_0e180e32___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
