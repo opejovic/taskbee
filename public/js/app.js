@@ -1860,18 +1860,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return 'Renew subscription';
-    },
-    description: function description() {
-      return "Purchase ".concat(this.plan.name, " bundle.");
-    },
-    totalPrice: function totalPrice() {
-      return this.plan.amount;
-    },
-    priceInDollars: function priceInDollars() {
-      return (this.plan.amount / 100).toFixed(2);
-    },
-    totalPriceInDollars: function totalPriceInDollars() {
-      return (this.plan.amount / 100).toFixed(2);
     }
   },
   methods: {
@@ -2170,39 +2158,107 @@ function () {
 }();
 
 ;
+
+var Form =
+/*#__PURE__*/
+function () {
+  function Form(data) {
+    _classCallCheck(this, Form);
+
+    this.originalData = data;
+
+    for (var field in data) {
+      this[field] = data[field];
+    }
+
+    this.errors = new Errors();
+  }
+
+  _createClass(Form, [{
+    key: "data",
+    value: function data() {
+      var data = {};
+
+      for (var property in this.originalData) {
+        data[property] = this[property];
+      }
+
+      return data;
+    }
+  }, {
+    key: "post",
+    value: function post(url) {
+      return this.submit('post', url);
+    }
+  }, {
+    key: "submit",
+    value: function submit(requestType, url) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios[requestType](url, _this.data()).then(function (response) {
+          _this.onSuccess(response.data);
+
+          resolve(response.data);
+        })["catch"](function (error) {
+          _this.onFail(error.response.data.errors);
+
+          reject(error.response.data.errors);
+        });
+      });
+    }
+  }, {
+    key: "onSuccess",
+    value: function onSuccess() {
+      this.reset();
+    }
+  }, {
+    key: "onFail",
+    value: function onFail(errors) {
+      this.errors.record(errors);
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      for (var field in this.originalData) {
+        this[field] = null;
+      }
+
+      this.errors.clear();
+    }
+  }]);
+
+  return Form;
+}();
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['workspace'],
   data: function data() {
     return {
-      show: true,
-      members: this.workspace.members,
-      name: '',
-      user_responsible: '',
-      start_date: '',
-      finish_date: '',
-      status: '',
-      errors: new Errors()
+      form: new Form({
+        name: '',
+        user_responsible: '',
+        start_date: '',
+        finish_date: '',
+        status: ''
+      }),
+      members: this.workspace.members
     };
   },
   methods: {
     addTask: function addTask() {
-      var _this = this;
+      var _this2 = this;
 
-      axios.post("/workspaces/".concat(this.workspace.id, "/tasks"), this.$data).then(function (response) {
-        _this.$emit('task-added');
+      this.form.post("/workspaces/".concat(this.workspace.id, "/tasks")).then(function (response) {
+        _this2.$emit('task-added');
 
-        $('#addTaskModal').modal('hide'); // flash a message to the user
-      })["catch"](function (error) {
-        _this.errors.record(error.response.data.errors);
+        $('#addTaskModal').modal('hide'); // Temporary
+
+        alert(response.message); // flash a message to the user
       });
     },
     clear: function clear() {
-      this.name = '';
-      this.user_responsible = '';
-      this.start_date = '';
-      this.finish_date = '';
-      this.status = '';
-      this.errors.clear();
+      this.form.reset();
     }
   },
   mounted: function mounted() {
@@ -55401,11 +55457,11 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.name,
-                            expression: "name"
+                            value: _vm.form.name,
+                            expression: "form.name"
                           }
                         ],
-                        class: _vm.errors.has("name")
+                        class: _vm.form.errors.has("name")
                           ? "form-control is-invalid"
                           : "form-control",
                         attrs: {
@@ -55414,21 +55470,21 @@ var render = function() {
                           id: "name",
                           placeholder: "Task description"
                         },
-                        domProps: { value: _vm.name },
+                        domProps: { value: _vm.form.name },
                         on: {
                           keydown: function($event) {
-                            return _vm.errors.clear("name")
+                            return _vm.form.errors.clear("name")
                           },
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.name = $event.target.value
+                            _vm.$set(_vm.form, "name", $event.target.value)
                           }
                         }
                       }),
                       _vm._v(" "),
-                      _vm.errors.has("name")
+                      _vm.form.errors.has("name")
                         ? _c(
                             "span",
                             {
@@ -55438,7 +55494,9 @@ var render = function() {
                             [
                               _c("strong", {
                                 domProps: {
-                                  textContent: _vm._s(_vm.errors.get("name"))
+                                  textContent: _vm._s(
+                                    _vm.form.errors.get("name")
+                                  )
                                 }
                               })
                             ]
@@ -55458,16 +55516,16 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.user_responsible,
-                              expression: "user_responsible"
+                              value: _vm.form.user_responsible,
+                              expression: "form.user_responsible"
                             }
                           ],
-                          class: _vm.errors.has("user_responsible")
+                          class: _vm.form.errors.has("user_responsible")
                             ? "form-control is-invalid"
                             : "form-control",
                           on: {
                             click: function($event) {
-                              return _vm.errors.clear("user_responsible")
+                              return _vm.form.errors.clear("user_responsible")
                             },
                             change: function($event) {
                               var $$selectedVal = Array.prototype.filter
@@ -55478,9 +55536,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.user_responsible = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.form,
+                                "user_responsible",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             }
                           }
                         },
@@ -55508,7 +55570,7 @@ var render = function() {
                         2
                       ),
                       _vm._v(" "),
-                      _vm.errors.has("user_responsible")
+                      _vm.form.errors.has("user_responsible")
                         ? _c(
                             "span",
                             {
@@ -55519,7 +55581,7 @@ var render = function() {
                               _c("strong", {
                                 domProps: {
                                   textContent: _vm._s(
-                                    _vm.errors.get("user_responsible")
+                                    _vm.form.errors.get("user_responsible")
                                   )
                                 }
                               })
@@ -55538,11 +55600,11 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.start_date,
-                            expression: "start_date"
+                            value: _vm.form.start_date,
+                            expression: "form.start_date"
                           }
                         ],
-                        class: _vm.errors.has("start_date")
+                        class: _vm.form.errors.has("start_date")
                           ? "form-control is-invalid"
                           : "form-control",
                         attrs: {
@@ -55551,21 +55613,25 @@ var render = function() {
                           id: "start_date",
                           placeholder: "Start date"
                         },
-                        domProps: { value: _vm.start_date },
+                        domProps: { value: _vm.form.start_date },
                         on: {
                           click: function($event) {
-                            return _vm.errors.clear("start_date")
+                            return _vm.form.errors.clear("start_date")
                           },
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.start_date = $event.target.value
+                            _vm.$set(
+                              _vm.form,
+                              "start_date",
+                              $event.target.value
+                            )
                           }
                         }
                       }),
                       _vm._v(" "),
-                      _vm.errors.has("start_date")
+                      _vm.form.errors.has("start_date")
                         ? _c(
                             "span",
                             {
@@ -55576,7 +55642,7 @@ var render = function() {
                               _c("strong", {
                                 domProps: {
                                   textContent: _vm._s(
-                                    _vm.errors.get("start_date")
+                                    _vm.form.errors.get("start_date")
                                   )
                                 }
                               })
@@ -55595,11 +55661,11 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.finish_date,
-                            expression: "finish_date"
+                            value: _vm.form.finish_date,
+                            expression: "form.finish_date"
                           }
                         ],
-                        class: _vm.errors.has("finish_date")
+                        class: _vm.form.errors.has("finish_date")
                           ? "form-control is-invalid"
                           : "form-control",
                         attrs: {
@@ -55608,21 +55674,25 @@ var render = function() {
                           id: "finish_date",
                           placeholder: "Finish date"
                         },
-                        domProps: { value: _vm.finish_date },
+                        domProps: { value: _vm.form.finish_date },
                         on: {
                           click: function($event) {
-                            return _vm.errors.clear("finish_date")
+                            return _vm.form.errors.clear("finish_date")
                           },
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.finish_date = $event.target.value
+                            _vm.$set(
+                              _vm.form,
+                              "finish_date",
+                              $event.target.value
+                            )
                           }
                         }
                       }),
                       _vm._v(" "),
-                      _vm.errors.has("finish_date")
+                      _vm.form.errors.has("finish_date")
                         ? _c(
                             "span",
                             {
@@ -55633,7 +55703,7 @@ var render = function() {
                               _c("strong", {
                                 domProps: {
                                   textContent: _vm._s(
-                                    _vm.errors.get("finish_date")
+                                    _vm.form.errors.get("finish_date")
                                   )
                                 }
                               })
@@ -55654,17 +55724,17 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.status,
-                              expression: "status"
+                              value: _vm.form.status,
+                              expression: "form.status"
                             }
                           ],
-                          class: _vm.errors.has("status")
+                          class: _vm.form.errors.has("status")
                             ? "form-control is-invalid"
                             : "form-control",
                           attrs: { id: "status", name: "status" },
                           on: {
                             click: function($event) {
-                              return _vm.errors.clear("status")
+                              return _vm.form.errors.clear("status")
                             },
                             change: function($event) {
                               var $$selectedVal = Array.prototype.filter
@@ -55675,9 +55745,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.status = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.form,
+                                "status",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             }
                           }
                         },
@@ -55720,7 +55794,7 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _vm.errors.has("status")
+                      _vm.form.errors.has("status")
                         ? _c(
                             "span",
                             {
@@ -55730,7 +55804,9 @@ var render = function() {
                             [
                               _c("strong", {
                                 domProps: {
-                                  textContent: _vm._s(_vm.errors.get("status"))
+                                  textContent: _vm._s(
+                                    _vm.form.errors.get("status")
+                                  )
                                 }
                               })
                             ]
@@ -55756,7 +55832,10 @@ var render = function() {
                         "button",
                         {
                           staticClass: "btn btn-primary",
-                          attrs: { type: "submit", disabled: _vm.errors.any() }
+                          attrs: {
+                            type: "submit",
+                            disabled: _vm.form.errors.any()
+                          }
                         },
                         [_vm._v("Submit")]
                       )

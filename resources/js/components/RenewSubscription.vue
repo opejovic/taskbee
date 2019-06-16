@@ -35,19 +35,6 @@
 
                 return 'Renew subscription';
             },
-
-            description() {
-                return `Purchase ${this.plan.name} bundle.`
-            },
-            totalPrice() {
-                return this.plan.amount
-            },
-            priceInDollars() {
-                return (this.plan.amount / 100).toFixed(2)
-            },
-            totalPriceInDollars() {
-                return (this.plan.amount / 100).toFixed(2)
-            },
         },
         methods: {
             initStripe() {
@@ -62,7 +49,7 @@
                     window.location = response.data;
                     // window.location = `/workspace-setup/${response.data[0]}`
                 }).catch(response => {
-                    this.processing = false
+                    this.processing = false;
                 })
                 
             },

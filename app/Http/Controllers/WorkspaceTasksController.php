@@ -42,6 +42,10 @@ class WorkspaceTasksController extends Controller
                 'tasks' => $tasks
             ]);
         } catch (SubscriptionExpiredException $e) {
+            if (Auth::user()->owns($workspace)) {
+                return redirect(route('subscription-expired.show', $workspace));
+            }
+
             return response("Subscription exipred. Please renew your subscription.", 423);
         }
     }
@@ -99,7 +103,7 @@ class WorkspaceTasksController extends Controller
             Mail::to($task->assignee->email)->queue(new TaskCreatedEmail($task));
 
             if (request()->wantsJson()) {
-                return response([], 201);
+                return response(['message' => 'Task created!'], 201);
             }
 
             return redirect(route('tasks.index', $workspace));

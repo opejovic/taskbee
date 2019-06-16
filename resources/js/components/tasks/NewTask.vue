@@ -20,16 +20,16 @@
                                 <label for="name">Describe the task</label>
 
                                 <input 
-                                type="text" 
-                                :class="errors.has('name')  ? 'form-control is-invalid' : 'form-control'" 
-                                name="name" 
-                                id="name" 
-                                placeholder="Task description" 
-                                v-model="name"
-                                @keydown="errors.clear('name')">
+                                    type="text" 
+                                    :class="form.errors.has('name')  ? 'form-control is-invalid' : 'form-control'" 
+                                    name="name" 
+                                    id="name" 
+                                    placeholder="Task description" 
+                                    v-model="form.name"
+                                    @keydown="form.errors.clear('name')">
 
-                                <span class="invalid-feedback" role="alert" v-if="errors.has('name')">
-                                    <strong v-text="errors.get('name')"></strong>
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('name')">
+                                    <strong v-text="form.errors.get('name')"></strong>
                                 </span>
                             </div>
 
@@ -37,9 +37,9 @@
                                 <label for="user_responsible">Who has to complete the task?</label>
 
                                 <select 
-                                    :class="errors.has('user_responsible')  ? 'form-control is-invalid' : 'form-control'"
-                                    v-model="user_responsible"
-                                    @click="errors.clear('user_responsible')">
+                                    :class="form.errors.has('user_responsible')  ? 'form-control is-invalid' : 'form-control'"
+                                    v-model="form.user_responsible"
+                                    @click="form.errors.clear('user_responsible')">
                                 
                                     <option value="" disabled>Choose one...</option>
                                     <option v-for="member in members" :value="member.id">
@@ -47,49 +47,49 @@
                                     </option>
                                 </select>
 
-                                <span class="invalid-feedback" role="alert" v-if="errors.has('user_responsible')">
-                                    <strong v-text="errors.get('user_responsible')"></strong>
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('user_responsible')">
+                                    <strong v-text="form.errors.get('user_responsible')"></strong>
                                 </span>
                             </div>
 
                             <fieldset class="form-group">
                                 <label for="start_date">Start date</label>
                                 <input type="date" 
-                                name="start_date" 
-                                :class="errors.has('start_date')  ? 'form-control is-invalid' : 'form-control'" 
-                                id="start_date" 
-                                placeholder="Start date"
-                                v-model="start_date"
-                                @click="errors.clear('start_date')">
+                                    name="start_date" 
+                                    :class="form.errors.has('start_date')  ? 'form-control is-invalid' : 'form-control'" 
+                                    id="start_date" 
+                                    placeholder="Start date"
+                                    v-model="form.start_date"
+                                    @click="form.errors.clear('start_date')">
 
-                                <span class="invalid-feedback" role="alert" v-if="errors.has('start_date')">
-                                    <strong v-text="errors.get('start_date')"></strong>
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('start_date')">
+                                    <strong v-text="form.errors.get('start_date')"></strong>
                                 </span>
                             </fieldset>
 
                             <fieldset class="form-group">
                                 <label for="finish_date">Finish date</label>
                                 <input type="date" 
-                                name="finish_date"
-                                :class="errors.has('finish_date')  ? 'form-control is-invalid' : 'form-control'" 
-                                id="finish_date" 
-                                placeholder="Finish date"
-                                v-model="finish_date"
-                                @click="errors.clear('finish_date')">
+                                    name="finish_date"
+                                    :class="form.errors.has('finish_date')  ? 'form-control is-invalid' : 'form-control'" 
+                                    id="finish_date" 
+                                    placeholder="Finish date"
+                                    v-model="form.finish_date"
+                                    @click="form.errors.clear('finish_date')">
 
-                                <span class="invalid-feedback" role="alert" v-if="errors.has('finish_date')">
-                                    <strong v-text="errors.get('finish_date')"></strong>
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('finish_date')">
+                                    <strong v-text="form.errors.get('finish_date')"></strong>
                                 </span>                                   
                             </fieldset>
 
                             <fieldset class="form-group">
                                 <label for="status">Task status</label>
                                 <select 
-                                :class="errors.has('status')  ? 'form-control is-invalid' : 'form-control'" 
-                                id="status" 
-                                name="status" 
-                                v-model="status"
-                                @click="errors.clear('status')">
+                                    :class="form.errors.has('status')  ? 'form-control is-invalid' : 'form-control'" 
+                                    id="status" 
+                                    name="status" 
+                                    v-model="form.status"
+                                    @click="form.errors.clear('status')">
 
                                     <option value="" disabled>
                                      Choose one...
@@ -112,15 +112,15 @@
                                     </option>
                                 </select>
 
-                                <span class="invalid-feedback" role="alert" v-if="errors.has('status')">
-                                    <strong v-text="errors.get('status')"></strong>
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('status')">
+                                    <strong v-text="form.errors.get('status')"></strong>
                                 </span>                             
                             </fieldset>
 
                             <div class="modal-footer">
                                 <small>The member responsible will be notified.</small>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" :disabled="errors.any()">Submit</button>
+                                <button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -169,42 +169,94 @@
         }
     };
 
+    class Form {
+        constructor(data) {
+            this.originalData = data;
+
+            for (let field in data) {
+                this[field] = data[field];
+            }
+
+            this.errors = new Errors();
+        }
+
+        data() {
+            var data = {};
+
+            for (let property in this.originalData) {
+                data[property] = this[property];
+            }
+
+            return data;
+        }
+
+        post(url) {
+            return this.submit('post', url);
+        }
+
+        submit(requestType, url) {
+            return new Promise((resolve, reject) => {
+                axios[requestType](url, this.data())
+                    .then(response => {
+                        this.onSuccess(response.data);
+
+                        resolve(response.data);
+                    }).catch(error => { 
+                        this.onFail(error.response.data.errors);
+
+                        reject(error.response.data.errors);
+                    });
+            });
+        }
+
+        onSuccess() {
+            this.reset();
+        }
+
+        onFail(errors) {
+            this.errors.record(errors);
+        }
+
+        reset() {
+            for (let field in this.originalData) {
+                this[field] = null;
+            }
+
+            this.errors.clear();
+        }
+    }
+
     export default {
 
         props: ['workspace'],
         data() {
             return {
-                show: true,
+                form: new Form({
+                    name: '',
+                    user_responsible: '',
+                    start_date: '',
+                    finish_date: '',
+                    status: '',
+                }),
+                
                 members: this.workspace.members,
-                name: '',
-                user_responsible: '',
-                start_date: '',
-                finish_date: '',
-                status: '',
-                errors: new Errors(),
             }
         },
 
         methods: {
             addTask() {
-                axios
-                .post(`/workspaces/${this.workspace.id}/tasks`, this.$data)
-                .then(response => {
-                    this.$emit('task-added');
-                    $('#addTaskModal').modal('hide');
-                    // flash a message to the user
-                }).catch(error => { 
-                    this.errors.record(error.response.data.errors);
-                });
+                this.form.post(`/workspaces/${this.workspace.id}/tasks`)
+                    .then(response => {
+                        this.$emit('task-added');
+                        $('#addTaskModal').modal('hide');
+                        // Temporary
+                        alert(response.message);
+                        // flash a message to the user
+                    });
             },
 
             clear() {
-                this.name = '';
-                this.user_responsible = '';
-                this.start_date = '';
-                this.finish_date = '';
-                this.status = '';
-                this.errors.clear();
+                this.form.reset();
             },
         },
 
