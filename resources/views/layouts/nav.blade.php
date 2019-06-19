@@ -13,6 +13,14 @@
 
             </ul>
 
+            @auth
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
+                    </li>
+                </ul>
+            @endauth
+
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
                 {{-- Refactor this --}}

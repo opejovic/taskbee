@@ -1,19 +1,17 @@
 <template>
-    <div class="flex row justify-content-between">
-        <new-task @task-added="refresh" :workspace="workspace"></new-task>
-        
-        <div class="col-md-12 text-center" v-if="items.length <= 0">No tasks created yet</div>
+    <div>
+        <div class="col-md-12" v-if="items.length <= 0">No tasks created yet</div>
 
-        <table class="table col-md-10" v-if="items.length > 0">
+        <table class="table col-md-16" v-if="items.length > 0">
             <thead>
                 <tr>
-                    <th scope="col">Task</th>
-                    <th scope="col">Creator</th>
-                    <th scope="col">Person responsible</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Start date</th>
-                    <th scope="col">Finish date</th>
-                    <th scope="col"></th>
+                    <th scope="col text-left" style="width: 35%">Task</th>
+                    <th scope="col text-center">Creator</th>
+                    <th scope="col text-center">Person responsible</th>
+                    <th scope="col text-center" style="width: 10%">Status</th>
+                    <th scope="col text-center">Start date</th>
+                    <th scope="col text-center">Finish date</th>
+                    <th scope="col text-center" style="width: 1%"></th>
                 </tr>
             </thead>
             <tbody>
@@ -21,7 +19,7 @@
                     <td v-text="task.name"></td>
                     <td v-text="task.creator.full_name"></td>
                     <td v-text="task.assignee.full_name"></td>
-                    <task-status :task="task" @task-updated="refresh"></task-status>
+                    <task-status :task="task" @task-updated="fetchTasks"></task-status>
                     <td v-text="formattedDate(task.start_date)"></td>
                     <td v-text="formattedDate(task.finish_date)"></td>
                     <td style="cursor: pointer" @click="deleteTask(task)">
@@ -39,7 +37,7 @@
     import TaskStatus from './TaskStatus.vue';
 
     export default {
-      props: ['workspace'],
+      props: ['workspace', 'tasks'],
 
       data() {
         return {
@@ -69,20 +67,20 @@
         deleteTask(task) {
             axios.delete(`/workspaces/${this.workspace.id}/tasks/${task.id}`)
                 .then(response => {
-                    this.refresh();
-                    // flash('Task deleted!');
+                    this.fetchTasks();
                     this.$toasted.show('Task deleted!');
                 })
                 .catch();
         },
-
-        refresh() {
-            this.fetchTasks();
-        },    
     },
 
     created() {
-        this.fetchTasks();
+        this.items = this.tasks;
+
+
+        window.events.$on('task-added', () => {
+            this.fetchTasks();
+        });
     },
 }
 </script>
@@ -90,6 +88,10 @@
 <style>
     .icon {
         font-size: 15px; 
+        vertical-align: middle;
+    }
+
+    .middle {
         vertical-align: middle;
     }
 </style>

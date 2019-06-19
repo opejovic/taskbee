@@ -23,8 +23,8 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
             
-            $tasks = $workspace->tasks()->with('creator', 'assignee')->get();
-            
+            $tasks = $workspace->tasks()->get();
+
             if (request()->has('my')) {
                 $tasks = $workspace->tasks()->where('user_responsible', Auth::user()->id)->get();
             } 
@@ -39,7 +39,8 @@ class WorkspaceTasksController extends Controller
 
             return view('tasks.index', [
                 'workspace' => $workspace,
-                'tasks' => $tasks
+                'tasks' => $tasks,
+                // 'groupedTasks' => $groupedTasks,
             ]);
         } catch (SubscriptionExpiredException $e) {
             if (Auth::user()->owns($workspace)) {

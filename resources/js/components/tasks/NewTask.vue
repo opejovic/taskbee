@@ -251,7 +251,7 @@
             addTask() {
                 this.form.post(`/workspaces/${this.workspace.id}/tasks`)
                     .then(response => {
-                        this.$emit('task-added');
+                        window.events.$emit('task-added');
                         $('#addTaskModal').modal('hide');
                         
                         // flash a message to the user

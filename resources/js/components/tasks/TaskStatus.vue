@@ -1,5 +1,5 @@
 <template>
-	<td class="dropdown" style="cursor: pointer">
+	<td class="dropdown cursor">
 		<a id="navbarDropdown" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-text="task.status">
 			<span class="caret"></span>
 		</a>
@@ -20,7 +20,6 @@
 		},
 		methods: {
 			updateStatus(taskStatus) {
-				// console.log(taskStatus);
 				if (this.task.status == taskStatus) {
 					return;
 				}
@@ -37,3 +36,9 @@
 		},
 	}
 </script>
+
+<style>
+	.cursor {
+		cursor: pointer;
+	}
+</style>
