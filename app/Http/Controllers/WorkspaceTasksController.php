@@ -114,6 +114,35 @@ class WorkspaceTasksController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Workspace $workspace, Task $task)
+    {
+        try {
+            $this->authorize('update', $workspace);
+
+            request()->validate([
+                'status' => ['required'],
+            ]);
+
+            $task->update(['status' => request('status')]);
+            // Mail::to($task->assignee->email)->queue(new TaskCreatedEmail($task));
+
+            if (request()->wantsJson()) {
+                return response(['message' => 'Task updated!'], 201);
+            }
+
+            return redirect(route('tasks.index', $workspace));
+        } catch (SubscriptionExpiredException $e) {
+            return response("Subscription exipred. Please renew your subscription.", 423);
+        }
+    }
+
+    /**
      * summary
      *
      * @return void

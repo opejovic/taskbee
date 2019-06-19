@@ -1,15 +1,25 @@
 <template>
     <div>
-        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addTaskModal">
-            Add task
+        <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addTaskModal">
+                <i class="material-icons add">
+                    add
+                </i>
+                Add task
         </button>
 
-        <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal" 
+            id="addTaskModal" 
+            tabindex="-1" 
+            role="dialog" 
+            aria-labelledby="addTaskModalLabel" 
+            aria-hidden="true"
+            data-focus="true">
+
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addTaskModalLabel">Add task information</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" @click="hide" class="close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -41,7 +51,6 @@
                                     v-model="form.user_responsible"
                                     @click="form.errors.clear('user_responsible')">
                                 
-                                    <option value="" disabled>Choose one...</option>
                                     <option v-for="member in members" :value="member.id">
                                         {{ member.first_name }} {{ member.last_name }}
                                     </option>
@@ -91,9 +100,6 @@
                                     v-model="form.status"
                                     @click="form.errors.clear('status')">
 
-                                    <option value="" disabled>
-                                     Choose one...
-                                     </option>
                                      <option value="Planned">
                                          Planned
                                      </option>
@@ -106,7 +112,6 @@
                                     <option value="Testing">
                                         Testing
                                     </option>
-
                                     <option value="Done">
                                         Done
                                     </option>
@@ -119,7 +124,7 @@
 
                             <div class="modal-footer">
                                 <small>The member responsible will be notified.</small>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" @click="hide">Close</button>
                                 <button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Submit</button>
                             </div>
                         </form>
@@ -227,16 +232,15 @@
     }
 
     export default {
-
         props: ['workspace'],
         data() {
             return {
                 form: new Form({
-                    name: '',
-                    user_responsible: '',
-                    start_date: '',
-                    finish_date: '',
-                    status: '',
+                    name: null,
+                    user_responsible: null,
+                    start_date: null,
+                    finish_date: null,
+                    status: null,
                 }),
                 
                 members: this.workspace.members,
@@ -249,22 +253,22 @@
                     .then(response => {
                         this.$emit('task-added');
                         $('#addTaskModal').modal('hide');
-                        // Temporary
-                        alert(response.message);
+                        
                         // flash a message to the user
+                        this.$toasted.show('Task created!');
                     });
             },
 
-            clear() {
+            hide() {
+                $('#addTaskModal').modal('hide');
                 this.form.reset();
-            },
-        },
-
-        mounted() {
-            const self = this;
-            $('#addTaskModal').on('hidden.bs.modal', function (e) {
-                self.clear();
-            });
+            }
         },
     };
 </script>
+
+<style>
+    .add {
+        vertical-align: middle;
+    }
+</style>

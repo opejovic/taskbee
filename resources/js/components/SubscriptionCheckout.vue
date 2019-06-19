@@ -1,19 +1,21 @@
 <template>
     <div>
-        <button class="btn btn-primary btn-block"
-           @click="initStripe"
-           :class="{ 'btn-loading': processing }"
-           :disabled="processing"
-           >
-            <span class="spinner-border spinner-border-sm" 
-                role="status" 
-                aria-hidden="true" 
-                v-show="processing"
-                >
-            </span>
-            <span v-text="state"></span>
-        </button>
+        <button 
+            class="btn btn-primary btn-block"
+            @click="checkout"
+            :class="{ 'btn-loading': processing }"
+            :disabled="processing">
 
+            <div :class="processing ? 'd-flex align-items-center' : 'text-center'">
+                <span v-text="state">Loading...</span>
+                <div 
+                    class="spinner-border ml-auto spinner-border-sm" 
+                    role="status" 
+                    v-show="processing"
+                >
+                </div>
+            </div>
+        </button>
     </div>
 </template>
 
@@ -30,27 +32,15 @@
         computed: {
             state() {
                 if (this.processing) {
-                    return 'Proceeding to checkout...';
+                    return 'Processing';
                 }
 
                 return 'Purchase Bundle';
             },
-
-            description() {
-                return `Purchase ${this.plan.name} bundle.`
-            },
-            totalPrice() {
-                return this.plan.amount
-            },
-            priceInDollars() {
-                return (this.plan.amount / 100).toFixed(2)
-            },
-            totalPriceInDollars() {
-                return (this.plan.amount / 100).toFixed(2)
-            },
         },
+
         methods: {
-            initStripe() {
+            checkout() {
                 const stripe = Stripe('pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE');
 
                 this.processing = true;
