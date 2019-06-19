@@ -8,6 +8,20 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted,  { 
+    theme: "toasted-primary", 
+    position: "bottom-left", 
+    duration: 4000,
+    action: {
+        text: 'Close',
+        onClick: (e, toastObject) => {
+            toastObject.goAway(0);
+        }
+    },
+});
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -24,6 +38,7 @@ Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.v
 Vue.component('renew-subscription', require('./components/RenewSubscription.vue').default);
 Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
 Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
+Vue.component('task-status', require('./components/tasks/TaskStatus.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

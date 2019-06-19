@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}/tasks', 'WorkspaceTasksController@index')->name('tasks.index');
 	Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
 	Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
+	Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update');
 	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
 
 	Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
