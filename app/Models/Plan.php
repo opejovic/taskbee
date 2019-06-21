@@ -61,13 +61,12 @@ class Plan extends Model
     }
 
     /**
-     * summary
+     * Get the amount in euros. 
      *
-     * @return void
-     * @author 
+     * @return int
      */
     public function getAmountInEurAttribute()
     {
-        return number_format($this->ammount / 100);
+        return number_format($this->amount / 100);
     }
 }

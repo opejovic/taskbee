@@ -41,7 +41,7 @@
 
         methods: {
             checkout() {
-                const stripe = Stripe('pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE');
+                const stripe = Stripe(process.env.STRIPE_KEY);
 
                 this.processing = true;
                 

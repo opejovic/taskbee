@@ -14,10 +14,10 @@ use Illuminate\Validation\Rule;
 class InviteMembersController extends Controller
 {
     /**
-     * summary
+     * Store a newly created resource in storage.
      *
-     * @return void
-     * @author 
+     * @param  App\Models\Workspace $workspace
+     * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)
     {
@@ -34,7 +34,7 @@ class InviteMembersController extends Controller
                 // Same user cant be invited to the workspace twice
                 Rule::unique('invitations')->where(function ($query) use ($workspace) {
                     return ! $query->where('workspace_id', $workspace->id);
-            })
+                })
             ],
         ]);
 

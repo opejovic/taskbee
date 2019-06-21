@@ -45,10 +45,9 @@ class Task extends Model
     }
 
     /**
-     * summary
+     * Task belongs to a Workspace.
      *
-     * @return void
-     * @author 
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function workspace()
     {
@@ -56,10 +55,9 @@ class Task extends Model
     }
 
     /**
-     * summary
+     * Get formatted start date.
      *
-     * @return void
-     * @author 
+     * @return date
      */
     public function getFormattedStartDateAttribute()
     {
@@ -67,10 +65,9 @@ class Task extends Model
     }
 
     /**
-     * summary
+     * Get formatted finish date.
      *
-     * @return void
-     * @author 
+     * @return date
      */
     public function getFormattedFinishDateAttribute()
     {

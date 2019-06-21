@@ -52,10 +52,10 @@ class WorkspaceTasksController extends Controller
     }
 
     /**
-     * summary
+     * Show the form for creating a new resource.
      *
-     * @return void
-     * @author 
+     * @param App\Models\Workspace $workspace
+     * @return \Illuminate\Http\Response
      */
     public function create(Workspace $workspace)
     {
@@ -73,10 +73,10 @@ class WorkspaceTasksController extends Controller
     }
 
     /**
-     * summary
+     * Store a newly created resource in storage.
      *
-     * @return void
-     * @author 
+     * @param App\Models\Workspace $workspace
+     * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)
     {
@@ -144,10 +144,11 @@ class WorkspaceTasksController extends Controller
     }
 
     /**
-     * summary
+     * Remove the specified resource from storage.
      *
-     * @return void
-     * @author 
+     * @param  App\Models\Workspace $workspace
+     * @param  App\Models\Task $task
+     * @return \Illuminate\Http\Response
      */
     public function destroy(Workspace $workspace, Task $task)
     {

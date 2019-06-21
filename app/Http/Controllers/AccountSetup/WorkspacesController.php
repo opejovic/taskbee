@@ -11,10 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class WorkspacesController extends Controller
 {
     /**
-     * summary
+     * Store a newly created resource in storage.
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Http\Response
      */
     public function store()
     {
@@ -31,6 +30,7 @@ class WorkspacesController extends Controller
         ]);
 
         $workspace->members()->attach(Auth::user());
+        Auth::user()->update(['workspace_id' => $workspace->id]);
 
         $authorization->update([
         	'admin_id' => Auth::user()->id,

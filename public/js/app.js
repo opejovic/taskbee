@@ -1782,6 +1782,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['plan', 'workspace'],
   data: function data() {
@@ -1793,7 +1795,7 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     state: function state() {
       if (this.processing) {
-        return 'Processing your request...';
+        return 'Processing';
       }
 
       return 'Buy a member slot';
@@ -1931,7 +1933,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     checkout: function checkout() {
-      var stripe = Stripe('pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE');
+      var stripe = Stripe(Object({"MIX_PUSHER_APP_KEY":"","MIX_PUSHER_APP_CLUSTER":"mt1","MIX_STRIPE_KEY":"pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE","NODE_ENV":"development"}).STRIPE_KEY);
       this.processing = true;
       axios.post("/plans/".concat(this.plan.id, "/checkout"), {}).then(function (response) {
         stripe.redirectToCheckout({
@@ -56060,20 +56062,30 @@ var render = function() {
         on: { click: _vm.initStripe }
       },
       [
-        _c("span", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.processing,
-              expression: "processing"
-            }
-          ],
-          staticClass: "spinner-border spinner-border-sm",
-          attrs: { role: "status", "aria-hidden": "true" }
-        }),
-        _vm._v(" "),
-        _c("span", { domProps: { textContent: _vm._s(_vm.state) } })
+        _c(
+          "div",
+          {
+            class: _vm.processing ? "d-flex align-items-center" : "text-center"
+          },
+          [
+            _c("span", { domProps: { textContent: _vm._s(_vm.state) } }, [
+              _vm._v("Loading...")
+            ]),
+            _vm._v(" "),
+            _c("div", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.processing,
+                  expression: "processing"
+                }
+              ],
+              staticClass: "spinner-border spinner-border-sm",
+              attrs: { role: "status" }
+            })
+          ]
+        )
       ]
     )
   ])

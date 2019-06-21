@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class RenewSubscriptionsController extends Controller
 {
-	/**
-	 * summary
-	 *
-	 * @return void
-	 * @author 
-	 */
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param App\Models\Workspace $workspace
+     * @return \Illuminate\Http\Response
+     */
 	public function show(Workspace $workspace)
 	{
 	    abort_unless($workspace->subscription->isExpired(), 404);
@@ -21,10 +21,10 @@ class RenewSubscriptionsController extends Controller
 	}
 
     /**
-     * summary
+     * Store a newly created resource in storage.
      *
-     * @return void
-     * @author 
+     * @param  App\Models\Workspace $workspace
+     * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)
     {

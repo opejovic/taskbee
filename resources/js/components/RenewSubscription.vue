@@ -38,6 +38,7 @@
         },
         methods: {
             initStripe() {
+                
                 const stripe = Stripe("{{ config('service.stripe.key') }}");
 
                 this.processing = true;

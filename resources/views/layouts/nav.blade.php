@@ -14,11 +14,13 @@
             </ul>
 
             @auth
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
-                    </li>
-                </ul>
+                @if (auth()->user()->workspace_id !== null)
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
+                        </li>
+                    </ul>
+                @endif
             @endauth
 
             <!-- Right Side Of Navbar -->

@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class AddMemberSlotController extends Controller
 {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param App\Models\Workspace $workspace
+     * @return \Illuminate\Http\Response
+     */
     public function store(Workspace $workspace)
     {
     	$subscription = $workspace->subscription;
@@ -18,13 +24,13 @@ class AddMemberSlotController extends Controller
 
         // increment current stripe subscription item (current subscription plan) quantity.
         \Stripe\Subscription::update($stripeSub['id'], [
-          'cancel_at_period_end' => false,
-          'items' => [
-            [
-              'id' => $stripeSub['items']['data'][0]['id'],
-              'quantity' => $stripeSub['quantity'] + 1,
+            'cancel_at_period_end' => false,
+            'items' => [
+                [
+                  'id' => $stripeSub['items']['data'][0]['id'],
+                  'quantity' => $stripeSub['quantity'] + 1,
+                ],
             ],
-          ],
         ]);
 
         // Create and pay an invoice for added member

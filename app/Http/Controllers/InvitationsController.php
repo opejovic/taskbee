@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 class InvitationsController extends Controller
 {
     /**
-     * summary
+     * Display the specified resource.
      *
-     * @return void
-     * @author 
+     * @param  string $code
+     * @return \Illuminate\Http\Response
      */
     public function show($code)
     {

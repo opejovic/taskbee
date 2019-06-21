@@ -9,10 +9,9 @@ use Illuminate\Http\Request;
 class AcceptInvitationsController extends Controller
 {
     /**
-     * summary
+     * Store a newly created resource in storage.
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Http\Response
      */
     public function store()
     {

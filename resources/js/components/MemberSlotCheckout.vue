@@ -5,13 +5,15 @@
            :class="{ 'btn-loading': processing }"
            :disabled="processing"
            >
-            <span class="spinner-border spinner-border-sm" 
-                role="status" 
-                aria-hidden="true" 
-                v-show="processing"
+            <div :class="processing ? 'd-flex align-items-center' : 'text-center'">
+                <span v-text="state">Loading...</span>
+                <div 
+                    class="spinner-border spinner-border-sm" 
+                    role="status" 
+                    v-show="processing"
                 >
-            </span>
-            <span v-text="state"></span>
+                </div>
+            </div>
         </button>
 
     </div>
@@ -30,7 +32,7 @@
         computed: {
             state() {
                 if (this.processing) {
-                    return 'Processing your request...';
+                    return 'Processing';
                 }
 
                 return 'Buy a member slot';

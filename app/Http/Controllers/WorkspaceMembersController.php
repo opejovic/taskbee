@@ -9,10 +9,9 @@ use Illuminate\Http\Request;
 class WorkspaceMembersController extends Controller
 {
     /**
-     * summary
+     * Display a listing of the resource.
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Http\Response
      */
     public function index(Workspace $workspace)
     {
