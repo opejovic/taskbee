@@ -67,6 +67,6 @@ class Plan extends Model
      */
     public function getAmountInEurAttribute()
     {
-        return number_format($this->amount / 100);
+        return number_format(($this->amount * $this->members_limit / 100), 2);
     }
 }

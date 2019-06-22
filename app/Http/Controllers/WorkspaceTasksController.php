@@ -22,7 +22,6 @@ class WorkspaceTasksController extends Controller
     {
         try {
             $this->authorize('update', $workspace);
-            
             $tasks = $workspace->tasks()->get();
 
             if (request()->has('my')) {

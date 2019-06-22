@@ -69,8 +69,10 @@ class ViewTasksTest extends TestCase
     /** @test */
     function workspace_members_can_see_tasks_they_have_created()
     {
+        $this->withoutExceptionHandling();
         $workspace = factory(Workspace::class)->create();
-        $member = factory(User::class)->create(['workspace_id' => $workspace->id]);
+        $member = factory(User::class)->create();
+        $workspace->members()->attach($member);
         
         $membersTask = factory(Task::class)->create([
             'name' => 'Go to the store.',
@@ -82,7 +84,6 @@ class ViewTasksTest extends TestCase
             'name' => 'Clean your room.',
             'workspace_id' => $workspace->id
         ]);
-
         $response = $this->actingAs($member)->get("/workspaces/{$workspace->id}/tasks?by=me");
 
         

@@ -2371,10 +2371,21 @@ __webpack_require__.r(__webpack_exports__);
     formattedDate: function formattedDate(date) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format("LL");
     },
-    fetchTasks: function fetchTasks() {
+    refresh: function refresh() {
+      var currentUrl = window.location.href;
+
+      if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks') {
+        this.fetchTasks("/workspaces/".concat(this.workspace.id, "/tasks"));
+      } else if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks?my') {
+        this.fetchTasks("/workspaces/".concat(this.workspace.id, "/tasks?my"));
+      } else if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks?by=me') {
+        this.fetchTasks("/workspaces/".concat(this.workspace.id, "/tasks?by=me"));
+      }
+    },
+    fetchTasks: function fetchTasks(url) {
       var _this = this;
 
-      axios.get("/workspaces/".concat(this.workspace.id, "/tasks")).then(function (response) {
+      axios.get(url).then(function (response) {
         // handle success
         // assign tasks to the items data.
         _this.items = response.data[1];
@@ -56806,7 +56817,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("task-status", {
                     attrs: { task: task },
-                    on: { "task-updated": _vm.fetchTasks }
+                    on: { "task-updated": _vm.refresh }
                   }),
                   _vm._v(" "),
                   _c("td", {

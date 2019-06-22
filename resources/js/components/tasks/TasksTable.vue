@@ -19,7 +19,7 @@
                     <td v-text="task.name"></td>
                     <td v-text="task.creator.full_name"></td>
                     <td v-text="task.assignee.full_name"></td>
-                    <task-status :task="task" @task-updated="fetchTasks"></task-status>
+                    <task-status :task="task" @task-updated="refresh"></task-status>
                     <td v-text="formattedDate(task.start_date)"></td>
                     <td v-text="formattedDate(task.finish_date)"></td>
                     <td style="cursor: pointer" @click="deleteTask(task)">
@@ -50,9 +50,21 @@
             return moment(date).format("LL");
         },
 
-        fetchTasks() {
+        refresh() {
+            var currentUrl = window.location.href;
+
+            if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks') {
+                this.fetchTasks(`/workspaces/${this.workspace.id}/tasks`);   
+            } else if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks?my') {
+                this.fetchTasks(`/workspaces/${this.workspace.id}/tasks?my`);
+            } else if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks?by=me') {
+                this.fetchTasks(`/workspaces/${this.workspace.id}/tasks?by=me`);
+            }
+        },
+
+        fetchTasks(url) {
             axios
-                .get(`/workspaces/${this.workspace.id}/tasks`)
+                .get(url)
                 .then(response => {
                     // handle success
                     // assign tasks to the items data.
@@ -61,7 +73,7 @@
                 .catch(function (error) {
                     // handle error
                     console.log(error);
-                });
+                });            
         },
 
         deleteTask(task) {

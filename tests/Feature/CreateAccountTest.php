@@ -29,6 +29,7 @@ class CreateAccountTest extends TestCase
     /** @test */
     function guests_can_register()
     {
+        $this->withoutExceptionHandling();
         // Arrange
         $this->assertCount(0, User::all());
 
@@ -37,7 +38,9 @@ class CreateAccountTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Malkovich',
             'email' => 'john@example.com',
+            'email_confirmation' => 'john@example.com',
             'password' => 'password',
+            'password_confirmation' => 'password',
         ]);
 
         // Assert: the user is created

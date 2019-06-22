@@ -17,21 +17,21 @@ class AcceptInvitationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    function testing_json_decode()
-    {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $sub = \Stripe\Subscription::retrieve('sub_FC8CValtLHwOjU');
-        $sub->cancel();
+    // /** @test */
+    // function testing_json_decode()
+    // {
+    //     \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    //     $sub = \Stripe\Subscription::retrieve('sub_FC8CValtLHwOjU');
+    //     $sub->cancel();
 
-        // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        // $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
-        // $collect = collect($json);
+    //     // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    //     // $json = json_decode(file_get_contents(__DIR__.'/'.'event.json'));
+    //     // $collect = collect($json);
 
-        // $sub = $json->data->object;
-        // dd($sub->customer);
+    //     // $sub = $json->data->object;
+    //     // dd($sub->customer);
 
-    }
+    // }
 
     /** @test */
     function viewing_unused_invitations()
@@ -69,7 +69,8 @@ class AcceptInvitationTest extends TestCase
 
     /** @test */
     function registering_with_a_valid_invitation_code()
-    {   
+    {
+    $this->withoutExceptionHandling();   
         $workspace = factory(Workspace::class)->create();
         $invitation = factory(Invitation::class)->create([
             'user_id' => null,
@@ -81,7 +82,9 @@ class AcceptInvitationTest extends TestCase
             'first_name' => 'Jae',
             'last_name' => 'Sremmurd',
             'email' => 'jae@example.com',
+            'email_confirmation' => 'jae@example.com',
             'password' => 'password',
+            'password_confirmation' => 'password',
             'invitation_code' => $invitation->code,
         ]);
 
@@ -94,7 +97,6 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     function existing_users_can_accept_invitations_for_other_workspaces()
     {
-        $this->withoutExceptionHandling();
         $workspace = factory(Workspace::class)->create();
         $otherWorkspace = factory(Workspace::class)->create();
         $existingUser = factory(User::class)->create([

@@ -21,6 +21,7 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 	/** @test */
 	function can_authorize_subscriptions()
 	{
+		$this->withoutExceptionHandling();
 		Mail::fake();
 		AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 
@@ -39,8 +40,8 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 
 	    Mail::assertQueued(SubscriptionPurchasedEmail::class, function($mail) use ($subscription, $setupAuthorization) {
             return $mail->hasTo('jane@example.com')
-                && $mail->setupAuthorization->id == $setupAuthorization->id
-                && $mail->subscription->id == $subscription->id;
+                && $mail->authorization->id == $setupAuthorization->id
+                && $mail->authorization->subscription->id == $subscription->id;
         });
 	}
 

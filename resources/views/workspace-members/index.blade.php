@@ -2,11 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-
-        @if (auth()->user()->owns($workspace))
-            <member-slot-checkout :workspace="{{ $workspace }}"></member-slot-checkout>
-        @endif
+    <div class="row justify-content-left">
         
         @forelse($members as $member)
             <div class="col-md-2">
@@ -17,11 +13,16 @@
                         Some data about the user
                     </div>
                 </div>
+            <br>
             </div>
                 @empty
                     Woooosh, all empty.
         @endforelse
+        
     </div>
+        @if (auth()->user()->owns($workspace))
+            <member-slot-checkout :workspace="{{ $workspace }}"></member-slot-checkout>
+        @endif
 </div>
 @endsection
 
