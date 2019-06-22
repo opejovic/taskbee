@@ -79,7 +79,7 @@
         deleteTask(task) {
             axios.delete(`/workspaces/${this.workspace.id}/tasks/${task.id}`)
                 .then(response => {
-                    this.fetchTasks();
+                    this.refresh();
                     this.$toasted.show('Task deleted!');
                 })
                 .catch();
@@ -91,7 +91,7 @@
 
 
         window.events.$on('task-added', () => {
-            this.fetchTasks();
+            this.refresh();
         });
     },
 }

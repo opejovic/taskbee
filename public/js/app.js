@@ -2398,7 +2398,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios["delete"]("/workspaces/".concat(this.workspace.id, "/tasks/").concat(task.id)).then(function (response) {
-        _this2.fetchTasks();
+        _this2.refresh();
 
         _this2.$toasted.show('Task deleted!');
       })["catch"]();
@@ -2409,7 +2409,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.items = this.tasks;
     window.events.$on('task-added', function () {
-      _this3.fetchTasks();
+      _this3.refresh();
     });
   }
 });
