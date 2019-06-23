@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\SubscriptionExpiredException;
 use App\Mail\TaskCreatedEmail;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Workspace;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -100,10 +101,12 @@ class WorkspaceTasksController extends Controller
                 'status' => request('status'),
             ]);
 
-            Mail::to($task->assignee->email)->queue(new TaskCreatedEmail($task));
+            // Temporary - excluded the email returned from the relationship.
+            $assignee = User::find($task->assignee->id);
+            Mail::to($assignee->email)->queue(new TaskCreatedEmail($task));
 
             if (request()->wantsJson()) {
-                return response(['message' => 'Task created!'], 201);
+                return $task;
             }
 
             return redirect(route('tasks.index', $workspace));

@@ -5,8 +5,11 @@
  */
 
 require('./bootstrap');
+import Form from './utilities/Form';
 
 window.Vue = require('vue');
+window.Form = Form;
+window.events = new Vue();
 
 import Toasted from 'vue-toasted';
 
@@ -22,7 +25,6 @@ Vue.use(Toasted,  {
     },
 });
 
-window.events = new Vue();
 
 /**
  * The following block of code may be used to automatically register your

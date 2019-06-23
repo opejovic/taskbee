@@ -31,7 +31,7 @@ class Task extends Model
      */
     public function assignee()
     {
-        return $this->belongsTo(User::class, 'user_responsible');
+        return $this->belongsTo(User::class, 'user_responsible')->select(['id', 'first_name', 'last_name']);
     }
 
     /**
@@ -41,7 +41,7 @@ class Task extends Model
      */
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->select(['id', 'first_name', 'last_name']);
     }
 
     /**

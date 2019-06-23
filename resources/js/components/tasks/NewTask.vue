@@ -51,7 +51,7 @@
                                     v-model="form.user_responsible"
                                     @click="form.errors.clear('user_responsible')">
                                 
-                                    <option v-for="member in members" :value="member.id">
+                                    <option v-for="member in members" :value="member.user_id">
                                         {{ member.first_name }} {{ member.last_name }}
                                     </option>
                                 </select>
@@ -136,101 +136,6 @@
 </template>
 
 <script>
-    class Errors {
-        constructor() {
-            this.errors = {};
-        }
-
-        has(field) {
-            return this.errors.hasOwnProperty(field);
-        }
-
-        any() {
-            if (Object.keys(this.errors).length > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        get(field) {
-            if (this.errors[field]) {
-                return this.errors[field][0];
-            }
-        }
-
-        record(errors) {
-            this.errors = errors;
-        }
-
-        clear(field) {
-            if (field) {
-                delete this.errors[field];
-                
-                return;   
-            }
-
-            this.errors = {};
-        }
-    };
-
-    class Form {
-        constructor(data) {
-            this.originalData = data;
-
-            for (let field in data) {
-                this[field] = data[field];
-            }
-
-            this.errors = new Errors();
-        }
-
-        data() {
-            var data = {};
-
-            for (let property in this.originalData) {
-                data[property] = this[property];
-            }
-
-            return data;
-        }
-
-        post(url) {
-            return this.submit('post', url);
-        }
-
-        submit(requestType, url) {
-            return new Promise((resolve, reject) => {
-                axios[requestType](url, this.data())
-                    .then(response => {
-                        this.onSuccess(response.data);
-
-                        resolve(response.data);
-                    }).catch(error => { 
-                        this.onFail(error.response.data.errors);
-
-                        reject(error.response.data.errors);
-                    });
-            });
-        }
-
-        onSuccess() {
-            this.reset();
-        }
-
-        onFail(errors) {
-            this.errors.record(errors);
-        }
-
-        reset() {
-            for (let field in this.originalData) {
-                this[field] = null;
-            }
-
-            this.errors.clear();
-        }
-    }
-
     export default {
         props: ['workspace'],
         data() {
@@ -243,7 +148,7 @@
                     status: null,
                 }),
                 
-                members: this.workspace.members,
+                members: null,
             }
         },
 
@@ -251,12 +156,13 @@
             addTask() {
                 this.form.post(`/workspaces/${this.workspace.id}/tasks`)
                     .then(response => {
-                        window.events.$emit('task-added');
+                        // Passing in a task to the emited event.
+                        window.events.$emit('task-added', response);
                         $('#addTaskModal').modal('hide');
                         
                         // flash a message to the user
                         this.$toasted.show('Task created!');
-                    });
+                });
             },
 
             hide() {
@@ -264,6 +170,10 @@
                 this.form.reset();
             }
         },
+
+        created() {
+            this.members = this.workspace.members;
+        }
     };
 </script>
 
