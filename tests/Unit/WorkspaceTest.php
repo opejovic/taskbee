@@ -6,6 +6,7 @@ use App\Models\Subscription;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -78,5 +79,24 @@ class WorkspaceTest extends TestCase
 	    $workspace->addMember($member);
 
 	    $this->assertTrue($workspace->fresh()->members->contains($member));
+	}
+
+	/** @test */
+	function it_can_have_many_invitations()
+	{
+	    $workspace = factory(Workspace::class)->create();
+
+	    $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $workspace->invitations);
+	}
+
+	/** @test */
+	function it_has_an_authorization()
+	{
+	    $workspace = factory(Workspace::class)->create();
+	    $authorization = factory(WorkspaceSetupAuthorization::class)->create([
+	    	'workspace_id' => $workspace->id,
+	    ]);
+
+	    $this->assertEquals($authorization->id, $workspace->authorization->id);
 	}
 }

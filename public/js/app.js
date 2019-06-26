@@ -1933,7 +1933,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     checkout: function checkout() {
-      var stripe = Stripe(Object({"MIX_PUSHER_APP_KEY":"","MIX_PUSHER_APP_CLUSTER":"mt1","MIX_STRIPE_KEY":"pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE","NODE_ENV":"development"}).STRIPE_KEY);
+      var stripe = Stripe("pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE");
       this.processing = true;
       axios.post("/plans/".concat(this.plan.id, "/checkout"), {}).then(function (response) {
         stripe.redirectToCheckout({
@@ -56574,9 +56574,9 @@ var staticRenderFns = [
       },
       [
         _c("i", { staticClass: "material-icons add" }, [
-          _vm._v("\n                add\n            ")
+          _vm._v("\n            add\n        ")
         ]),
-        _vm._v("\n            Add task\n    ")
+        _vm._v("\n        Add task\n    ")
       ]
     )
   }
@@ -68961,7 +68961,7 @@ window.events = new Vue();
 Vue.use(vue_toasted__WEBPACK_IMPORTED_MODULE_1___default.a, {
   theme: "toasted-primary",
   position: "bottom-left",
-  duration: 4000,
+  duration: 5000,
   action: {
     text: 'Close',
     onClick: function onClick(e, toastObject) {

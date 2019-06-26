@@ -118,4 +118,15 @@ class WorkspaceSetupAuthorization extends Model
     {
         return $this->members_invited >= $this->members_limit;
     }
+
+    /**
+     * How many invites remain for this authorization.
+     *
+     * @return void
+     * @author 
+     */
+    public function getInvitesRemainingAttribute()
+    {
+        return $this->members_limit - $this->members_invited;
+    }
 }

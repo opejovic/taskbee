@@ -12,15 +12,17 @@ class TaskCreatedEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $task;
+    public $authUser;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($task)
+    public function __construct($task, $authUser)
     {
         $this->task = $task;
+        $this->authUser = $authUser;
     }
 
     /**
@@ -30,6 +32,6 @@ class TaskCreatedEmail extends Mailable
      */
     public function build()
     {
-        return $this->from($this->task->creator->email)->markdown('emails.task-created');
+        return $this->from($this->authUser->email)->markdown('emails.task-created');
     }
 }

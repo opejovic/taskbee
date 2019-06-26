@@ -48,6 +48,11 @@ class User extends Authenticatable
      */
     protected $appends = ['full_name'];
 
+    public function workspacesOwned()
+    {
+        return $this->hasMany(Workspace::class, 'created_by');
+    }
+
     /**
      * Does user owns a workspace?
      *

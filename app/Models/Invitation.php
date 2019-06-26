@@ -55,4 +55,15 @@ class Invitation extends Model
     {
         return $this->user_id !== null;
     }
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

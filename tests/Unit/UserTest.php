@@ -23,6 +23,16 @@ class UserTest extends TestCase
 	}
 
 	/** @test */
+	function can_own_many_workspaces()
+	{
+	    $user = factory(User::class)->create(['role' => User::ADMIN]);
+	    $workspaceA = factory(Workspace::class)->create(['created_by' => $user->id]);
+	    $workspaceB = factory(Workspace::class)->create(['created_by' => $user->id]);
+
+	    $this->assertEquals(2, $user->workspacesOwned->count());
+	}
+
+	/** @test */
 	function can_have_many_tasks()
 	{
 	    $user = factory(User::class)->states('member')->create();

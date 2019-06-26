@@ -70,6 +70,26 @@ class Workspace extends Model
     }
 
     /**
+     * Workspace belongs to WorkspaceSetupAuthorization
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function authorization()
+    {
+        return $this->hasOne(WorkspaceSetupAuthorization::class);
+    }
+
+    /**
+     * Workspace has many Invitations.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    /**
      * Increments members limit number by 1.
      *
      * @return void

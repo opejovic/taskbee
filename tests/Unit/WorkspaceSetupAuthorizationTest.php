@@ -120,6 +120,19 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 	}
 
 	/** @test */
+	function can_tell_how_many_invites_remain()
+	{
+	    $authorization = factory(WorkspaceSetupAuthorization::class)->create([
+	    	'members_invited' => 2,
+	    	'members_limit' => 5,
+	    	'code' => 'TESTCODE456',
+	    	'subscription_id' => 123,
+	    ]);
+
+	    $this->assertEquals(3, $authorization->invites_remaining);
+	}
+
+	/** @test */
 	function it_has_one_subscription()
 	{
 		$subscription = factory(Subscription::class)->create();

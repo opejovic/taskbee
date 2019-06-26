@@ -16,7 +16,7 @@ import Toasted from 'vue-toasted';
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
     position: "bottom-left", 
-    duration: 4000,
+    duration: 5000,
     action: {
         text: 'Close',
         onClick: (e, toastObject) => {

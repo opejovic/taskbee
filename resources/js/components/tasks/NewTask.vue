@@ -1,10 +1,10 @@
 <template>
     <div>
         <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addTaskModal">
-                <i class="material-icons add">
-                    add
-                </i>
-                Add task
+            <i class="material-icons add">
+                add
+            </i>
+            Add task
         </button>
 
         <div class="modal" 

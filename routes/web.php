@@ -22,7 +22,9 @@ Route::get('success', 'SubscriptionsController@success')->middleware('auth');
 Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store')->middleware('auth');
 
 Route::post('workspaces/{workspace}/renew', 'RenewSubscriptionsController@store')->middleware('auth');
-Route::get('workspaces/{workspace}/subscription-expired', 'RenewSubscriptionsController@show')->name('subscription-expired.show')->middleware('auth');
+Route::get('workspaces/{workspace}/subscription-expired', 'RenewSubscriptionsController@show')
+	->name('subscription-expired.show')
+	->middleware('auth');
 
 Route::post('stripe-webhook', 'WebhookController@handle')->name('webhook.handle');
 	
@@ -46,3 +48,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 
 	Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
+
+Route::get('/dashboard', 'AdminDashboardController@show')->name('dashboard')->middleware('auth');

@@ -41,7 +41,7 @@
 
         methods: {
             checkout() {
-                const stripe = Stripe(process.env.STRIPE_KEY);
+                const stripe = Stripe(process.env.MIX_STRIPE_KEY);
 
                 this.processing = true;
                 

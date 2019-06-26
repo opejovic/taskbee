@@ -101,9 +101,9 @@ class WorkspaceTasksController extends Controller
                 'status' => request('status'),
             ]);
 
-            // Temporary - excluded the email returned from the relationship.
+            // Temporary - excluded the email returned from the relationship. Also, passing Auth user to TaskCreatedEmail, beacuse of the excluded email..
             $assignee = User::find($task->assignee->id);
-            Mail::to($assignee->email)->queue(new TaskCreatedEmail($task));
+            Mail::to($assignee->email)->queue(new TaskCreatedEmail($task, Auth::user()));
 
             if (request()->wantsJson()) {
                 return $task;

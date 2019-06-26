@@ -40,4 +40,16 @@ class InvitationTest extends TestCase
 	    $this->assertTrue($usedInvitation->fresh()->hasBeenUsed());
 	    $this->assertFalse($unusedInvitation->fresh()->hasBeenUsed());
 	}
+
+	/** @test */
+	function it_can_get_invitees_full_name()
+	{
+	    $invitation = factory(Invitation::class)->create([
+	    	'code' => 'TESTCODE123',
+	    	'first_name' => 'Ron',
+	    	'last_name' => 'Weasely'
+	    ]);
+	    
+	    $this->assertEquals('Ron Weasely', $invitation->full_name);
+	}
 }
