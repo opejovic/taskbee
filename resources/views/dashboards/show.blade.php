@@ -25,7 +25,7 @@
                             @if ($workspace->authorization->invites_remaining > 0)
                                 You can 
                                     <a href="{{ route('workspace-setup.show', $workspace->authorization->code) }}">invite</a> 
-                                    {{ $workspace->authorization->invites_remaining }} more members.
+                                    {{ $workspace->authorization->invites_remaining }} more {{ str_plural('member', $workspace->authorization->invites_remaining) }}
                             @else
                                 You have used all your invites. You can buy more at this link.
                             @endif

@@ -48,5 +48,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 
 	Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
+	Route::patch('/workspaces/{workspace}/members/{memberId}', 'WorkspaceMembersController@update')->name('workspace-members.update')->middleware('auth');
 
 Route::get('/dashboard', 'AdminDashboardController@show')->name('dashboard')->middleware('auth');
