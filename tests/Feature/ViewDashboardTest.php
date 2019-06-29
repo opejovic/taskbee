@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Workspace;
+use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -22,10 +23,11 @@ class ViewDashboardTest extends TestCase
     /** @test */
     function workspace_owners_can_view_dashboard_page()
     {
-        $this->withoutExceptionHandling();
         // Arrange: existing workspace and workspace owner
         $owner = factory(User::class)->create();
         $workspace = factory(Workspace::class)->create(['created_by' => $owner->id]);
+        $workspace->members()->attach($owner);
+        factory(WorkspaceSetupAuthorization::class)->create(['workspace_id' => $workspace->id]);
 
         // Act: visit /dashboard
         $response = $this->actingAs($owner)->get('/dashboard');

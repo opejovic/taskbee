@@ -55,6 +55,17 @@ class Task extends Model
     }
 
     /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
+    /**
      * Get formatted start date.
      *
      * @return date

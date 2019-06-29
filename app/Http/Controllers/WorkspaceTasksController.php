@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\SubscriptionExpiredException;
+use App\Filters\TaskFilters;
 use App\Mail\TaskCreatedEmail;
 use App\Models\Task;
 use App\Models\User;
@@ -19,19 +20,12 @@ class WorkspaceTasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Workspace $workspace)
+    public function index(Workspace $workspace, TaskFilters $filters)
     {
         try {
             $this->authorize('update', $workspace);
-            $tasks = $workspace->tasks()->get();
-
-            if (request()->has('my')) {
-                $tasks = $workspace->tasks()->where('user_responsible', Auth::user()->id)->get();
-            } 
-
-            if (request()->has('by')) {
-                $tasks = $workspace->tasks()->where('created_by', Auth::user()->id)->get();
-            } 
+            
+            $tasks = $workspace->tasks()->filter($filters)->latest()->get();
 
             if (request()->wantsJson()) {
                 return response([$workspace, $tasks], 200);
@@ -40,7 +34,6 @@ class WorkspaceTasksController extends Controller
             return view('tasks.index', [
                 'workspace' => $workspace,
                 'tasks' => $tasks,
-                // 'groupedTasks' => $groupedTasks,
             ]);
         } catch (SubscriptionExpiredException $e) {
             if (Auth::user()->owns($workspace)) {

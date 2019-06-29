@@ -18,6 +18,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
+/**
+* @group integration
+*/
 class PurchaseSubscriptionsTest extends TestCase
 {
     use RefreshDatabase;
@@ -36,7 +39,7 @@ class PurchaseSubscriptionsTest extends TestCase
     /** @test */
     function guests_cannot_purchase_a_bundle_subscription()
     {
-        $response = $this->json('POST', "bundles/{$this->plan->id}/checkout", [])->assertStatus(401);
+        $response = $this->json('POST', "plans/{$this->plan->id}/checkout", [])->assertStatus(401);
     }
 
     /** @test */

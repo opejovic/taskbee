@@ -6,7 +6,9 @@
             @forelse($workspaces as $workspace)
                 <div class="col-md-4">
                     <div class="card shadow-sm">
-                        <div class="card-header">{{ $workspace->name }}</div>
+                        <div class="card-header">
+                            <a href="{{ route('workspaces.show', $workspace) }}">{{ $workspace->name }}</a>
+                        </div>
 
                         <div class="card-body">
                             {{ $workspace->creator->full_name }}

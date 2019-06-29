@@ -20,16 +20,15 @@ class ViewWorkspaceMembersTest extends TestCase
 
         $memberA = factory(User::class)->create();
         $memberB = factory(User::class)->create();
+        $otherWorkspaceMember = factory(User::class)->create();
         $workspace->members()->attach($memberA);
         $workspace->members()->attach($memberB);
 
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/members");
 
         $response->assertViewIs('workspace-members.index');
-        $response->assertViewHas('members');
-        $this->assertTrue($response->viewData('members')->contains($memberA));
-        $this->assertTrue($response->viewData('members')->contains($memberB));
         $response->assertSee($memberB->full_name);
         $response->assertSee($memberA->full_name);
+        $response->assertDontSee($otherWorkspaceMember->full_name);
     }
 }

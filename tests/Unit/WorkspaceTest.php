@@ -38,13 +38,14 @@ class WorkspaceTest extends TestCase
 	{
 	    $creator = factory(User::class)->states('admin')->create();
 	    $workspace = factory(Workspace::class)->create(['created_by' => $creator->id]);
+	    $workspace->members()->attach($creator);
 	    $memberOne = factory(User::class)->create();
 	    $memberTwo = factory(User::class)->create();
 
 	    $workspace->members()->attach($memberOne);
 	    $workspace->members()->attach($memberTwo);
 
-	    $this->assertEquals(3, $workspace->allMembers()->count());
+	    $this->assertEquals(3, $workspace->members->count());
 	}
 
 	/** @test */
@@ -77,8 +78,8 @@ class WorkspaceTest extends TestCase
 	    $this->assertCount(0, $workspace->members);
 
 	    $workspace->addMember($member);
-
-	    $this->assertTrue($workspace->fresh()->members->contains($member));
+	    $this->assertCount(1, $workspace->fresh()->members);
+	    $this->assertTrue($workspace->fresh()->members->pluck('user_id')->contains($member->id));
 	}
 
 	/** @test */

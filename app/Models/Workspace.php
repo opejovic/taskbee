@@ -35,18 +35,7 @@ class Workspace extends Model
      */
     public function members()
     {
-        return $this->belongsToMany(User::class, 'workspace_user')
-            ->select(['user_id', 'first_name', 'last_name']);
-    }
-
-    /**
-     * Get all workspace members including the workspace creator.
-     *
-     * @return Illuminate\Database\Eloquent\Collection
-     */
-    public function allMembers()
-    {
-        return $this->members->push($this->creator)->unique()->sortBy('first_name');
+        return $this->belongsToMany(User::class, 'workspace_user')->select(['user_id', 'first_name', 'last_name']);
     }
 
     /**

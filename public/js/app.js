@@ -2247,14 +2247,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     refresh: function refresh() {
       var currentUrl = window.location.href;
-
-      if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks') {
-        this.fetchTasks("/workspaces/".concat(this.workspace.id, "/tasks"));
-      } else if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks?my') {
-        this.fetchTasks("/workspaces/".concat(this.workspace.id, "/tasks?my"));
-      } else if (currentUrl == 'http://127.0.0.1:8000/workspaces/1/tasks?by=me') {
-        this.fetchTasks("/workspaces/".concat(this.workspace.id, "/tasks?by=me"));
-      }
+      this.fetchTasks(currentUrl);
     },
     fetchTasks: function fetchTasks(url) {
       var _this = this;

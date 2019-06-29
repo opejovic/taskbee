@@ -36,6 +36,11 @@ class WorkspaceMembersController extends Controller
 
         // remove the user from the workspace
         $workspace->members()->detach($memberId);
+        
+        $user = User::whereId($memberId)->firstOrFail();
+        if ($user->workspace_id == $workspace->id) {
+            $user->update(['workspace_id' => null]);
+        }
 
         // delete the invitation for this user, also decrement the members invited from workspace and workspace authorization
         // there is a slight duplication of code here, which will have to be refactored

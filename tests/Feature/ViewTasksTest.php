@@ -31,23 +31,24 @@ class ViewTasksTest extends TestCase
             ->assertSee($task->creator->full_name)
             ->assertSee($task->assignee->full_name)
             ->assertSee($task->status)
-            ->assertSee($task->formatted_start_date)
-            ->assertSee($task->formatted_finish_date);
+            ->assertSee($task->start_date)
+            ->assertSee($task->finish_date);
 
         $this->actingAs($jackie)->get("/workspaces/{$workspace->id}/tasks")
             ->assertSee($task->name)
             ->assertSee($task->creator->full_name)
             ->assertSee($task->assignee->full_name)
             ->assertSee($task->status)
-            ->assertSee($task->formatted_start_date)
-            ->assertSee($task->formatted_finish_date);
+            ->assertSee($task->start_date)
+            ->assertSee($task->finish_date);
     }
 
     /** @test */
     function workspace_members_can_see_tasks_they_are_responsible_for()
     {
         $workspace = factory(Workspace::class)->create();
-        $member = factory(User::class)->create(['workspace_id' => $workspace->id]);
+        $member = factory(User::class)->create();
+        $workspace->members()->attach($member);
         
         $membersTask = factory(Task::class)->create([
             'name' => 'Go to the store.',
@@ -69,7 +70,6 @@ class ViewTasksTest extends TestCase
     /** @test */
     function workspace_members_can_see_tasks_they_have_created()
     {
-        $this->withoutExceptionHandling();
         $workspace = factory(Workspace::class)->create();
         $member = factory(User::class)->create();
         $workspace->members()->attach($member);
@@ -84,7 +84,7 @@ class ViewTasksTest extends TestCase
             'name' => 'Clean your room.',
             'workspace_id' => $workspace->id
         ]);
-        $response = $this->actingAs($member)->get("/workspaces/{$workspace->id}/tasks?by=me");
+        $response = $this->actingAs($member)->get("/workspaces/{$workspace->id}/tasks?creator={$member->id}");
 
         
         $response->assertSee('Go to the store.');

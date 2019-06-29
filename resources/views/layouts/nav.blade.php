@@ -42,10 +42,17 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" 
-                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?by=me">
+                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?creator={{ auth()->user()->id }}">
                             {{ __('Tasks I have created') }}
                         </a>
                     </li>
+
+{{--                     <li class="nav-item">
+                        <a class="nav-link" 
+                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?responsibility={{ auth()->user()->id }}">
+                            {{ __('Tasks I have created') }}
+                        </a>
+                    </li> --}}
                     @endif
                 @endauth
 
