@@ -79,7 +79,7 @@ class WorkspaceTest extends TestCase
 
 	    $workspace->addMember($member);
 	    $this->assertCount(1, $workspace->fresh()->members);
-	    $this->assertTrue($workspace->fresh()->members->pluck('user_id')->contains($member->id));
+	    $this->assertTrue($workspace->fresh()->members->contains($member));
 	}
 
 	/** @test */

@@ -1,33 +1,36 @@
 <template>
     <div>
-        <div class="col-md-12" v-if="items.length <= 0">No tasks created yet</div>
+        <h3 v-if="items.length == 0">No tasks created yet.</h3>
 
-        <table class="table col-md-16" v-if="items.length > 0">
-            <thead>
-                <tr>
-                    <th scope="col text-left" style="width: 35%">Task</th>
-                    <th scope="col text-center">Creator</th>
-                    <th scope="col text-center">Person responsible</th>
-                    <th scope="col text-center" style="width: 10%">Status</th>
-                    <th scope="col text-center">Start date</th>
-                    <th scope="col text-center">Finish date</th>
-                    <th scope="col text-center" style="width: 1%"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="task in items">
-                    <td v-text="task.name"></td>
-                    <td v-text="task.creator.full_name"></td>
-                    <td v-text="task.assignee.full_name"></td>
-                    <task-status :task="task" @task-updated="refresh"></task-status>
-                    <td v-text="formattedDate(task.start_date)"></td>
-                    <td v-text="formattedDate(task.finish_date)"></td>
-                    <td style="cursor: pointer" @click="deleteTask(task)">
-                        <i class="material-icons icon" title="Delete">clear</i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>        
+        <div v-for="(tasks, status) in items">
+            <h2 class="text-center"><strong>{{ status }}</strong></h2>
+            <table class="table col-md-16 mb-5">
+                <thead>
+                    <tr>
+                        <th scope="col text-left" style="width: 30%">Task</th>
+                        <th scope="col text-center" style="width: 15%">Creator</th>
+                        <th scope="col text-center" style="width: 15%">Person responsible</th>
+                        <th scope="col text-center" style="width: 10%">Status</th>
+                        <th scope="col text-center">Start date</th>
+                        <th scope="col text-center">Finish date</th>
+                        <th scope="col text-center" style="width: 1%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="task in tasks">
+                        <td v-text="task.name"></td>
+                        <td v-text="task.creator.full_name"></td>
+                        <td v-text="task.assignee.full_name"></td>
+                        <task-status :task="task" @task-updated="refresh"></task-status>
+                        <td v-text="formattedDate(task.start_date)"></td>
+                        <td v-text="formattedDate(task.finish_date)"></td>
+                        <td style="cursor: pointer" @click="deleteTask(task)">
+                            <i class="material-icons icon" title="Delete">delete</i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -41,7 +44,7 @@
 
       data() {
         return {
-            items: [],
+            items: {},
         }
     },
 
@@ -81,8 +84,6 @@
 
     created() {
         this.items = this.tasks;
-
-
         window.events.$on('task-added', () => {
             this.refresh();
         });

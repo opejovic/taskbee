@@ -91,7 +91,9 @@ class User extends Authenticatable
      */
     public function workspace()
     {
-        return $this->belongsTo(Workspace::class)->with('members');
+        return $this->belongsTo(Workspace::class)->with(array('members' => function($query) {
+            $query->select('user_id', 'first_name', 'last_name');
+        }));
     }
 
     /**

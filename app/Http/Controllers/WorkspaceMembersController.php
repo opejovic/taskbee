@@ -17,8 +17,11 @@ class WorkspaceMembersController extends Controller
      */
     public function index(Workspace $workspace)
     {
+        // We avoid passing in emails in our vue components, which can be visible to anyone.
+        $members = $workspace->members()->select(['user_id', 'first_name', 'last_name'])->get();
+
     	return view('workspace-members.index', [
-    		'members' => $workspace->members,
+    		'members' => $members,
     		'plan' => Plan::whereName('Per User Monthly')->first(),
             'workspace' => $workspace,
     	]);

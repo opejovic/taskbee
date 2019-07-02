@@ -44,7 +44,7 @@ class WorkspacePolicy
      */
     public function update(User $user, Workspace $workspace)
     {
-        if ($workspace->members->pluck('user_id')->contains($user->id)) {
+        if ($workspace->members->contains($user)) {
 
             if ($workspace->subscription->isExpired()) {
                 throw new SubscriptionExpiredException;

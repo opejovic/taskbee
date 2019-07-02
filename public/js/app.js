@@ -2231,6 +2231,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2238,7 +2241,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['workspace', 'tasks'],
   data: function data() {
     return {
-      items: []
+      items: {}
     };
   },
   methods: {
@@ -56655,80 +56658,88 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.items.length <= 0
-      ? _c("div", { staticClass: "col-md-12" }, [
-          _vm._v("No tasks created yet")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.items.length > 0
-      ? _c("table", { staticClass: "table col-md-16" }, [
-          _vm._m(0),
+  return _c(
+    "div",
+    [
+      _vm.items.length == 0
+        ? _c("h3", [_vm._v("No tasks created yet.")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.items, function(tasks, status) {
+        return _c("div", [
+          _c("h2", { staticClass: "text-center" }, [
+            _c("strong", [_vm._v(_vm._s(status))])
+          ]),
           _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.items, function(task) {
-              return _c(
-                "tr",
-                [
-                  _c("td", { domProps: { textContent: _vm._s(task.name) } }),
-                  _vm._v(" "),
-                  _c("td", {
-                    domProps: { textContent: _vm._s(task.creator.full_name) }
-                  }),
-                  _vm._v(" "),
-                  _c("td", {
-                    domProps: { textContent: _vm._s(task.assignee.full_name) }
-                  }),
-                  _vm._v(" "),
-                  _c("task-status", {
-                    attrs: { task: task },
-                    on: { "task-updated": _vm.refresh }
-                  }),
-                  _vm._v(" "),
-                  _c("td", {
-                    domProps: {
-                      textContent: _vm._s(_vm.formattedDate(task.start_date))
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("td", {
-                    domProps: {
-                      textContent: _vm._s(_vm.formattedDate(task.finish_date))
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "td",
-                    {
-                      staticStyle: { cursor: "pointer" },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteTask(task)
-                        }
+          _c("table", { staticClass: "table col-md-16 mb-5" }, [
+            _vm._m(0, true),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(tasks, function(task) {
+                return _c(
+                  "tr",
+                  [
+                    _c("td", { domProps: { textContent: _vm._s(task.name) } }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(task.creator.full_name) }
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(task.assignee.full_name) }
+                    }),
+                    _vm._v(" "),
+                    _c("task-status", {
+                      attrs: { task: task },
+                      on: { "task-updated": _vm.refresh }
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: {
+                        textContent: _vm._s(_vm.formattedDate(task.start_date))
                       }
-                    },
-                    [
-                      _c(
-                        "i",
-                        {
-                          staticClass: "material-icons icon",
-                          attrs: { title: "Delete" }
-                        },
-                        [_vm._v("clear")]
-                      )
-                    ]
-                  )
-                ],
-                1
-              )
-            }),
-            0
-          )
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: {
+                        textContent: _vm._s(_vm.formattedDate(task.finish_date))
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      {
+                        staticStyle: { cursor: "pointer" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteTask(task)
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "i",
+                          {
+                            staticClass: "material-icons icon",
+                            attrs: { title: "Delete" }
+                          },
+                          [_vm._v("delete")]
+                        )
+                      ]
+                    )
+                  ],
+                  1
+                )
+              }),
+              0
+            )
+          ])
         ])
-      : _vm._e()
-  ])
+      })
+    ],
+    2
+  )
 }
 var staticRenderFns = [
   function() {
@@ -56739,15 +56750,27 @@ var staticRenderFns = [
       _c("tr", [
         _c(
           "th",
-          { staticStyle: { width: "35%" }, attrs: { scope: "col text-left" } },
+          { staticStyle: { width: "30%" }, attrs: { scope: "col text-left" } },
           [_vm._v("Task")]
         ),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col text-center" } }, [_vm._v("Creator")]),
+        _c(
+          "th",
+          {
+            staticStyle: { width: "15%" },
+            attrs: { scope: "col text-center" }
+          },
+          [_vm._v("Creator")]
+        ),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col text-center" } }, [
-          _vm._v("Person responsible")
-        ]),
+        _c(
+          "th",
+          {
+            staticStyle: { width: "15%" },
+            attrs: { scope: "col text-center" }
+          },
+          [_vm._v("Person responsible")]
+        ),
         _vm._v(" "),
         _c(
           "th",
@@ -69502,7 +69525,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************************************!*\
   !*** ./resources/js/components/tasks/TasksTable.vue?vue&type=template&id=49776828& ***!
   \*************************************************************************************/
-/*! exports provided: render, staticRenderFns */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

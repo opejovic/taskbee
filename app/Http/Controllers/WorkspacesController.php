@@ -51,7 +51,13 @@ class WorkspacesController extends Controller
     {
         try {
             $this->authorize('update', $workspace);
-            return view('workspaces.show', ['workspace' => $workspace]);    
+
+            $tasks = $workspace->tasks->groupBy('status');
+
+            return view('workspaces.show', [
+                'workspace' => $workspace,
+                'tasks' => $tasks,
+            ]);    
         } catch (SubscriptionExpiredException $e) {
             return redirect(route('subscription-expired.show', $workspace));
             // return response("Subscription exipred. Please renew your subscription.", 423);

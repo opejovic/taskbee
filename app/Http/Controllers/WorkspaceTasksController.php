@@ -25,7 +25,7 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
             
-            $tasks = $workspace->tasks()->filter($filters)->latest()->get();
+            $tasks = $workspace->tasks()->filter($filters)->orderBy('status', 'asc')->get()->groupBy('status');
 
             if (request()->wantsJson()) {
                 return response([$workspace, $tasks], 200);
