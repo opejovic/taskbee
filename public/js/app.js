@@ -2238,7 +2238,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['workspace', 'tasks'],
+  props: ['workspace', 'tasks', 'filters'],
   data: function data() {
     return {
       items: {}
@@ -2281,6 +2281,7 @@ __webpack_require__.r(__webpack_exports__);
     window.events.$on('task-added', function () {
       _this3.refresh();
     });
+    console.log(this.filters);
   }
 });
 
@@ -56667,7 +56668,7 @@ var render = function() {
       _vm._v(" "),
       _vm._l(_vm.items, function(tasks, status) {
         return _c("div", [
-          _c("h2", { staticClass: "text-center" }, [
+          _c("h4", { staticClass: "text-center" }, [
             _c("strong", [_vm._v(_vm._s(status))])
           ]),
           _vm._v(" "),
@@ -69525,7 +69526,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************************************!*\
   !*** ./resources/js/components/tasks/TasksTable.vue?vue&type=template&id=49776828& ***!
   \*************************************************************************************/
-/*! no static exports found */
+/*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -3,7 +3,7 @@
         <h3 v-if="items.length == 0">No tasks created yet.</h3>
 
         <div v-for="(tasks, status) in items">
-            <h2 class="text-center"><strong>{{ status }}</strong></h2>
+            <h4 class="text-center"><strong>{{ status }}</strong></h4>
             <table class="table col-md-16 mb-5">
                 <thead>
                     <tr>
@@ -40,7 +40,7 @@
     import TaskStatus from './TaskStatus.vue';
 
     export default {
-      props: ['workspace', 'tasks'],
+      props: ['workspace', 'tasks', 'filters'],
 
       data() {
         return {
@@ -87,6 +87,7 @@
         window.events.$on('task-added', () => {
             this.refresh();
         });
+        console.log(this.filters);
     },
 }
 </script>

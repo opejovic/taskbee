@@ -105,4 +105,20 @@ class Workspace extends Model
     {
         $this->members()->attach($member);
     }
+
+    /**
+     * Get the tasks for the workspace, aplying the filters
+     * if there are any, and sort them by status name, and by latest.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function getTasks($filters)
+    {
+        return $this->tasks()
+            ->filter($filters)
+            ->orderBy('status', 'asc')
+            ->latest()
+            ->get()
+            ->groupBy('status');
+    }
 }
