@@ -35,70 +35,77 @@
 </template>
 
 <script>
-	import moment from 'moment';
+    import moment from 'moment';
     import NewTask from './NewTask.vue';
     import TaskStatus from './TaskStatus.vue';
+    import Swal from 'sweetalert2';
 
     export default {
-      props: ['workspace', 'tasks', 'filters'],
+        props: ['workspace', 'tasks', 'filters'],
 
-      data() {
-        return {
-            items: {},
-        }
-    },
-
-    methods: {
-        formattedDate(date) {
-            return moment(date).format("LL");
+        data() {
+            return {
+                items: {},
+            }
         },
 
-        refresh() {
-            var currentUrl = window.location.href;
-            this.fetchTasks(currentUrl);
-        },
+        methods: {
+            formattedDate(date) {
+                return moment(date).format("LL");
+            },
 
-        fetchTasks(url) {
-            axios
+            refresh() {
+                var currentUrl = window.location.href;
+                this.fetchTasks(currentUrl);
+            },
+
+            fetchTasks(url) {
+                axios
                 .get(url)
                 .then(response => {
                     // handle success
                     // assign tasks to the items data.
-                    this.items = response.data[1];
+                this.items = response.data[1];
                 })
                 .catch(function (error) {
-                    // handle error
-                    console.log(error);
+                   // handle error
                 });            
+            },
+
+            deleteTask(task) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        axios.delete(`/workspaces/${this.workspace.id}/tasks/${task.id}`)
+                        .then(response => {
+                            this.refresh();
+                            this.$toasted.show('Task deleted!');
+                        })
+                        .catch();
+                    }
+                });
+            },
         },
 
-        deleteTask(task) {
-            axios.delete(`/workspaces/${this.workspace.id}/tasks/${task.id}`)
-                .then(response => {
-                    this.refresh();
-                    this.$toasted.show('Task deleted!');
-                })
-                .catch();
+        created() {
+            this.items = this.tasks;
+            window.events.$on('task-added', () => {
+                this.refresh();
+            });
         },
-    },
-
-    created() {
-        this.items = this.tasks;
-        window.events.$on('task-added', () => {
-            this.refresh();
-        });
-        console.log(this.filters);
-    },
-}
+    }
 </script>
 
 <style>
     .icon {
         font-size: 15px; 
-        vertical-align: middle;
-    }
-
-    .middle {
         vertical-align: middle;
     }
 </style>

@@ -1,8 +1,8 @@
 <template>
 	<td class="dropdown cursor">
-		<a id="navbarDropdown" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-text="task.status">
+		<span id="navbarDropdown" :class="'dropdown-toggle badge ' + classes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-text="task.status">
 			<span class="caret"></span>
-		</a>
+		</span>
 
 		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 			<a class="dropdown-item" v-for="taskStatus in statuses" v-text="taskStatus" @click="updateStatus(taskStatus)"></a>
@@ -18,6 +18,31 @@
 				statuses: ['Planned', 'In progress', 'Waiting', 'Testing', 'Done'],
 			}
 		},
+
+		computed: {
+			classes() {
+				switch(this.task.status) {
+					case 'Planned':
+						return 'planned';
+						break;
+					case 'In progress':
+						return 'inprogress';
+						break;
+					case 'Waiting':
+						return 'badge-warning';
+						break;
+					case 'Testing':
+						return 'testing';
+						break;
+					case 'Done':
+						return 'done';
+						break;
+					default:
+						return;
+				}
+			}
+		},
+
 		methods: {
 			updateStatus(taskStatus) {
 				if (this.task.status == taskStatus) {
@@ -40,5 +65,24 @@
 <style>
 	.cursor {
 		cursor: pointer;
+	}
+
+	.done {
+		background-color: #00b365;
+		color: white;
+	}
+
+	.planned {
+		background-color: #6200EE;
+		color: white;
+	}
+
+	.testing {
+		background-color: #dae0e5;
+	}
+
+	.inprogress {
+		background-color: #f06900;
+		color: white;
 	}
 </style>

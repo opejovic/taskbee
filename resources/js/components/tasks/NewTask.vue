@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addTaskModal">
+        <button class="btn btn-lg btn-block bigtask" data-toggle="modal" data-target="#addTaskModal">
             <i class="material-icons add">
                 add
             </i>
@@ -180,5 +180,10 @@
 <style>
     .add {
         vertical-align: middle;
+    }
+
+    .bigtask {
+        background-color: #6200EE;
+        color: white;
     }
 </style>
