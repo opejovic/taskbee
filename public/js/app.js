@@ -2157,6 +2157,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['task'],
   data: function data() {
@@ -2206,7 +2209,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.$emit('task-updated');
 
         _this.$toasted.show('Task updated!');
-      })["catch"]();
+      })["catch"](function (error) {
+        _this.checkError(error.response.data.message);
+      });
+    },
+    checkError: function checkError(message) {
+      if (message == "Too Many Attempts.") {
+        this.$toasted.show('You can update up to 10 tasks per minute. Try again shortly.');
+      }
     }
   }
 });

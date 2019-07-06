@@ -125,17 +125,12 @@ class WorkspaceTasksController extends Controller
                 'status' => ['required'],
             ]);
 
-            $task->update(['status' => request('status')]);
-            // Mail::to($task->assignee->email)->queue(new TaskCreatedEmail($task));
+            $task->updateStatus(request('status'));
 
-            if (request()->wantsJson()) {
-                return response(['message' => 'Task updated!'], 201);
-            }
-
-            return redirect(route('tasks.index', $workspace));
+            return response(['message' => 'Task updated!'], 200);
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription exipred. Please renew your subscription.", 423);
-        }
+        } 
     }
 
     /**

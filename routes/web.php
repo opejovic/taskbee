@@ -12,21 +12,24 @@
 */
 Auth::routes();
 
-Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
-Route::get('home', 'HomeController@index')->name('home');
-
-Route::get('plans', 'SubscriptionPlansController@index');
-
-Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout')->middleware('auth');
-Route::get('success', 'SubscriptionsController@success')->middleware('auth');
-Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store')->middleware('auth');
-
-Route::post('workspaces/{workspace}/renew', 'RenewSubscriptionsController@store')->middleware('auth');
-Route::get('workspaces/{workspace}/subscription-expired', 'RenewSubscriptionsController@show')
-	->name('subscription-expired.show')
-	->middleware('auth');
-
 Route::post('stripe-webhook', 'WebhookController@handle')->name('webhook.handle');
+Route::get('home', 'HomeController@index')->name('home');
+Route::get('plans', 'SubscriptionPlansController@index');
+Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
+
+Route::middleware('auth')->group(function () {
+	Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout');
+	Route::get('success', 'SubscriptionsController@success');
+	Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store');
+	
+	Route::post('workspaces/{workspace}/renew', 'RenewSubscriptionsController@store');
+	Route::get('workspaces/{workspace}/subscription-expired', 'RenewSubscriptionsController@show')
+	->name('subscription-expired.show');
+	
+	Route::get('/dashboard', 'AdminDashboardController@show')->name('dashboard');
+	Route::patch('/workspaces/{workspace}/members/{memberId}', 'WorkspaceMembersController@update')->name('members.update');
+	Route::post('accept-invitation', 'AcceptInvitationsController@store')->name('accept-invitation.store');
+});
 	
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
 	Route::get('{authorization}', 'InitialSetupController@show')->name('workspace-setup.show');
@@ -36,18 +39,17 @@ Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace'
 
 Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
 Route::post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register')->middleware('guest');
-Route::post('accept-invitation', 'AcceptInvitationsController@store')->name('accept-invitation.store')->middleware('auth');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
 	Route::get('{workspace}/tasks', 'WorkspaceTasksController@index')->name('tasks.index');
 	Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
 	Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
-	Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update');
+
+	Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update')
+	->middleware('throttle:10,1');
+	
 	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
 
 	Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
-	Route::patch('/workspaces/{workspace}/members/{memberId}', 'WorkspaceMembersController@update')->name('workspace-members.update')->middleware('auth');
-
-Route::get('/dashboard', 'AdminDashboardController@show')->name('dashboard')->middleware('auth');

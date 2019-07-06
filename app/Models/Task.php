@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\TaskUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -52,6 +53,21 @@ class Task extends Model
     public function workspace()
     {
         return $this->belongsTo(Workspace::class);
+    }
+
+    /**
+     * summary
+     *
+     * @return void
+     * @author 
+     */
+    public function updateStatus($status)
+    {
+        $this->update(['status' => $status]);
+
+        $this->workspace->members->each(function ($member) {
+            $member->notify(new TaskUpdated($this, auth()->user()));
+        });
     }
 
     /**

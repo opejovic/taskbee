@@ -5,7 +5,10 @@
 		</span>
 
 		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-			<a class="dropdown-item" v-for="taskStatus in statuses" v-text="taskStatus" @click="updateStatus(taskStatus)"></a>
+			<a class="dropdown-item" 
+			v-for="taskStatus in statuses" 
+			v-text="taskStatus" 
+			@click="updateStatus(taskStatus)"></a>
 		</div>                        
 	</td>
 </template>
@@ -56,8 +59,16 @@
 					this.$emit('task-updated');
 					this.$toasted.show('Task updated!');
 				})
-				.catch();
-			}
+				.catch(error => {
+					this.checkError(error.response.data.message);
+				});
+			},
+
+			checkError(message) {
+				if (message == "Too Many Attempts.") {
+					this.$toasted.show('You can update up to 10 tasks per minute. Try again shortly.');
+				}
+			},
 		},
 	}
 </script>
