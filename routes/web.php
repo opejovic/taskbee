@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 	Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
 
 	Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update')
-	->middleware('throttle:10,1');
+	->middleware('throttle:5,1');
 	
 	Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
 

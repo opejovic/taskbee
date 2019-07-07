@@ -96,7 +96,7 @@ class CreateTasksTest extends TestCase
     }
 
     /** @test */
-    function team_members_can_updae_any_task_belonging_to_their_workspace_only_two_times_per_minute()
+    function team_members_can_update_any_task_belonging_to_their_workspace_only_five_times_per_minute()
     {
         $workspace = factory(Workspace::class)->create();
         $john = factory(User::class)->create();
@@ -114,13 +114,16 @@ class CreateTasksTest extends TestCase
 
         $this->assertCount(1, Task::all());
         $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::WAITING]);
-        $response = $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::DONE]);
+        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::TESTING]);
+        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::PLANNED]);
+        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::IN_PROGRESS]);
+        $response = $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::WAITING]);
         $response->assertStatus(200);
-        $this->assertEquals(Task::DONE, $john->tasks->fresh()->first()->status);
+        $this->assertEquals(Task::WAITING, $john->tasks->fresh()->first()->status);
 
         $response = $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::PLANNED]);
         $response->assertStatus(429); // Too many requests
-        $this->assertEquals(Task::DONE, $john->tasks->fresh()->first()->status);
+        $this->assertEquals(Task::WAITING, $john->tasks->fresh()->first()->status);
 
     }
 }
