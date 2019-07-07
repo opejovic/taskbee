@@ -14,16 +14,18 @@
 			<span class="caret"></span>
 		</a>
 
-		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-			<a 
-				class="dropdown-item" 
-				href="#" 
-				v-for="notification in notifications" 
+		<div
+			class="dropdown-menu dropdown-menu-right"
+			aria-labelledby="navbarDropdown"
+		>
+			<a
+				class="dropdown-item"
+				href="#"
+				v-for="notification in notifications"
 				:key="notification.id"
 				v-text="notificationText(notification)"
 				@click="markAsRead(notification)"
 			>
-			
 			</a>
 		</div>
 	</li>
@@ -45,24 +47,33 @@
 			notificationText(notification) {
 				var name = this.notificationOwner(notification);
 
-				return this.formattedMessage(name, notification.data.message, notification.updated_at);
+				return this.formattedMessage(
+					name,
+					notification.data.message,
+					notification.updated_at
+				);
 			},
 
 			markAsRead(notification) {
-				axios.delete(`/profiles/${this.user.id}/notifications/${notification.id}`)
-				.then(this.notifications.splice(notification, 1));
+				axios
+					.delete(
+						`/profiles/${this.user.id}/notifications/${notification.id}`
+					)
+					.then(this.notifications.splice(notification, 1));
 			},
 
 			formattedDate(date) {
-                return moment(date).fromNow();
+				return moment(date).fromNow();
 			},
 
 			formattedMessage(name, message, date) {
-				return name + ' ' + message + ' ' + this.formattedDate(date);
+				return name + " " + message + " " + this.formattedDate(date);
 			},
 
 			notificationOwner(notification) {
-				return notification.data.member == this.user.full_name ? 'You' : notification.data.member;
+				return notification.data.member == this.user.full_name
+					? "You"
+					: notification.data.member;
 			}
 		},
 
@@ -73,8 +84,3 @@
 		}
 	};
 </script>
-
-<style>
-</style>
-
-

@@ -1,44 +1,59 @@
 <template>
 	<td class="dropdown cursor">
-		<span id="navbarDropdown" :class="'dropdown-toggle badge ' + classes" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-text="task.status">
+		<span
+			id="navbarDropdown"
+			class="dropdown-toggle badge"
+			:class="classes"
+			role="button"
+			data-toggle="dropdown"
+			aria-haspopup="true"
+			aria-expanded="false"
+			v-text="task.status"
+		>
 			<span class="caret"></span>
 		</span>
 
-		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-			<a class="dropdown-item" 
-			v-for="taskStatus in statuses" 
-			v-text="taskStatus" 
-			@click="updateStatus(taskStatus)"></a>
-		</div>                        
+		<div
+			class="dropdown-menu dropdown-menu-right"
+			aria-labelledby="navbarDropdown"
+		>
+			<a
+				class="dropdown-item"
+				v-for="taskStatus in statuses"
+				:key="taskStatus.id"
+				v-text="taskStatus"
+				@click="updateStatus(taskStatus)"
+			></a>
+		</div>
 	</td>
 </template>
 
 <script>
 	export default {
-		props: ['task'],
+		props: ["task"],
 		data() {
 			return {
-				statuses: ['Planned', 'In progress', 'Waiting', 'Testing', 'Done'],
-			}
+				statuses: ["Planned", "In progress", "Waiting", "Testing", "Done"]
+			};
 		},
 
 		computed: {
 			classes() {
-				switch(this.task.status) {
-					case 'Planned':
-						return 'planned';
+				switch (this.task.status) {
+					case "Planned":
+						return "planned";
 						break;
-					case 'In progress':
-						return 'inprogress';
+					case "In progress":
+						return "inprogress";
 						break;
-					case 'Waiting':
-						return 'badge-warning';
+					case "Waiting":
+						return "badge-warning";
 						break;
-					case 'Testing':
-						return 'testing';
+					case "Testing":
+						return "testing";
 						break;
-					case 'Done':
-						return 'done';
+					case "Done":
+						return "done";
 						break;
 					default:
 						return;
@@ -52,25 +67,31 @@
 					return;
 				}
 
-				axios.patch(`/workspaces/${this.task.workspace_id}/tasks/${this.task.id}`, {
-					status: taskStatus
-				})
-				.then(response =>  {
-					this.$emit('task-updated');
-					this.$toasted.show('Task updated!');
-				})
-				.catch(error => {
-					this.checkError(error.response.data.message);
-				});
+				axios
+					.patch(
+						`/workspaces/${this.task.workspace_id}/tasks/${this.task.id}`,
+						{
+							status: taskStatus
+						}
+					)
+					.then(response => {
+						this.$emit("task-updated");
+						this.$toasted.show("Task updated!");
+					})
+					.catch(error => {
+						this.checkError(error.response.data.message);
+					});
 			},
 
 			checkError(message) {
 				if (message == "Too Many Attempts.") {
-					this.$toasted.show('You can update up to 10 tasks per minute. Try again shortly.');
+					this.$toasted.show(
+						"You can update up to 10 tasks per minute. Try again shortly."
+					);
 				}
-			},
-		},
-	}
+			}
+		}
+	};
 </script>
 
 <style>
@@ -84,7 +105,7 @@
 	}
 
 	.planned {
-		background-color: #6200EE;
+		background-color: #6200ee;
 		color: white;
 	}
 
