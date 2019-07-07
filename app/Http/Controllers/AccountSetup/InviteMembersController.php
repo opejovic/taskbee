@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\AccountSetup;
 
-use App\Facades\InvitationCode;
-use App\Http\Controllers\Controller;
-use App\Models\Invitation;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Models\WorkspaceSetupAuthorization;
+use App\Models\Invitation;
 use Illuminate\Http\Request;
+use App\Facades\InvitationCode;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Models\WorkspaceSetupAuthorization;
 
 class InviteMembersController extends Controller
 {

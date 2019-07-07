@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Billing\StripeSubscriptionGateway;
 use Illuminate\Http\Request;
+use App\Billing\StripeSubscriptionGateway;
 
 class WebhookController extends Controller
 {

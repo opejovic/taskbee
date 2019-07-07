@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     /**
- 	 * Task status.
+ 	 * Class constants. Alowed statuses for the model.
  	 */
     const PLANNED = 'Planned';
     const IN_PROGRESS = 'In progress';
@@ -56,10 +56,8 @@ class Task extends Model
     }
 
     /**
-     * summary
+     * Update the tasks status and notify the users.
      *
-     * @return void
-     * @author 
      */
     public function updateStatus($status)
     {
@@ -71,10 +69,11 @@ class Task extends Model
     }
 
     /**
-     * summary
+     * Query scope, uses ThreadFilter $filters, if provided.
      *
-     * @return void
-     * @author 
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param \App\Filters\TaskFilters $filters
+     * @return $query
      */
     public function scopeFilter($query, $filters)
     {

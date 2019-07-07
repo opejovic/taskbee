@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Mail\TaskCreatedEmail;
-use App\Models\Subscription;
+use Tests\TestCase;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
-use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Subscription;
+use App\Mail\TaskCreatedEmail;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateTasksTest extends TestCase
 {

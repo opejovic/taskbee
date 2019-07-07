@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\AccountSetup;
 
-use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\WorkspaceSetupAuthorization;
 
 class InitialSetupController extends Controller
 {

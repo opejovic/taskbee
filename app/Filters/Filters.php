@@ -15,10 +15,9 @@ abstract class Filters
 	protected $filters = [];
 
     /**
-     * summary
+     * Class construct.
      *
      * @return void
-     * @author 
      */
 	public function __construct(Request $request)
 	{
@@ -45,10 +44,9 @@ abstract class Filters
     }
 
     /**
-     * summary
+     * Return the filters from the request.
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Support\Collection
      */
     public function getFilters()
     {

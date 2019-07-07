@@ -7,12 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
-    /**
-     * summary
-     *
-     * @return void
-     * @author 
-     */
+	/**
+	 * Display the specified resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
     public function show()
     {
         return view('dashboards.show', [

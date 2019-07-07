@@ -4,25 +4,22 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TaskUpdated extends Notification
+class TaskCreated extends Notification
 {
-    use Queueable;
+	protected $task;
+	protected $user;
 
-    protected $task;
-    protected $user;
-
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct($task, $user)
-    {
-        $this->task = $task;
-        $this->user = $user;
-    }
+	/**
+	 * Create a new notification instance.
+	 *
+	 * @return void
+	 */
+	public function __construct($task, $user)
+	{
+		$this->task = $task;
+		$this->user = $user;
+	}
 
     /**
      * Get the notification's delivery channels.
@@ -43,9 +40,9 @@ class TaskUpdated extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
+		return [
 			'member' => "{$this->user->full_name}",
-			'message' => "updated {$this->task->name} to {$this->task->status}"
+			'message' => "created {$this->task->name}"
         ];
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\SubscriptionCanceledException;
-use App\Exceptions\SubscriptionExpiredException;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\SubscriptionExpiredException;
+use App\Exceptions\SubscriptionCanceledException;
 
 class WorkspacesController extends Controller
 {

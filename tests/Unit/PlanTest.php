@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use App\Models\Plan;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Plan;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PlanTest extends TestCase
 {
@@ -24,7 +24,7 @@ class PlanTest extends TestCase
 
 	private function getPlans()
 	{
-		$basic = [ 
+		$basic = [
 			"id" => "plan_F8k6u8imre8C85",
 			"amount" => 3995,
 			"currency" => "eur",
@@ -35,7 +35,7 @@ class PlanTest extends TestCase
 			"nickname" => "Basic Monthly",
 		];
 
-		$standard = [ 
+		$standard = [
 			"id" => "plan_faas8d8271728sd",
 			"amount" => 6995,
 			"currency" => "eur",
@@ -46,7 +46,7 @@ class PlanTest extends TestCase
 			"nickname" => "Standard Monthly",
 		];
 
-		$premium = [ 
+		$premium = [
 			"id" => "plan_imre8C85F8k6u8",
 			"amount" => 9995,
 			"currency" => "eur",
@@ -57,7 +57,7 @@ class PlanTest extends TestCase
 			"nickname" => "Premium Monthly",
 		];
 
-		$perUser = [ 
+		$perUser = [
 			"id" => "plan_6uke8C8588imFr",
 			"amount" => 799,
 			"currency" => "eur",

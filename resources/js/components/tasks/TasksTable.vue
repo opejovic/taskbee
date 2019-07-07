@@ -4,7 +4,7 @@
 
         <div v-for="(tasks, status) in items">
             <h4 class="text-center"><strong>{{ status }}</strong></h4>
-            <table class="table col-md-16 mb-5">
+            <table class="table col-md-16 mb-5 table-responsive-md">
                 <thead>
                     <tr>
                         <th scope="col text-left" style="width: 30%">Task</th>
@@ -36,12 +36,13 @@
 
 <script>
     import moment from 'moment';
-    import NewTask from './NewTask.vue';
     import TaskStatus from './TaskStatus.vue';
     import Swal from 'sweetalert2';
 
     export default {
         props: ['workspace', 'tasks', 'filters'],
+
+		components: { TaskStatus },
 
         data() {
             return {

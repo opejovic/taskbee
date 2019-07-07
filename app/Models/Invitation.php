@@ -57,10 +57,9 @@ class Invitation extends Model
     }
 
     /**
-     * summary
+     * Return the full name of the invited user.
      *
-     * @return void
-     * @author 
+     * @return string
      */
     public function getFullNameAttribute()
     {

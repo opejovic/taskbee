@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\AccountSetup;
 
-use App\Http\Controllers\Controller;
 use App\Models\Workspace;
-use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\WorkspaceSetupAuthorization;
 
 class WorkspacesController extends Controller
 {

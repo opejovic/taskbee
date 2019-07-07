@@ -27,12 +27,13 @@ class WorkspaceMembersController extends Controller
     	]);
     }
 
-    /**
-     * summary
-     *
-     * @return void
-     * @author 
-     */
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \App\Models\Workspace  $workspace
+	 * @param  int $memberId
+	 * @return \Illuminate\Http\Response
+	 */
     public function update(Workspace $workspace, $memberId)
     {   
         abort_unless(Auth::user()->owns($workspace), 403);

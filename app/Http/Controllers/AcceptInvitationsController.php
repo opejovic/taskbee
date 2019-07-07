@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invitation;
 use App\Models\User;
+use App\Models\Invitation;
 use Illuminate\Http\Request;
 
 class AcceptInvitationsController extends Controller

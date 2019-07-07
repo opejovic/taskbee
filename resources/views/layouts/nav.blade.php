@@ -9,42 +9,25 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto">
-
-            </ul>
-
-            @auth
-                @if (auth()->user()->workspace_id !== null)
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
-                        </li>
-                    </ul>
-                @endif
-            @endauth
-
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ml-auto">
-                {{-- Refactor this --}}
+            <ul class="navbar-nav">
                 @auth
                     @if (auth()->user()->workspace_id !== null)
-                    <li class="nav-item">
-                        <a class="nav-link" 
-                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks">
-                            {{ __('All tasks') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" 
-                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?my">
-                            {{ __('My Tasks') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" 
-                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?creator={{ auth()->user()->id }}">
-                            {{ __('Tasks I have created') }}
-                        </a>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Browse <span class="caret"></span>
+                            </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks">
+                                {{ __('All tasks') }}
+                            </a>
+                            <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?my">
+                                {{ __('My Tasks') }}
+                            </a>
+                            <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?creator={{ auth()->user()->id }}">
+                                {{ __('Tasks I have created') }}
+                            </a>
+                        </div>
                     </li>
 
 {{--                     <li class="nav-item">
@@ -54,8 +37,20 @@
                         </a>
                     </li> --}}
                     @endif
-                @endauth
+                @endauth    
+            </ul>
 
+			<ul class="navbar-nav ml-auto mr-auto">
+				@auth
+					@if (auth()->user()->workspace_id !== null)
+						<new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
+					@endif
+				@endauth
+			</ul>
+            
+
+            <!-- Right Side Of Navbar -->
+            <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
@@ -67,6 +62,8 @@
                         </li>
                     @endif
                 @else
+                    <user-notifications :user="{{ Auth::user() }}"></user-notifications>
+
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->first_name }} <span class="caret"></span>

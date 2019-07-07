@@ -42,7 +42,7 @@ Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.v
 Vue.component('renew-subscription', require('./components/RenewSubscription.vue').default);
 Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
 Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
-Vue.component('task-status', require('./components/tasks/TaskStatus.vue').default);
+Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -43,11 +43,17 @@ class User extends Authenticatable
     ];
 
     /**
-     * summary
+     * Attributes to include in every query.
      *
      */
     protected $appends = ['full_name'];
 
+
+	/**
+	 * User can own many workspaces.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 **/
     public function workspacesOwned()
     {
         return $this->hasMany(Workspace::class, 'created_by');

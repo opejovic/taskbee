@@ -2,17 +2,13 @@
 
 namespace Tests\Unit;
 
-use App\Mail\SubscriptionExpiredEmail;
-use App\Models\Bundle;
-use App\Models\Invitation;
-use App\Models\Plan;
-use App\Models\Subscription;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
+use App\Models\Plan;
+use App\Models\User;
+use App\Models\Invitation;
+use App\Models\Subscription;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SubscriptionTest extends TestCase
 {
@@ -44,11 +40,10 @@ class SubscriptionTest extends TestCase
 	{
 		$user = factory(User::class)->create(['email' => 'john@example.com']);
 		Subscription::buildFrom($this->stripeSubscription(), $user->email);
-		
+
 		$sub = Subscription::whereEmail('john@example.com')->first();
 
 		$this->assertInstanceOf('App\Models\User', $sub->owner);
-
 	}
 
 	/** @test */
@@ -85,11 +80,11 @@ class SubscriptionTest extends TestCase
 			"items" => [
 				"object" => "list",
 				"data" => [
-						"quantity" => 1,
-						"subscription" => "sub_F94NGC6CJuQuFx",
-						"tax_rates" => [],
-					],
+					"quantity" => 1,
+					"subscription" => "sub_F94NGC6CJuQuFx",
+					"tax_rates" => [],
 				],
+			],
 			"latest_invoice" => "in_1EemEuEZ56ycPUyuIjuE8Ofp",
 			"livemode" => false,
 			"metadata" => [],

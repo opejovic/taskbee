@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Workspace;
-use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Http\Request;
+use App\Models\WorkspaceSetupAuthorization;
 
 class AddMemberSlotController extends Controller
 {

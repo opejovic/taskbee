@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\SubscriptionExpiredException;
-use App\Filters\TaskFilters;
-use App\Mail\TaskCreatedEmail;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
-use Carbon\Carbon;
+use App\Filters\TaskFilters;
 use Illuminate\Http\Request;
+use App\Mail\TaskCreatedEmail;
+use App\Notifications\TaskCreated;
+use App\Notifications\TaskDeleted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Exceptions\SubscriptionExpiredException;
 
 class WorkspaceTasksController extends Controller
 {
@@ -98,6 +99,8 @@ class WorkspaceTasksController extends Controller
             $assignee = User::find($task->assignee->id);
             Mail::to($assignee->email)->queue(new TaskCreatedEmail($task, Auth::user()));
 
+			$this->notifyUsers($task, TaskCreated::class);
+
             if (request()->wantsJson()) {
                 return $task;
             }
@@ -124,7 +127,7 @@ class WorkspaceTasksController extends Controller
             request()->validate([
                 'status' => ['required'],
             ]);
-
+			
             $task->updateStatus(request('status'));
 
             return response(['message' => 'Task updated!'], 200);
@@ -145,9 +148,26 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
 
-            $task->delete();
+			$this->notifyUsers($task, TaskDeleted::class);
+
+			$task->delete();
+
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription exipred. Please renew your subscription.", 423);
         }
-    }
+	}
+	
+	/**
+	 * Notify the members of workspace for the given task, about changes that occured.
+	 *
+	 * @param Type \App\Models\Task $task
+	 * @param Type $class Given App/Notifications Notification Class
+	 * @return void
+	 **/
+	public function notifyUsers($task, $class)
+	{
+		$task->workspace->members->each(function ($member) use ($task, $class) {
+			$member->notify(new $class($task, auth()->user()));
+		});
+	}
 }

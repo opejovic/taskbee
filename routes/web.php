@@ -29,6 +29,10 @@ Route::middleware('auth')->group(function () {
 	Route::get('/dashboard', 'AdminDashboardController@show')->name('dashboard');
 	Route::patch('/workspaces/{workspace}/members/{memberId}', 'WorkspaceMembersController@update')->name('members.update');
 	Route::post('accept-invitation', 'AcceptInvitationsController@store')->name('accept-invitation.store');
+
+	Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index')->name('notifications.index');
+	Route::delete('/profiles/{user}/notifications/{notificationId}', 'UserNotificationsController@destroy')
+		->name('notifications.delete');
 });
 	
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
@@ -53,3 +57,4 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 
 	Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
+

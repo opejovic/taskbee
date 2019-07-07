@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Billing;
 
+use Tests\TestCase;
 use App\Billing\PaymentFailedException;
 use App\Billing\StripeSubscriptionGateway;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /** 
-* @group integration
-*/
+ * @group integration
+ */
 class StripeSubscriptionGatewayTest extends TestCase
 {
 	use RefreshDatabase;
@@ -18,27 +18,28 @@ class StripeSubscriptionGatewayTest extends TestCase
 	protected function setUp(): void
 	{
 		parent::setUp();
-	    $this->subGateway = new StripeSubscriptionGateway(config('services.stripe.secret'));
+		$this->subGateway = new StripeSubscriptionGateway(config('services.stripe.secret'));
 	}
 
 	/** @test */
 	function customer_is_created_if_a_valid_payment_token_is_provided()
 	{
 		dd(\Stripe\Checkout\Session::create([
-          'payment_method_types' => ['card'],
-          'subscription_data' => [
-            'items' => [[
-              'plan' => 'plan_F809L6rksIcZzw',
-            ]],
-          ],
-          'success_url' => 'https://example.com/success',
-          'cancel_url' => 'https://example.com/cancel',
-        ], ['api_key' => config('services.stripe.secret')]));
+			'payment_method_types' => ['card'],
+			'subscription_data' => [
+				'items' => [[
+					'plan' => 'plan_F809L6rksIcZzw',
+				]],
+			],
+			'success_url' => 'https://example.com/success',
+			'cancel_url' => 'https://example.com/cancel',
+		], ['api_key' => config('services.stripe.secret')]));
 
-	    $customer = $this->subGateway->createCustomer('jane@example.com', $this->validToken());
+		$customer = $this->subGateway->createCustomer('jane@example.com', $this->validToken());
 
-		$this->assertNotNull(\Stripe\Customer::retrieve(
-				$customer->id, 
+		$this->assertNotNull(
+			\Stripe\Customer::retrieve(
+				$customer->id,
 				['api_key' => config('services.stripe.secret')]
 			)
 		);
@@ -48,9 +49,9 @@ class StripeSubscriptionGatewayTest extends TestCase
 	function customer_is_not_created_if_a_invalid_payment_token_is_provided()
 	{
 		$customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
-		
+
 		try {
-	    	$this->subGateway->createCustomer('jane@example.com', "invalid-token");
+			$this->subGateway->createCustomer('jane@example.com', "invalid-token");
 		} catch (PaymentFailedException $e) {
 			$this->assertCount(0, $this->newCustomersSince($customer));
 			return;
@@ -68,7 +69,7 @@ class StripeSubscriptionGatewayTest extends TestCase
 		// running this test will create another customer with john@example.com email. 
 		// But in production this will work.)
 
-	    $customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
+		$customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
 
 		$this->assertNotNull(\Stripe\Customer::retrieve(
 			$customer->id,
@@ -83,17 +84,17 @@ class StripeSubscriptionGatewayTest extends TestCase
 	/** @test */
 	function subscription_to_a_bundle_can_be_created_for_a_customer()
 	{
-	    $customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
+		$customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());
 
-	    // Bundles and plans are created when the app admin runs the artisan command generate-bundles.
-	    $bundle = $this->createBundle();
-	    $plan = $this->createPlanFor($bundle);
+		// Bundles and plans are created when the app admin runs the artisan command generate-bundles.
+		$bundle = $this->createBundle();
+		$plan = $this->createPlanFor($bundle);
 
-	    $sub = $this->subGateway->createSubscriptionFor($customer, $plan);
-	    dd($sub);
-	    $this->assertEquals(2500, $sub['plan']['amount']);
-	   	$this->assertEquals('active', $sub->status);
-	   	$this->assertEquals($customer->id, $sub['customer']);
+		$sub = $this->subGateway->createSubscriptionFor($customer, $plan);
+		dd($sub);
+		$this->assertEquals(2500, $sub['plan']['amount']);
+		$this->assertEquals('active', $sub->status);
+		$this->assertEquals($customer->id, $sub['customer']);
 	}
 
 	private function validToken()
@@ -124,20 +125,20 @@ class StripeSubscriptionGatewayTest extends TestCase
 		return \Stripe\Product::create([
 			"name" => 'Some Sample Workspace Bundle 3',
 			"type" => "service",
-	  		"metadata" => [
-	  			"members_limit" => 5,
-	  			"price" => 2500,
-	  		],
+			"metadata" => [
+				"members_limit" => 5,
+				"price" => 2500,
+			],
 		], ['api_key' => config('services.stripe.secret')]);
 	}
 
 	private function createPlanFor($bundle)
 	{
 		return \Stripe\Plan::create([
-	        "amount" => $bundle['metadata']['price'],
-	        "interval" => "month",
-	        "product" => $bundle['id'],
-	        "currency" => "eur",
-    	], ['api_key' => config('services.stripe.secret')]);
+			"amount" => $bundle['metadata']['price'],
+			"interval" => "month",
+			"product" => $bundle['id'],
+			"currency" => "eur",
+		], ['api_key' => config('services.stripe.secret')]);
 	}
 }
