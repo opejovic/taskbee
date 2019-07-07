@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<button
-			class="btn btn-lg btn-block bigtask"
-			data-toggle="modal"
-			data-target="#addTaskModal"
-		>
+		<button class="btn btn-lg btn-block bigtask" data-toggle="modal" data-target="#addTaskModal">
 			<div class="d-flex justify-content-center h-100">
 				<i class="material-icons add align-self-center">add</i>
 				<span class="align-self-center ml-2">Add task</span>
@@ -23,9 +19,7 @@
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="addTaskModalLabel">
-							Add task information
-						</h5>
+						<h5 class="modal-title" id="addTaskModalLabel">Add task information</h5>
 						<button type="button" @click="hide" class="close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -37,10 +31,11 @@
 
 								<input
 									type="text"
+									class="form-control"
 									:class="
 										form.errors.has('name')
-											? 'form-control is-invalid'
-											: 'form-control'
+											? ' is-invalid'
+											: ''
 									"
 									name="name"
 									id="name"
@@ -50,27 +45,20 @@
 									required
 								/>
 
-								<span
-									class="invalid-feedback"
-									role="alert"
-									v-if="form.errors.has('name')"
-								>
-									<strong
-										v-text="form.errors.get('name')"
-									></strong>
+								<span class="invalid-feedback" role="alert" v-if="form.errors.has('name')">
+									<strong v-text="form.errors.get('name')"></strong>
 								</span>
 							</div>
 
 							<div class="form-group">
-								<label for="user_responsible"
-									>Who has to complete the task?</label
-								>
+								<label for="user_responsible">Who has to complete the task?</label>
 
 								<select
+									class="form-control"
 									:class="
 										form.errors.has('user_responsible')
-											? 'form-control is-invalid'
-											: 'form-control'
+											? ' is-invalid'
+											: ''
 									"
 									v-model="form.user_responsible"
 									@click="
@@ -78,38 +66,29 @@
 									"
 									required
 								>
-									<option
-										v-for="member in members"
-										:value="member.user_id"
-										:key="member.user_id"
-									>
+									<option v-for="member in members" :value="member.user_id" :key="member.user_id">
 										{{ member.first_name }}
 										{{ member.last_name }}
 									</option>
 								</select>
 
-								<span
-									class="invalid-feedback"
-									role="alert"
-									v-if="form.errors.has('user_responsible')"
-								>
-									<strong
-										v-text="
+								<span class="invalid-feedback" role="alert" v-if="form.errors.has('user_responsible')">
+									<strong v-text="
 											form.errors.get('user_responsible')
-										"
-									></strong>
+										"></strong>
 								</span>
 							</div>
 							<div class="row form-group">
 								<div class="col">
 									<label for="start_date">Start date</label>
 									<input
+										class="form-control"
 										type="date"
 										name="start_date"
 										:class="
 											form.errors.has('start_date')
-												? 'form-control is-invalid'
-												: 'form-control'
+												? ' is-invalid'
+												: ''
 										"
 										id="start_date"
 										placeholder="Start date"
@@ -118,28 +97,23 @@
 										required
 									/>
 
-									<span
-										class="invalid-feedback"
-										role="alert"
-										v-if="form.errors.has('start_date')"
-									>
-										<strong
-											v-text="
+									<span class="invalid-feedback" role="alert" v-if="form.errors.has('start_date')">
+										<strong v-text="
 												form.errors.get('start_date')
-											"
-										></strong>
+											"></strong>
 									</span>
 								</div>
 
 								<div class="col">
 									<label for="finish_date">Finish date</label>
 									<input
+										class="form-control"
 										type="date"
 										name="finish_date"
 										:class="
 											form.errors.has('finish_date')
-												? 'form-control is-invalid'
-												: 'form-control'
+												? ' is-invalid'
+												: ''
 										"
 										id="finish_date"
 										placeholder="Finish date"
@@ -150,26 +124,21 @@
 										required
 									/>
 
-									<span
-										class="invalid-feedback"
-										role="alert"
-										v-if="form.errors.has('finish_date')"
-									>
-										<strong
-											v-text="
+									<span class="invalid-feedback" role="alert" v-if="form.errors.has('finish_date')">
+										<strong v-text="
 												form.errors.get('finish_date')
-											"
-										></strong>
+											"></strong>
 									</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="status">Task status</label>
 								<select
+									class="form-control"
 									:class="
 										form.errors.has('status')
-											? 'form-control is-invalid'
-											: 'form-control'
+											? ' is-invalid'
+											: ''
 									"
 									id="status"
 									name="status"
@@ -178,43 +147,21 @@
 									required
 								>
 									<option value="Planned">Planned</option>
-									<option value="In progress"
-										>In Progress</option
-									>
+									<option value="In progress">In Progress</option>
 									<option value="Waiting">Waiting</option>
 									<option value="Testing">Testing</option>
 									<option value="Done">Done</option>
 								</select>
 
-								<span
-									class="invalid-feedback"
-									role="alert"
-									v-if="form.errors.has('status')"
-								>
-									<strong
-										v-text="form.errors.get('status')"
-									></strong>
+								<span class="invalid-feedback" role="alert" v-if="form.errors.has('status')">
+									<strong v-text="form.errors.get('status')"></strong>
 								</span>
 							</div>
 
 							<div class="modal-footer">
-								<small>
-									The member responsible will be notified.
-								</small>
-								<button
-									type="button"
-									class="btn btn-secondary"
-									@click="hide"
-								>
-									Close
-								</button>
-								<button
-									type="submit"
-									class="btn btn-primary"
-									:disabled="form.errors.any()"
-								>
-									Submit
-								</button>
+								<small>The member responsible will be notified.</small>
+								<button type="button" class="btn btn-secondary" @click="hide">Close</button>
+								<button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Submit</button>
 							</div>
 						</form>
 					</div>

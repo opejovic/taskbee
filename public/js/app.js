@@ -1784,6 +1784,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['plan', 'workspace'],
   data: function data() {
@@ -1794,11 +1797,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      if (this.processing) {
-        return 'Processing';
-      }
-
-      return 'Buy a member slot';
+      return this.processing ? 'Processing' : 'Buy a member slot';
     }
   },
   methods: {
@@ -1807,9 +1806,9 @@ __webpack_require__.r(__webpack_exports__);
 
       var stripe = Stripe("pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE");
       this.processing = true;
-      axios.post("/workspaces/".concat(this.workspace.id, "/add-slot"), {//
-      }).then(function (response) {
-        window.location = response.data.hosted_invoice_url; // window.location = `/workspace-setup/${response.data[0]}`
+      axios.post("/workspaces/".concat(this.workspace.id, "/add-slot")).then(function (response) {
+        // return a link for the hosted invoice instead of redirecting the user.
+        window.location = response.data.hosted_invoice_url;
       })["catch"](function (response) {
         _this.processing = false;
       });
@@ -1847,6 +1846,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['workspace'],
   data: function data() {
@@ -1857,24 +1857,19 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      if (this.processing) {
-        return 'Proceeding to checkout...';
-      }
-
-      return 'Renew subscription';
+      return this.processing ? 'Proceeding to checkout...' : 'Renew subscription';
     }
   },
   methods: {
     initStripe: function initStripe() {
       var _this = this;
 
-      var stripe = Stripe("{{ config('service.stripe.key') }}");
+      var stripe = Stripe("pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE");
       this.processing = true;
-      axios.post("/workspaces/".concat(this.workspace.id, "/renew"), {//
-      }).then(function (response) {
+      axios.post("/workspaces/".concat(this.workspace.id, "/renew")).then(function (response) {
         _this.processing = false;
         console.log(response);
-        window.location = response.data; // window.location = `/workspace-setup/${response.data[0]}`
+        window.location = response.data;
       })["catch"](function (response) {
         _this.processing = false;
       });
@@ -1914,6 +1909,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['plan'],
   data: function data() {
@@ -1924,11 +1920,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      if (this.processing) {
-        return 'Processing';
-      }
-
-      return 'Purchase Bundle';
+      return this.processing ? 'Processing' : 'Purchase Bundle';
     }
   },
   methods: {
@@ -1994,6 +1986,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
@@ -2014,10 +2008,10 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow();
     },
     formattedMessage: function formattedMessage(name, message, date) {
-      return name + ' ' + message + ' ' + this.formattedDate(date);
+      return name + " " + message + " " + this.formattedDate(date);
     },
     notificationOwner: function notificationOwner(notification) {
-      return notification.data.member == this.user.full_name ? 'You' : notification.data.member;
+      return notification.data.member == this.user.full_name ? "You" : notification.data.member;
     }
   },
   created: function created() {
@@ -2040,6 +2034,39 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2242,34 +2269,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['task'],
+  props: ["task"],
   data: function data() {
     return {
-      statuses: ['Planned', 'In progress', 'Waiting', 'Testing', 'Done']
+      statuses: ["Planned", "In progress", "Waiting", "Testing", "Done"]
     };
   },
   computed: {
     classes: function classes() {
       switch (this.task.status) {
-        case 'Planned':
-          return 'planned';
+        case "Planned":
+          return "planned";
           break;
 
-        case 'In progress':
-          return 'inprogress';
+        case "In progress":
+          return "inprogress";
           break;
 
-        case 'Waiting':
-          return 'badge-warning';
+        case "Waiting":
+          return "badge-warning";
           break;
 
-        case 'Testing':
-          return 'testing';
+        case "Testing":
+          return "testing";
           break;
 
-        case 'Done':
-          return 'done';
+        case "Done":
+          return "done";
           break;
 
         default:
@@ -2288,16 +2330,16 @@ __webpack_require__.r(__webpack_exports__);
       axios.patch("/workspaces/".concat(this.task.workspace_id, "/tasks/").concat(this.task.id), {
         status: taskStatus
       }).then(function (response) {
-        _this.$emit('task-updated');
+        _this.$emit("task-updated");
 
-        _this.$toasted.show('Task updated!');
+        _this.$toasted.show("Task updated!");
       })["catch"](function (error) {
         _this.checkError(error.response.data.message);
       });
     },
     checkError: function checkError(message) {
       if (message == "Too Many Attempts.") {
-        this.$toasted.show('You can update up to 10 tasks per minute. Try again shortly.');
+        this.$toasted.show("You can update up to 10 tasks per minute. Try again shortly.");
       }
     }
   }
@@ -2355,11 +2397,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['workspace', 'tasks', 'filters'],
+  props: ["workspace", "tasks", "filters"],
   components: {
     TaskStatus: _TaskStatus_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
@@ -2390,20 +2445,20 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        type: 'warning',
+        type: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
       }).then(function (result) {
         if (result.value) {
           axios["delete"]("/workspaces/".concat(_this2.workspace.id, "/tasks/").concat(task.id)).then(function (response) {
             _this2.refresh();
 
-            _this2.$toasted.show('Task deleted!');
-          })["catch"]();
+            _this2.$toasted.show("Task deleted!");
+          });
         }
       });
     }
@@ -2412,7 +2467,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this3 = this;
 
     this.items = this.tasks;
-    window.events.$on('task-added', function () {
+    window.events.$on("task-added", function () {
       _this3.refresh();
     });
   }
@@ -6896,7 +6951,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.cursor {\n\tcursor: pointer;\n}\n.done {\n\tbackground-color: #00b365;\n\tcolor: white;\n}\n.planned {\n\tbackground-color: #6200EE;\n\tcolor: white;\n}\n.testing {\n\tbackground-color: #dae0e5;\n}\n.inprogress {\n\tbackground-color: #f06900;\n\tcolor: white;\n}\n", ""]);
+exports.push([module.i, "\n.cursor {\n\tcursor: pointer;\n}\n.done {\n\tbackground-color: #00b365;\n\tcolor: white;\n}\n.planned {\n\tbackground-color: #6200ee;\n\tcolor: white;\n}\n.testing {\n\tbackground-color: #dae0e5;\n}\n.inprogress {\n\tbackground-color: #f06900;\n\tcolor: white;\n}\n", ""]);
 
 // exports
 
@@ -6915,7 +6970,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.icon {\n    font-size: 15px; \n    vertical-align: middle;\n}\n", ""]);
+exports.push([module.i, "\n.icon {\n\tfont-size: 15px;\n\tvertical-align: middle;\n}\n", ""]);
 
 // exports
 
@@ -59190,9 +59245,8 @@ var render = function() {
                             expression: "form.name"
                           }
                         ],
-                        class: _vm.form.errors.has("name")
-                          ? "form-control is-invalid"
-                          : "form-control",
+                        staticClass: "form-control",
+                        class: _vm.form.errors.has("name") ? " is-invalid" : "",
                         attrs: {
                           type: "text",
                           name: "name",
@@ -59250,9 +59304,10 @@ var render = function() {
                               expression: "form.user_responsible"
                             }
                           ],
+                          staticClass: "form-control",
                           class: _vm.form.errors.has("user_responsible")
-                            ? "form-control is-invalid"
-                            : "form-control",
+                            ? " is-invalid"
+                            : "",
                           attrs: { required: "" },
                           on: {
                             click: function($event) {
@@ -59286,9 +59341,11 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                _vm._s(member.first_name) +
-                                  " " +
-                                  _vm._s(member.last_name)
+                                "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(member.first_name) +
+                                  "\n\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(member.last_name) +
+                                  "\n\t\t\t\t\t\t\t\t"
                               )
                             ]
                           )
@@ -59331,9 +59388,10 @@ var render = function() {
                               expression: "form.start_date"
                             }
                           ],
+                          staticClass: "form-control",
                           class: _vm.form.errors.has("start_date")
-                            ? "form-control is-invalid"
-                            : "form-control",
+                            ? " is-invalid"
+                            : "",
                           attrs: {
                             type: "date",
                             name: "start_date",
@@ -59393,9 +59451,10 @@ var render = function() {
                               expression: "form.finish_date"
                             }
                           ],
+                          staticClass: "form-control",
                           class: _vm.form.errors.has("finish_date")
-                            ? "form-control is-invalid"
-                            : "form-control",
+                            ? " is-invalid"
+                            : "",
                           attrs: {
                             type: "date",
                             name: "finish_date",
@@ -59458,9 +59517,10 @@ var render = function() {
                               expression: "form.status"
                             }
                           ],
+                          staticClass: "form-control",
                           class: _vm.form.errors.has("status")
-                            ? "form-control is-invalid"
-                            : "form-control",
+                            ? " is-invalid"
+                            : "",
                           attrs: { id: "status", name: "status", required: "" },
                           on: {
                             click: function($event) {
@@ -59615,7 +59675,8 @@ var render = function() {
     _c(
       "span",
       {
-        class: "dropdown-toggle badge " + _vm.classes,
+        staticClass: "dropdown-toggle badge",
+        class: _vm.classes,
         attrs: {
           id: "navbarDropdown",
           role: "button",
@@ -59636,6 +59697,7 @@ var render = function() {
       },
       _vm._l(_vm.statuses, function(taskStatus) {
         return _c("a", {
+          key: taskStatus.id,
           staticClass: "dropdown-item",
           domProps: { textContent: _vm._s(taskStatus) },
           on: {
@@ -59679,7 +59741,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.items, function(tasks, status) {
-        return _c("div", [
+        return _c("div", { key: tasks.id }, [
           _c("h4", { staticClass: "text-center" }, [
             _c("strong", [_vm._v(_vm._s(status))])
           ]),
@@ -59695,6 +59757,7 @@ var render = function() {
                 _vm._l(tasks, function(task) {
                   return _c(
                     "tr",
+                    { key: task.id },
                     [
                       _c("td", {
                         domProps: { textContent: _vm._s(task.name) }
@@ -59787,7 +59850,7 @@ var staticRenderFns = [
             staticStyle: { width: "15%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("Creator")]
+          [_vm._v("\n\t\t\t\t\t\tCreator\n\t\t\t\t\t")]
         ),
         _vm._v(" "),
         _c(
@@ -59796,7 +59859,7 @@ var staticRenderFns = [
             staticStyle: { width: "15%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("Person responsible")]
+          [_vm._v("\n\t\t\t\t\t\tPerson responsible\n\t\t\t\t\t")]
         ),
         _vm._v(" "),
         _c(
@@ -59805,7 +59868,7 @@ var staticRenderFns = [
             staticStyle: { width: "10%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("Status")]
+          [_vm._v("\n\t\t\t\t\t\tStatus\n\t\t\t\t\t")]
         ),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col text-center" } }, [
