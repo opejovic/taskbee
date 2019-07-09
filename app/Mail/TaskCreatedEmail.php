@@ -17,7 +17,8 @@ class TaskCreatedEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $task
+     * @param $authUser
      */
     public function __construct($task, $authUser)
     {

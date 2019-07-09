@@ -16,7 +16,7 @@ class SubscriptionExpiredEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $subscription
      */
     public function __construct($subscription)
     {

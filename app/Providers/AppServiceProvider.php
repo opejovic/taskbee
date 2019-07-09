@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Billing\PaymentGateway;
-use App\Billing\StripePaymentGateway;
 use App\Billing\StripeSubscriptionGateway;
 use App\Billing\SubscriptionGateway;
 use App\Helpers\AuthorizationCodeGenerator;

@@ -29,8 +29,8 @@ class WorkspaceSetupAuthorization extends Model
     /**
      * Authorization has one subscription
      *
-     * @return void
-     * @author 
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @author
      */
     public function subscription()
     {
@@ -40,7 +40,7 @@ class WorkspaceSetupAuthorization extends Model
     /**
      * Create an authorization for subscription.
      *
-     * @param App\Models\Subscription $subscription
+     * @param \App\Models\Subscription $subscription
      * @return void 
      */
     public static function authorize($subscription)
@@ -57,9 +57,8 @@ class WorkspaceSetupAuthorization extends Model
     }
 
     /**
-     * Sends an email to the customer that purchsed a subscription.
+     * Sends an email to the customer that purchased a subscription.
      *
-     * @param App\Models\Subscription $subscription
      */
     public function send()
     {
@@ -70,7 +69,7 @@ class WorkspaceSetupAuthorization extends Model
      * Get the WorkspaceSetupAuthorization by its code.
      *
      * @param string $code 
-     * @return App\Models\WorkspaceSetupAuthorization
+     * @return \App\Models\WorkspaceSetupAuthorization
      */
     public static function findByCode($code)
     {

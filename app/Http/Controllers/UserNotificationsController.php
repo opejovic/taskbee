@@ -7,26 +7,28 @@ use Illuminate\Http\Request;
 
 class UserNotificationsController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @param \App\Models\User $user
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index(User $user)
-	{
-		return auth()->user()->unreadNotifications;
-	}
+    /**
+     * Display a listing of the resource.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(User $user)
+    {
+        return auth()->user()->notifications;
+    }
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \App\Models\User  $user
-	 * @param  int $notificationId
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(User $user, $notificationId)
-	{
-		auth()->user()->unreadNotifications()->findOrFail($notificationId)->delete();
-	}
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\Models\User $user
+     * @param int $notificationId
+     *
+     * @return void
+     */
+    public function destroy(User $user, $notificationId)
+    {
+        auth()->user()->notifications()->findOrFail($notificationId)->delete();
+    }
 }

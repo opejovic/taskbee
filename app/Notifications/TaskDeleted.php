@@ -14,11 +14,12 @@ class TaskDeleted extends Notification
 	protected $task;
 	protected $user;
 
-	/**
-	 * Create a new notification instance.
-	 *
-	 * @return void
-	 */
+    /**
+     * Create a new notification instance.
+     *
+     * @param $task
+     * @param $user
+     */
 	public function __construct($task, $user)
 	{
 		

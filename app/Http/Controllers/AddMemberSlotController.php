@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Workspace;
 use Illuminate\Http\Request;
-use App\Models\WorkspaceSetupAuthorization;
 
 class AddMemberSlotController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @param App\Models\Workspace $workspace
+     * @param \App\Models\Workspace $workspace
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)

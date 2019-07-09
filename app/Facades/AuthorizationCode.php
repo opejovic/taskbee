@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Facades;
 
@@ -13,8 +13,8 @@ class AuthorizationCode extends Facade
      * @return string
      *
      */
-	protected static function getFacadeAccessor()
-	{
-		return AuthorizationCodeGenerator::class;
-	}
+    protected static function getFacadeAccessor()
+    {
+        return AuthorizationCodeGenerator::class;
+    }
 }

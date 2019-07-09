@@ -16,7 +16,8 @@ class TaskUpdated extends Notification
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param $task
+     * @param $user
      */
     public function __construct($task, $user)
     {

@@ -3,10 +3,7 @@
 namespace App\Models;
 
 use App\Mail\SlotPurchasedEmail;
-use App\Models\Workspace;
-use App\Models\WorkspaceSetupAuthorization;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class Workspace extends Model
@@ -31,7 +28,7 @@ class Workspace extends Model
     /**
      * Get all workspace members including the workspace creator.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function members()
     {
@@ -41,7 +38,7 @@ class Workspace extends Model
     /**
      * Workspace has many tasks.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tasks()
     {
@@ -61,7 +58,7 @@ class Workspace extends Model
     /**
      * Workspace belongs to WorkspaceSetupAuthorization
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function authorization()
     {
@@ -71,7 +68,7 @@ class Workspace extends Model
     /**
      * Workspace has many Invitations.
      *
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function invitations()
     {
@@ -80,6 +77,8 @@ class Workspace extends Model
 
     /**
      * Increments members limit number by 1.
+     *
+     * @param $subscription
      *
      * @return void
      */
@@ -98,8 +97,9 @@ class Workspace extends Model
     /**
      * Add a member to the workspace.
      *
+     * @param $member
+     *
      * @return void
-     * @author 
      */
     public function addMember($member)
     {
@@ -107,10 +107,12 @@ class Workspace extends Model
     }
 
     /**
-     * Get the tasks for the workspace, aplying the filters
+     * Get the tasks for the workspace, applying the filters
      * if there are any, and sort them by status name, and by latest.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @param $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getTasks($filters)
     {

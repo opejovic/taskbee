@@ -1788,7 +1788,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['plan', 'workspace'],
+  props: ["plan", "workspace"],
   data: function data() {
     return {
       processing: false,
@@ -1797,21 +1797,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      return this.processing ? 'Processing' : 'Buy a member slot';
+      return this.processing ? "Processing" : "Buy a member slot";
     }
   },
   methods: {
     initStripe: function initStripe() {
-      var _this = this;
-
       var stripe = Stripe("pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE");
       this.processing = true;
       axios.post("/workspaces/".concat(this.workspace.id, "/add-slot")).then(function (response) {
         // return a link for the hosted invoice instead of redirecting the user.
         window.location = response.data.hosted_invoice_url;
-      })["catch"](function (response) {
-        _this.processing = false;
-      });
+      })["catch"](this.processing = false);
     }
   }
 });
@@ -1848,7 +1844,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['workspace'],
+  props: ["workspace"],
   data: function data() {
     return {
       processing: false,
@@ -1857,7 +1853,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      return this.processing ? 'Proceeding to checkout...' : 'Renew subscription';
+      return this.processing ? "Proceeding to checkout..." : "Renew subscription";
     }
   },
   methods: {
@@ -1870,9 +1866,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.processing = false;
         console.log(response);
         window.location = response.data;
-      })["catch"](function (response) {
-        _this.processing = false;
-      });
+      })["catch"](this.processing = false);
     }
   }
 });
@@ -1910,8 +1904,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['plan'],
+  props: ["plan"],
   data: function data() {
     return {
       processing: false,
@@ -1920,7 +1916,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      return this.processing ? 'Processing' : 'Purchase Bundle';
+      return this.processing ? "Processing" : "Purchase Bundle";
     }
   },
   methods: {
@@ -1988,6 +1984,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
@@ -1996,13 +1995,23 @@ __webpack_require__.r(__webpack_exports__);
       notifications: false
     };
   },
+  created: function created() {
+    this.fetch();
+  },
   methods: {
+    fetch: function fetch() {
+      var _this = this;
+
+      axios.get("/profiles/".concat(this.user.id, "/notifications")).then(function (response) {
+        return _this.notifications = response.data;
+      });
+    },
     notificationText: function notificationText(notification) {
       var name = this.notificationOwner(notification);
       return this.formattedMessage(name, notification.data.message, notification.updated_at);
     },
-    markAsRead: function markAsRead(notification) {
-      axios["delete"]("/profiles/".concat(this.user.id, "/notifications/").concat(notification.id)).then(this.notifications.splice(notification, 1));
+    markAsRead: function markAsRead(notification, index) {
+      axios["delete"]("/profiles/".concat(this.user.id, "/notifications/").concat(notification.id)).then(this.notifications.splice(index, 1));
     },
     formattedDate: function formattedDate(date) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow();
@@ -2011,15 +2020,8 @@ __webpack_require__.r(__webpack_exports__);
       return name + " " + message + " " + this.formattedDate(date);
     },
     notificationOwner: function notificationOwner(notification) {
-      return notification.data.member == this.user.full_name ? "You" : notification.data.member;
+      return notification.data.member === this.user.full_name ? "You" : notification.data.member;
     }
-  },
-  created: function created() {
-    var _this = this;
-
-    axios.get("/profiles/".concat(this.user.id, "/notifications")).then(function (response) {
-      return _this.notifications = response.data;
-    });
   }
 });
 
@@ -2207,8 +2209,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["workspace"],
+  props: ['workspace'],
   data: function data() {
     return {
       form: new Form({
@@ -6932,7 +6935,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.add {\n\tvertical-align: middle;\n\tfont-size: 30px;\n}\n.bigtask {\n\tbackground-color: #6200ee;\n\tcolor: white;\n\tvertical-align: middle;\n\twidth: 12em;\n}\n.bigtask:hover {\n\tbackground-color: #2e006e;\n\tcolor: white;\n}\n", ""]);
+exports.push([module.i, "\n.add {\n    vertical-align: middle;\n    font-size: 25px;\n}\n.big-task {\n    background-color: #6200ee;\n    color: white;\n    vertical-align: middle;\n    width: 10em;\n}\n.big-task:hover {\n    background-color: #2e006e;\n    color: white;\n}\n", ""]);
 
 // exports
 
@@ -58933,7 +58936,7 @@ var render = function() {
       },
       [
         _c(
-          "div",
+          "span",
           {
             class: _vm.processing ? "d-flex align-items-center" : "text-center"
           },
@@ -58942,7 +58945,7 @@ var render = function() {
               _vm._v("Loading...")
             ]),
             _vm._v(" "),
-            _c("div", {
+            _c("span", {
               directives: [
                 {
                   name: "show",
@@ -59102,20 +59105,25 @@ var render = function() {
             staticClass: "dropdown-menu dropdown-menu-right",
             attrs: { "aria-labelledby": "navbarDropdown" }
           },
-          _vm._l(_vm.notifications, function(notification) {
-            return _c("a", {
-              key: notification.id,
-              staticClass: "dropdown-item",
-              attrs: { href: "#" },
-              domProps: {
-                textContent: _vm._s(_vm.notificationText(notification))
-              },
-              on: {
-                click: function($event) {
-                  return _vm.markAsRead(notification)
-                }
-              }
-            })
+          _vm._l(_vm.notifications, function(notification, index) {
+            return _c(
+              "li",
+              { key: notification.id, staticClass: "dropdown-item" },
+              [
+                _c("a", {
+                  staticStyle: { "text-decoration": "none" },
+                  attrs: { href: "#" },
+                  domProps: {
+                    textContent: _vm._s(_vm.notificationText(notification))
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.markAsRead(notification, index)
+                    }
+                  }
+                })
+              ]
+            )
           }),
           0
         )
@@ -59142,7 +59150,7 @@ var staticRenderFns = [
         }
       },
       [
-        _vm._v("\n\t\tNotifications\n\t\t"),
+        _vm._v("\n        Notifications\n        "),
         _c("span", { pre: true, attrs: { class: "caret" } })
       ]
     )
@@ -59341,11 +59349,11 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\t" +
+                                "\n                                        " +
                                   _vm._s(member.first_name) +
-                                  "\n\t\t\t\t\t\t\t\t\t" +
+                                  "\n                                        " +
                                   _vm._s(member.last_name) +
-                                  "\n\t\t\t\t\t\t\t\t"
+                                  "\n                                    "
                               )
                             ]
                           )
@@ -59612,7 +59620,7 @@ var render = function() {
                             disabled: _vm.form.errors.any()
                           }
                         },
-                        [_vm._v("Submit")]
+                        [_vm._v("Submit\n                                ")]
                       )
                     ])
                   ]
@@ -59633,18 +59641,23 @@ var staticRenderFns = [
     return _c(
       "button",
       {
-        staticClass: "btn btn-lg btn-block bigtask",
+        staticClass: "btn btn-lg btn-block big-task",
         attrs: { "data-toggle": "modal", "data-target": "#addTaskModal" }
       },
       [
-        _c("div", { staticClass: "d-flex justify-content-center h-100" }, [
+        _c("div", { staticClass: "d-flex justify-content-between" }, [
           _c("i", { staticClass: "material-icons add align-self-center" }, [
             _vm._v("add")
           ]),
           _vm._v(" "),
-          _c("span", { staticClass: "align-self-center ml-2" }, [
-            _vm._v("Add task")
-          ])
+          _c(
+            "span",
+            {
+              staticClass: "align-self-center",
+              staticStyle: { "font-size": "20px" }
+            },
+            [_vm._v("Add task")]
+          )
         ])
       ]
     )

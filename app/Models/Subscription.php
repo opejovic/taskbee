@@ -15,8 +15,8 @@ class Subscription extends Model
      * Class constants.
      *
      */
-    const ACTIVE = 'active';
-    const UNPAID = 'unpaid';
+    const ACTIVE   = 'active';
+    const UNPAID   = 'unpaid';
     const CANCELED = 'canceled';
     const PAST_DUE = 'past_due';
 
@@ -25,7 +25,7 @@ class Subscription extends Model
      *
      */
     protected $guarded = [];
-    
+
     /**
      * Subscription has an owner.
      *
@@ -47,23 +47,26 @@ class Subscription extends Model
     /**
      * Create a subscription from StripeSubscription.
      *
-     * @param Stripe\Subscription $subscription
+     * @param \Stripe\Subscription $subscription
+     *
+     * @param $email
+     *
      * @return void
      */
     public static function buildFrom($subscription, $email)
     {
         return self::create([
-            'stripe_id'   => $subscription['id'],
-            'product_id'  => $subscription['plan']['product'],
-            'plan_id'     => $subscription['plan']['id'],
-            'plan_name'   => $subscription['plan']['nickname'],
-            'customer'    => $subscription['customer'],
-            'email'       => $email,
-            'billing'     => $subscription['billing'],
-            'amount'      => $subscription['plan']['amount'] * $subscription['quantity'],
-            'status'      => $subscription['status'],
-            'start_date'  => Carbon::createFromTimestamp($subscription['current_period_start']),
-            'expires_at'  => Carbon::createFromTimestamp($subscription['current_period_end']),
+            'stripe_id'  => $subscription['id'],
+            'product_id' => $subscription['plan']['product'],
+            'plan_id'    => $subscription['plan']['id'],
+            'plan_name'  => $subscription['plan']['nickname'],
+            'customer'   => $subscription['customer'],
+            'email'      => $email,
+            'billing'    => $subscription['billing'],
+            'amount'     => $subscription['plan']['amount'] * $subscription['quantity'],
+            'status'     => $subscription['status'],
+            'start_date' => Carbon::createFromTimestamp($subscription['current_period_start']),
+            'expires_at' => Carbon::createFromTimestamp($subscription['current_period_end']),
         ])->getAuthorization();
     }
 
@@ -80,6 +83,8 @@ class Subscription extends Model
     /**
      * Change the status of the subscription.
      *
+     * @param $subscription
+     *
      * @return void
      */
     public static function expire($subscription)
@@ -92,15 +97,16 @@ class Subscription extends Model
     /**
      * Renews the subscription.
      *
+     * @param $subscription
+     *
      * @return void
      */
     public static function renew($subscription)
     {
         $sub = self::where('stripe_id', $subscription['id'])->first();
         $sub->update(['status' => $subscription->status]);
-        // Mail::to($sub->email)->queue(new SubscriptionRenewedEmail($sub));
     }
-    
+
     /**
      * Subscription belongs to a Plan
      *
@@ -108,7 +114,7 @@ class Subscription extends Model
      */
     public function plan()
     {
-       return $this->belongsTo(Plan::class, 'plan_id', 'stripe_id');
+        return $this->belongsTo(Plan::class, 'plan_id', 'stripe_id');
     }
 
     /**

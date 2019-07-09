@@ -38,9 +38,12 @@ class WorkspacePolicy
     /**
      * Determine whether the user can update the workspace.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Workspace  $workspace
+     * @param \App\Models\User $user
+     * @param \App\Models\Workspace $workspace
+     *
      * @return mixed
+     * @throws \App\Exceptions\SubscriptionCanceledException
+     * @throws \App\Exceptions\SubscriptionExpiredException
      */
     public function update(User $user, Workspace $workspace)
     {

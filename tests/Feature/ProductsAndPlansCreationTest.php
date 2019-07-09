@@ -18,7 +18,7 @@ class ProductsAndPlansCreationTest extends TestCase
 	/** @test */
 	function initial_product_and_plans_creation()
 	{
-		// Predefined subuscription plans for the application
+		// Predefined subscription plans for the application
 		$plans = [
 			'basic' => [
 				'name' => 'Basic Monthly',

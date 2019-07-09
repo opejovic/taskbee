@@ -20,6 +20,7 @@ class WorkspaceTasksController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Workspace $workspace, TaskFilters $filters)
     {
@@ -41,15 +42,17 @@ class WorkspaceTasksController extends Controller
                 return redirect(route('subscription-expired.show', $workspace));
             }
 
-            return response("Subscription exipred. Please renew your subscription.", 423);
+            return response("Subscription expired. Please renew your subscription.", 423);
         }
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param App\Models\Workspace $workspace
+     * @param \App\Models\Workspace $workspace
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(Workspace $workspace)
     {
@@ -61,7 +64,7 @@ class WorkspaceTasksController extends Controller
                 'members' => $workspace->allMembers(),
             ]);    
         } catch (SubscriptionExpiredException $e) {
-            return response("Subscription exipred. Please renew your subscription.", 423);
+            return response("Subscription expired. Please renew your subscription.", 423);
         }
         
     }
@@ -69,8 +72,10 @@ class WorkspaceTasksController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param App\Models\Workspace $workspace
+     * @param \App\Models\Workspace $workspace
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Workspace $workspace)
     {
@@ -107,7 +112,7 @@ class WorkspaceTasksController extends Controller
 
             return redirect(route('tasks.index', $workspace));
         } catch (SubscriptionExpiredException $e) {
-            return response("Subscription exipred. Please renew your subscription.", 423);
+            return response("Subscription expired. Please renew your subscription.", 423);
         }
 
     }
@@ -115,9 +120,11 @@ class WorkspaceTasksController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \App\Models\Workspace $workspace
+     * @param \App\Models\Task $task
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Workspace $workspace, Task $task)
     {
@@ -132,16 +139,18 @@ class WorkspaceTasksController extends Controller
 
             return response(['message' => 'Task updated!'], 200);
         } catch (SubscriptionExpiredException $e) {
-            return response("Subscription exipred. Please renew your subscription.", 423);
+            return response("Subscription expired. Please renew your subscription.", 423);
         } 
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  App\Models\Workspace $workspace
-     * @param  App\Models\Task $task
+     * @param \App\Models\Workspace $workspace
+     * @param \App\Models\Task $task
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Workspace $workspace, Task $task)
     {
@@ -153,15 +162,15 @@ class WorkspaceTasksController extends Controller
 			$task->delete();
 
         } catch (SubscriptionExpiredException $e) {
-            return response("Subscription exipred. Please renew your subscription.", 423);
+            return response("Subscription expired. Please renew your subscription.", 423);
         }
 	}
 	
 	/**
-	 * Notify the members of workspace for the given task, about changes that occured.
+	 * Notify the members of workspace for the given task, about changes that occurred.
 	 *
-	 * @param Type \App\Models\Task $task
-	 * @param Type $class Given App/Notifications Notification Class
+	 * @param \App\Models\Task $task
+	 * @param $class
 	 * @return void
 	 **/
 	public function notifyUsers($task, $class)

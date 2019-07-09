@@ -13,7 +13,7 @@
                         <div class="card-body">
                             {{ $workspace->creator->full_name }}
 
-                            @forelse($workspace->invitations as $invitation) 
+                            @forelse($workspace->invitations as $invitation)
                                 <li style="list-style: none;">
                                     {{ $invitation->full_name }}
                                     {{ $invitation->hasBeenUsed() ? 'Accepted' : 'Not accepted' }}
@@ -25,11 +25,13 @@
 
                         <div class="card-footer">
                             @if ($workspace->authorization->invites_remaining > 0)
-                                You can 
-                                    <a href="{{ route('workspace-setup.show', $workspace->authorization->code) }}">invite</a> 
-                                    {{ $workspace->authorization->invites_remaining }} more {{ str_plural('member', $workspace->authorization->invites_remaining) }}
+                                You can
+                                <a href="{{ route('workspace-setup.show', $workspace->authorization->code) }}">invite</a>
+                                {{ $workspace->authorization->invites_remaining }}
+                                more {{ str_plural('member', $workspace->authorization->invites_remaining) }}
                             @else
-                                You have used all your invites. You can buy more at this link.
+                                You have used all your invites. Setup or purchase more slots <a
+                                        href="{{ route('workspace-members.index', $workspace) }}">here</a>.
                             @endif
 
                         </div>
@@ -37,7 +39,7 @@
                 </div>
             @empty
                 <p>Nothing here.</p>
-            @endforelse    
+            @endforelse
         </div>
     </div>
 @endsection

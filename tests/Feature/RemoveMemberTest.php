@@ -73,7 +73,7 @@ class RemoveMemberTest extends TestCase
 	}
 
 	/** @test */
-	function admin_can_remove_members_from_his_workspaces()
+	function admins_can_remove_members_from_their_workspaces()
 	{
 		// Arrange: workspace, owner, a member and an used invitation
 		$owner = factory(User::class)->create();
@@ -86,7 +86,7 @@ class RemoveMemberTest extends TestCase
 		]);
 
 		$member = factory(User::class)->create();
-		$invitation = factory(Invitation::class)->create([
+		factory(Invitation::class)->create([
 			'workspace_id' => $workspace->id,
 			'user_id' => $member->id
 		]);
@@ -107,5 +107,34 @@ class RemoveMemberTest extends TestCase
 		$this->assertCount(0, $workspace->fresh()->invitations);
 		$this->assertEquals(0, $workspace->fresh()->members_invited);
 		$this->assertEquals(1, $workspace->fresh()->authorization->members_invited);
+	}
+
+	/** @test */
+	function admins_cannot_remove_themselves_from_the_workspaces()
+	{
+	    // Arrange: existing workspace and workspace owner
+        $owner = factory(User::class)->create();
+        $workspace = factory(Workspace::class)->create(['created_by' => $owner->id]);
+        $workspace->members()->attach($owner);
+
+        factory(WorkspaceSetupAuthorization::class)->create([
+            'workspace_id' => $workspace->id,
+            'members_invited' => 2,
+        ]);
+
+        factory(Invitation::class)->create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $owner->id
+        ]);
+
+        // Act: admin tries to delete himself from the workspace
+        $response = $this->actingAs($owner)->json(
+            'PATCH',
+            "/workspaces/$workspace->id/members/$owner->id"
+        );
+
+        // Assert: assert fail, not even shown on the page
+        $response->assertStatus(403);
+        $this->assertTrue($workspace->fresh()->members->contains($owner));
 	}
 }

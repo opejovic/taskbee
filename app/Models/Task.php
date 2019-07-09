@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     /**
- 	 * Class constants. Alowed statuses for the model.
- 	 */
-    const PLANNED = 'Planned';
+     * Class constants. Allowed statuses for the model.
+     */
+    const PLANNED     = 'Planned';
     const IN_PROGRESS = 'In progress';
-    const WAITING = 'Waiting';
-    const TESTING = 'Testing';
-    const DONE = 'Done';
+    const WAITING     = 'Waiting';
+    const TESTING     = 'Testing';
+    const DONE        = 'Done';
 
     /**
      * The attributes that are not mass assignable.
@@ -22,7 +22,12 @@ class Task extends Model
      * @var array
      */
     protected $guarded = [];
-    
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = ['start_date', 'finish_date'];
 
     /**
@@ -48,7 +53,7 @@ class Task extends Model
     /**
      * Task belongs to a Workspace.
      *
-     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function workspace()
     {
@@ -58,6 +63,7 @@ class Task extends Model
     /**
      * Update the tasks status and notify the users.
      *
+     * @param $status
      */
     public function updateStatus($status)
     {
@@ -73,7 +79,8 @@ class Task extends Model
      *
      * @param \Illuminate\Database\Query\Builder $query
      * @param \App\Filters\TaskFilters $filters
-     * @return $query
+     *
+     * @return void
      */
     public function scopeFilter($query, $filters)
     {
@@ -83,7 +90,7 @@ class Task extends Model
     /**
      * Get formatted start date.
      *
-     * @return date
+     * @return string
      */
     public function getFormattedStartDateAttribute()
     {
@@ -93,7 +100,7 @@ class Task extends Model
     /**
      * Get formatted finish date.
      *
-     * @return date
+     * @return string
      */
     public function getFormattedFinishDateAttribute()
     {

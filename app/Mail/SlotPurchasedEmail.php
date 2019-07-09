@@ -17,7 +17,8 @@ class SlotPurchasedEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $workspace
+     * @param $authorization
      */
     public function __construct($workspace, $authorization)
     {

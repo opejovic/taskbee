@@ -10,7 +10,8 @@ class RenewSubscriptionsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param App\Models\Workspace $workspace
+     * @param \App\Models\Workspace $workspace
+     *
      * @return \Illuminate\Http\Response
      */
 	public function show(Workspace $workspace)
@@ -23,7 +24,8 @@ class RenewSubscriptionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  App\Models\Workspace $workspace
+     * @param \App\Models\Workspace $workspace
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)

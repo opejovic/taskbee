@@ -18,22 +18,22 @@ class WorkspacesController extends Controller
     public function store()
     {
         $authorization = WorkspaceSetupAuthorization::findByCode(request('authorization_code'));
-        
+
         abort_if($authorization->hasBeenUsedForWorkspace(), 403);
 
         $workspace = Workspace::create([
-        	'name' => request('name'),
-        	'created_by' => Auth::user()->id,
-        	'members_invited' => $authorization->members_invited,
-        	'members_limit' => $authorization->members_limit,
-        	'subscription_id' => $authorization->subscription_id,
+            'name'            => request('name'),
+            'created_by'      => Auth::user()->id,
+            'members_invited' => $authorization->members_invited,
+            'members_limit'   => $authorization->members_limit,
+            'subscription_id' => $authorization->subscription_id,
         ]);
 
         $workspace->members()->attach(Auth::user());
         Auth::user()->update(['workspace_id' => $workspace->id]);
 
         $authorization->update([
-        	'admin_id' => Auth::user()->id,
+            'admin_id'     => Auth::user()->id,
             'workspace_id' => $workspace->id,
         ]);
 

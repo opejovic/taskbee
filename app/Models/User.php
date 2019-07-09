@@ -13,7 +13,7 @@ class User extends Authenticatable
     /**
      * User roles.
      */
-    const ADMIN = 'Admin';
+    const ADMIN  = 'Admin';
     const MEMBER = 'Member';
 
 
@@ -49,11 +49,11 @@ class User extends Authenticatable
     protected $appends = ['full_name'];
 
 
-	/**
-	 * User can own many workspaces.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 **/
+    /**
+     * User can own many workspaces.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
     public function workspacesOwned()
     {
         return $this->hasMany(Workspace::class, 'created_by');
@@ -62,7 +62,8 @@ class User extends Authenticatable
     /**
      * Does user owns a workspace?
      *
-     * @param $workspace
+     * @param \App\Models\Workspace $workspace
+     *
      * @return bool
      */
     public function owns($workspace)
@@ -73,7 +74,7 @@ class User extends Authenticatable
     /**
      * User has many tasks assigned to him.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tasks()
     {
@@ -83,7 +84,7 @@ class User extends Authenticatable
     /**
      * User created many tasks.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tasksCreated()
     {
@@ -97,15 +98,17 @@ class User extends Authenticatable
      */
     public function workspace()
     {
-        return $this->belongsTo(Workspace::class)->with(array('members' => function($query) {
-            $query->select('user_id', 'first_name', 'last_name');
-        }));
+        return $this->belongsTo(Workspace::class)->with([
+            'members' => function ($query) {
+                $query->select('user_id', 'first_name', 'last_name');
+            }
+        ]);
     }
 
     /**
      * User belongs to many Workspaces.
      *
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function workspaces()
     {
@@ -119,6 +122,6 @@ class User extends Authenticatable
      */
     public function getFullNameAttribute()
     {
-        return "{$this->first_name} {$this->last_name}"; 
+        return "{$this->first_name} {$this->last_name}";
     }
 }

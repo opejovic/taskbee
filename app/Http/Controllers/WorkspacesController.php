@@ -44,8 +44,10 @@ class WorkspacesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \App\Models\Workspace $workspace
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Workspace $workspace)
     {
@@ -60,7 +62,7 @@ class WorkspacesController extends Controller
             ]);    
         } catch (SubscriptionExpiredException $e) {
             return redirect(route('subscription-expired.show', $workspace));
-            // return response("Subscription exipred. Please renew your subscription.", 423);
+            // return response("Subscription expired. Please renew your subscription.", 423);
         } catch (SubscriptionCanceledException $e) {
             return response("You have canceled your subscription.", 423);
         }

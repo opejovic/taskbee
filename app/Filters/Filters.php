@@ -1,43 +1,45 @@
-<?php 
+<?php
 
 namespace App\Filters;
 
 use Illuminate\Http\Request;
 
-abstract class Filters 
+abstract class Filters
 {
     /**
      * summary
      *
      * @var string
      */
-	protected $request, $builder;
-	protected $filters = [];
+    protected $request, $builder;
+    protected $filters = [];
 
     /**
      * Class construct.
      *
-     * @return void
+     * @param \Illuminate\Http\Request $request
      */
-	public function __construct(Request $request)
-	{
-		$this->request = $request;
-	}
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * summary
      *
+     * @param $builder
+     *
      * @return void
-     * @author 
+     * @author
      */
     public function apply($builder)
     {
         $this->builder = $builder;
 
         $this->getFilters()->each(function ($value, $filter) {
-        	if (method_exists($this, $filter)) {
-        		return $this->$filter($value);
-        	}
+            if (method_exists($this, $filter)) {
+                return $this->$filter($value);
+            }
         });
 
         return $builder;

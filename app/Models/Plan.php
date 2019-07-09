@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Subscription;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Plan extends Model
@@ -15,11 +13,11 @@ class Plan extends Model
     const BASIC = 'Basic Monthly';
     const BASIC_PRICE = 799; // per user
     const BASIC_MEMBERS_LIMIT = 5;
-    
+
     const STANDARD = 'Standard Monthly';
     const STANDARD_PRICE = 699;
     const STANDARD_MEMBERS_LIMIT = 10;
-    
+
     const PREMIUM = 'Premium Monthly';
     const PREMIUM_PRICE = 599;
     const PREMIUM_MEMBERS_LIMIT = 15;
@@ -32,28 +30,28 @@ class Plan extends Model
      *
      * @param array $data
      * @return void
-     * @author 
+     * @author
      */
     public static function assemble($data)
     {
         $data->map(function ($plans) {
             return [
-                'name' => $plans['nickname'],
-                'amount' => $plans['amount'],
-                'interval' => $plans['interval'],
+                'name'          => $plans['nickname'],
+                'amount'        => $plans['amount'],
+                'interval'      => $plans['interval'],
                 'members_limit' => $plans['metadata']['members_limit'],
-                'currency' => $plans['currency'],
-                'stripe_id' => $plans['id'],
-            ]; 
-        })->each(function ($plan) { 
-            self::create($plan); 
+                'currency'      => $plans['currency'],
+                'stripe_id'     => $plans['id'],
+            ];
+        })->each(function ($plan) {
+            self::create($plan);
         });
     }
 
     /**
      * Plan has many subscriptions
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subscriptions()
     {
@@ -61,7 +59,7 @@ class Plan extends Model
     }
 
     /**
-     * Get the amount in euros. 
+     * Get the amount in euros.
      *
      * @return int
      */

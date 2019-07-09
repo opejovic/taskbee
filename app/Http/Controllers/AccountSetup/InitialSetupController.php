@@ -11,22 +11,27 @@ class InitialSetupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  App\Models\WorkspaceSetupAuthorization $authorization
+     * @param \App\Models\WorkspaceSetupAuthorization $authorization
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(WorkspaceSetupAuthorization $authorization)
     {
-    	abort_if($authorization->hasBeenUsed(), 404);
+        abort_if($authorization->hasBeenUsed(), 404);
 
 
-        if (! $authorization->hasBeenUsedForWorkspace()) {
-            return view('workspace-setup.create-workspace', ['authorization' => $authorization]);
+        if (!$authorization->hasBeenUsedForWorkspace()) {
+            return view('workspace-setup.create-workspace', [
+                'authorization' => $authorization
+            ]);
         }
 
-        if ($authorization->hasBeenUsedForWorkspace() && ! $authorization->hasBeenUsedForMemberInvites()) {
-            return view('workspace-setup.invite-members', ['authorization' => $authorization]);
-        } 
+        if ($authorization->hasBeenUsedForWorkspace() && !$authorization->hasBeenUsedForMemberInvites()) {
+            return view('workspace-setup.invite-members', [
+                'authorization' => $authorization
+            ]);
+        }
 
-    	return view('workspace-setup.show');
+        return view('workspace-setup.show');
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Billing\StripeSubscriptionGateway;
 
 class WebhookController extends Controller
 {
     /**
-     * Handles the stripe webhooks.
+     * Handles the stripe web hooks.
      *
      */
     public function handle()
@@ -28,18 +27,18 @@ class WebhookController extends Controller
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
             );
-        } catch(\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException $e) {
             // Invalid payload
             http_response_code(400); // PHP 5.4 or greater
             exit();
-          } catch(\Stripe\Error\SignatureVerification $e) {
+        } catch (\Stripe\Error\SignatureVerification $e) {
             // Invalid signature
             http_response_code(400); // PHP 5.4 or greater
             exit();
         }
 
         $subscriptionGateway = new StripeSubscriptionGateway($apiKey);
-        
+
         switch ($event->type) {
             // ... handle the customer.subscription.created event
             case 'customer.subscription.created':
@@ -47,7 +46,7 @@ class WebhookController extends Controller
                 $subscriptionGateway->fulfill($subscription);
                 http_response_code(200);
                 break;
-            
+
             // ... handle the invoice.payment_succeeded event
             case 'invoice.payment_succeeded':
                 $invoice = $event->data->object; // contains a StripePaymentIntent

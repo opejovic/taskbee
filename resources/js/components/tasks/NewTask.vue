@@ -1,234 +1,235 @@
 <template>
-	<div>
-		<button class="btn btn-lg btn-block bigtask" data-toggle="modal" data-target="#addTaskModal">
-			<div class="d-flex justify-content-center h-100">
-				<i class="material-icons add align-self-center">add</i>
-				<span class="align-self-center ml-2">Add task</span>
-			</div>
-		</button>
+    <div>
+        <button class="btn btn-lg btn-block big-task" data-toggle="modal" data-target="#addTaskModal">
+            <div class="d-flex justify-content-between">
+                <i class="material-icons add align-self-center">add</i>
+                <span class="align-self-center" style="font-size: 20px;">Add task</span>
+            </div>
+        </button>
 
-		<div
-			class="modal"
-			id="addTaskModal"
-			tabindex="-1"
-			role="dialog"
-			aria-labelledby="addTaskModalLabel"
-			aria-hidden="true"
-			data-focus="true"
-		>
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="addTaskModalLabel">Add task information</h5>
-						<button type="button" @click="hide" class="close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body text-left">
-						<form @submit.prevent="addTask">
-							<div class="form-group">
-								<label for="name">Describe the task</label>
+        <div
+            class="modal"
+            id="addTaskModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="addTaskModalLabel"
+            aria-hidden="true"
+            data-focus="true"
+        >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTaskModalLabel">Add task information</h5>
+                        <button type="button" @click="hide" class="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-left">
+                        <form @submit.prevent="addTask">
+                            <div class="form-group">
+                                <label for="name">Describe the task</label>
 
-								<input
-									type="text"
-									class="form-control"
-									:class="
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    :class="
 										form.errors.has('name')
 											? ' is-invalid'
 											: ''
 									"
-									name="name"
-									id="name"
-									placeholder="Task description"
-									v-model="form.name"
-									@keydown="form.errors.clear('name')"
-									required
-								/>
+                                    name="name"
+                                    id="name"
+                                    placeholder="Task description"
+                                    v-model="form.name"
+                                    @keydown="form.errors.clear('name')"
+                                    required
+                                />
 
-								<span class="invalid-feedback" role="alert" v-if="form.errors.has('name')">
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('name')">
 									<strong v-text="form.errors.get('name')"></strong>
 								</span>
-							</div>
+                            </div>
 
-							<div class="form-group">
-								<label for="user_responsible">Who has to complete the task?</label>
+                            <div class="form-group">
+                                <label for="user_responsible">Who has to complete the task?</label>
 
-								<select
-									class="form-control"
-									:class="
+                                <select
+                                    class="form-control"
+                                    :class="
 										form.errors.has('user_responsible')
 											? ' is-invalid'
 											: ''
 									"
-									v-model="form.user_responsible"
-									@click="
+                                    v-model="form.user_responsible"
+                                    @click="
 										form.errors.clear('user_responsible')
 									"
-									required
-								>
-									<option v-for="member in members" :value="member.user_id" :key="member.user_id">
-										{{ member.first_name }}
-										{{ member.last_name }}
-									</option>
-								</select>
+                                    required
+                                >
+                                    <option v-for="member in members" :value="member.user_id" :key="member.user_id">
+                                        {{ member.first_name }}
+                                        {{ member.last_name }}
+                                    </option>
+                                </select>
 
-								<span class="invalid-feedback" role="alert" v-if="form.errors.has('user_responsible')">
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('user_responsible')">
 									<strong v-text="
 											form.errors.get('user_responsible')
 										"></strong>
 								</span>
-							</div>
-							<div class="row form-group">
-								<div class="col">
-									<label for="start_date">Start date</label>
-									<input
-										class="form-control"
-										type="date"
-										name="start_date"
-										:class="
+                            </div>
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label for="start_date">Start date</label>
+                                    <input
+                                        class="form-control"
+                                        type="date"
+                                        name="start_date"
+                                        :class="
 											form.errors.has('start_date')
 												? ' is-invalid'
 												: ''
 										"
-										id="start_date"
-										placeholder="Start date"
-										v-model="form.start_date"
-										@click="form.errors.clear('start_date')"
-										required
-									/>
+                                        id="start_date"
+                                        placeholder="Start date"
+                                        v-model="form.start_date"
+                                        @click="form.errors.clear('start_date')"
+                                        required
+                                    />
 
-									<span class="invalid-feedback" role="alert" v-if="form.errors.has('start_date')">
+                                    <span class="invalid-feedback" role="alert" v-if="form.errors.has('start_date')">
 										<strong v-text="
 												form.errors.get('start_date')
 											"></strong>
 									</span>
-								</div>
+                                </div>
 
-								<div class="col">
-									<label for="finish_date">Finish date</label>
-									<input
-										class="form-control"
-										type="date"
-										name="finish_date"
-										:class="
+                                <div class="col">
+                                    <label for="finish_date">Finish date</label>
+                                    <input
+                                        class="form-control"
+                                        type="date"
+                                        name="finish_date"
+                                        :class="
 											form.errors.has('finish_date')
 												? ' is-invalid'
 												: ''
 										"
-										id="finish_date"
-										placeholder="Finish date"
-										v-model="form.finish_date"
-										@click="
+                                        id="finish_date"
+                                        placeholder="Finish date"
+                                        v-model="form.finish_date"
+                                        @click="
 											form.errors.clear('finish_date')
 										"
-										required
-									/>
+                                        required
+                                    />
 
-									<span class="invalid-feedback" role="alert" v-if="form.errors.has('finish_date')">
+                                    <span class="invalid-feedback" role="alert" v-if="form.errors.has('finish_date')">
 										<strong v-text="
 												form.errors.get('finish_date')
 											"></strong>
 									</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="status">Task status</label>
-								<select
-									class="form-control"
-									:class="
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Task status</label>
+                                <select
+                                    class="form-control"
+                                    :class="
 										form.errors.has('status')
 											? ' is-invalid'
 											: ''
 									"
-									id="status"
-									name="status"
-									v-model="form.status"
-									@click="form.errors.clear('status')"
-									required
-								>
-									<option value="Planned">Planned</option>
-									<option value="In progress">In Progress</option>
-									<option value="Waiting">Waiting</option>
-									<option value="Testing">Testing</option>
-									<option value="Done">Done</option>
-								</select>
+                                    id="status"
+                                    name="status"
+                                    v-model="form.status"
+                                    @click="form.errors.clear('status')"
+                                    required
+                                >
+                                    <option value="Planned">Planned</option>
+                                    <option value="In progress">In Progress</option>
+                                    <option value="Waiting">Waiting</option>
+                                    <option value="Testing">Testing</option>
+                                    <option value="Done">Done</option>
+                                </select>
 
-								<span class="invalid-feedback" role="alert" v-if="form.errors.has('status')">
+                                <span class="invalid-feedback" role="alert" v-if="form.errors.has('status')">
 									<strong v-text="form.errors.get('status')"></strong>
 								</span>
-							</div>
+                            </div>
 
-							<div class="modal-footer">
-								<small>The member responsible will be notified.</small>
-								<button type="button" class="btn btn-secondary" @click="hide">Close</button>
-								<button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Submit</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                            <div class="modal-footer">
+                                <small>The member responsible will be notified.</small>
+                                <button type="button" class="btn btn-secondary" @click="hide">Close</button>
+                                <button type="submit" class="btn btn-primary" :disabled="form.errors.any()">Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-	export default {
-		props: ["workspace"],
-		data() {
-			return {
-				form: new Form({
-					name: null,
-					user_responsible: null,
-					start_date: null,
-					finish_date: null,
-					status: null
-				}),
+    export default {
+        props: ['workspace'],
+        data() {
+            return {
+                form: new Form({
+                    name: null,
+                    user_responsible: null,
+                    start_date: null,
+                    finish_date: null,
+                    status: null
+                }),
 
-				members: null
-			};
-		},
+                members: null
+            };
+        },
 
-		methods: {
-			addTask() {
-				this.form
-					.post(`/workspaces/${this.workspace.id}/tasks`)
-					.then(response => {
-						// Passing in a task to the emited event.
-						window.events.$emit("task-added", response);
-						$("#addTaskModal").modal("hide");
+        methods: {
+            addTask() {
+                this.form
+                    .post(`/workspaces/${this.workspace.id}/tasks`)
+                    .then(response => {
+                        // Passing in a task to the emited event.
+                        window.events.$emit("task-added", response);
+                        $("#addTaskModal").modal("hide");
 
-						// flash a message to the user
-						this.$toasted.show("Task created!");
-					});
-			},
+                        // flash a message to the user
+                        this.$toasted.show("Task created!");
+                    });
+            },
 
-			hide() {
-				$("#addTaskModal").modal("hide");
-				this.form.reset();
-			}
-		},
+            hide() {
+                $("#addTaskModal").modal("hide");
+                this.form.reset();
+            }
+        },
 
-		created() {
-			this.members = this.workspace.members;
-		}
-	};
+        created() {
+            this.members = this.workspace.members;
+        }
+    };
 </script>
 
 <style>
-	.add {
-		vertical-align: middle;
-		font-size: 30px;
-	}
+    .add {
+        vertical-align: middle;
+        font-size: 25px;
+    }
 
-	.bigtask {
-		background-color: #6200ee;
-		color: white;
-		vertical-align: middle;
-		width: 12em;
-	}
+    .big-task {
+        background-color: #6200ee;
+        color: white;
+        vertical-align: middle;
+        width: 10em;
+    }
 
-	.bigtask:hover {
-		background-color: #2e006e;
-		color: white;
-	}
+    .big-task:hover {
+        background-color: #2e006e;
+        color: white;
+    }
 </style>

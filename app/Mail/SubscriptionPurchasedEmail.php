@@ -16,7 +16,7 @@ class SubscriptionPurchasedEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $authorization
      */
     public function __construct($authorization)
     {
