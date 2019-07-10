@@ -18,6 +18,12 @@
             class="dropdown-menu dropdown-menu-right"
             aria-labelledby="navbarDropdown"
         >
+            <li class="dropdown-item text-right">
+                <a href="#" style="text-decoration: none;" @click="clearAll"
+                    >Clear all</a
+                >
+            </li>
+            <div class="dropdown-divider"></div>
             <li
                 class="dropdown-item"
                 v-for="(notification, index) in notifications"
@@ -47,6 +53,13 @@ export default {
     },
 
     created() {
+        window.events.$on(
+            ["task-updated", "task-added", "task-deleted"],
+            () => {
+                this.fetch();
+            }
+        );
+
         this.fetch();
     },
 
@@ -73,6 +86,15 @@ export default {
                     `/profiles/${this.user.id}/notifications/${notification.id}`
                 )
                 .then(this.notifications.splice(index, 1));
+        },
+
+        clearAll() {
+            axios
+                .delete(`/profiles/${this.user.id}/notifications/`)
+                .then(response => {
+                    this.notifications = false;
+                    this.$toasted.show("Notifications cleared.");
+                });
         },
 
         formattedDate(date) {

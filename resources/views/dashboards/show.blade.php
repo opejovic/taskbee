@@ -10,13 +10,18 @@
                             <a href="{{ route('workspaces.show', $workspace) }}">{{ $workspace->name }}</a>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body text-left">
                             {{ $workspace->creator->full_name }}
 
                             @forelse($workspace->invitations as $invitation)
+
                                 <li style="list-style: none;">
                                     {{ $invitation->full_name }}
-                                    {{ $invitation->hasBeenUsed() ? 'Accepted' : 'Not accepted' }}
+
+                                    <span
+                                        class="badge badge-pill {{ $invitation->hasBeenUsed() ? 'badge-success' : 'badge-warning'}}">
+                                        {{ $invitation->hasBeenUsed() ? 'Accepted' : 'Invited' }}
+                                    </span>
                                 </li>
                             @empty
                                 <p>Still no invited members</p>

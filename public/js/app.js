@@ -1807,7 +1807,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/workspaces/".concat(this.workspace.id, "/add-slot")).then(function (response) {
         // return a link for the hosted invoice instead of redirecting the user.
         window.location = response.data.hosted_invoice_url;
-      })["catch"](this.processing = false);
+      });
     }
   }
 });
@@ -1987,6 +1987,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
@@ -1996,14 +2002,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
+    window.events.$on(["task-updated", "task-added", "task-deleted"], function () {
+      _this.fetch();
+    });
     this.fetch();
   },
   methods: {
     fetch: function fetch() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/profiles/".concat(this.user.id, "/notifications")).then(function (response) {
-        return _this.notifications = response.data;
+        return _this2.notifications = response.data;
       });
     },
     notificationText: function notificationText(notification) {
@@ -2012,6 +2023,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     markAsRead: function markAsRead(notification, index) {
       axios["delete"]("/profiles/".concat(this.user.id, "/notifications/").concat(notification.id)).then(this.notifications.splice(index, 1));
+    },
+    clearAll: function clearAll() {
+      var _this3 = this;
+
+      axios["delete"]("/profiles/".concat(this.user.id, "/notifications/")).then(function (response) {
+        _this3.notifications = false;
+
+        _this3.$toasted.show("Notifications cleared.");
+      });
     },
     formattedDate: function formattedDate(date) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow();
@@ -2210,8 +2230,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['workspace'],
+  props: ["workspace"],
   data: function data() {
     return {
       form: new Form({
@@ -2326,7 +2406,7 @@ __webpack_require__.r(__webpack_exports__);
     updateStatus: function updateStatus(taskStatus) {
       var _this = this;
 
-      if (this.task.status == taskStatus) {
+      if (this.task.status === taskStatus) {
         return;
       }
 
@@ -2335,13 +2415,15 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this.$emit("task-updated");
 
+        window.events.$emit("task-updated");
+
         _this.$toasted.show("Task updated!");
       })["catch"](function (error) {
         _this.checkError(error.response.data.message);
       });
     },
     checkError: function checkError(message) {
-      if (message == "Too Many Attempts.") {
+      if (message === "Too Many Attempts.") {
         this.$toasted.show("You can update up to 10 tasks per minute. Try again shortly.");
       }
     }
@@ -2459,6 +2541,8 @@ __webpack_require__.r(__webpack_exports__);
         if (result.value) {
           axios["delete"]("/workspaces/".concat(_this2.workspace.id, "/tasks/").concat(task.id)).then(function (response) {
             _this2.refresh();
+
+            window.events.$emit("task-deleted");
 
             _this2.$toasted.show("Task deleted!");
           });
@@ -6954,7 +7038,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.cursor {\n\tcursor: pointer;\n}\n.done {\n\tbackground-color: #00b365;\n\tcolor: white;\n}\n.planned {\n\tbackground-color: #6200ee;\n\tcolor: white;\n}\n.testing {\n\tbackground-color: #dae0e5;\n}\n.inprogress {\n\tbackground-color: #f06900;\n\tcolor: white;\n}\n", ""]);
+exports.push([module.i, "\n.cursor {\n    cursor: pointer;\n}\n.done {\n    background-color: #00b365;\n    color: white;\n}\n.planned {\n    background-color: #6200ee;\n    color: white;\n}\n.testing {\n    background-color: #dae0e5;\n}\n.inprogress {\n    background-color: #f06900;\n    color: white;\n}\n", ""]);
 
 // exports
 
@@ -6973,7 +7057,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.icon {\n\tfont-size: 15px;\n\tvertical-align: middle;\n}\n", ""]);
+exports.push([module.i, "\n.icon {\n    font-size: 15px;\n    vertical-align: middle;\n}\n", ""]);
 
 // exports
 
@@ -58936,7 +59020,7 @@ var render = function() {
       },
       [
         _c(
-          "span",
+          "div",
           {
             class: _vm.processing ? "d-flex align-items-center" : "text-center"
           },
@@ -58945,7 +59029,7 @@ var render = function() {
               _vm._v("Loading...")
             ]),
             _vm._v(" "),
-            _c("span", {
+            _c("div", {
               directives: [
                 {
                   name: "show",
@@ -58954,7 +59038,7 @@ var render = function() {
                   expression: "processing"
                 }
               ],
-              staticClass: "spinner-border spinner-border-sm",
+              staticClass: "spinner-border ml-auto spinner-border-sm",
               attrs: { role: "status" }
             })
           ]
@@ -59105,27 +59189,43 @@ var render = function() {
             staticClass: "dropdown-menu dropdown-menu-right",
             attrs: { "aria-labelledby": "navbarDropdown" }
           },
-          _vm._l(_vm.notifications, function(notification, index) {
-            return _c(
-              "li",
-              { key: notification.id, staticClass: "dropdown-item" },
-              [
-                _c("a", {
+          [
+            _c("li", { staticClass: "dropdown-item text-right" }, [
+              _c(
+                "a",
+                {
                   staticStyle: { "text-decoration": "none" },
                   attrs: { href: "#" },
-                  domProps: {
-                    textContent: _vm._s(_vm.notificationText(notification))
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.markAsRead(notification, index)
+                  on: { click: _vm.clearAll }
+                },
+                [_vm._v("Clear all")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _vm._l(_vm.notifications, function(notification, index) {
+              return _c(
+                "li",
+                { key: notification.id, staticClass: "dropdown-item" },
+                [
+                  _c("a", {
+                    staticStyle: { "text-decoration": "none" },
+                    attrs: { href: "#" },
+                    domProps: {
+                      textContent: _vm._s(_vm.notificationText(notification))
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.markAsRead(notification, index)
+                      }
                     }
-                  }
-                })
-              ]
-            )
-          }),
-          0
+                  })
+                ]
+              )
+            })
+          ],
+          2
         )
       ])
     : _vm._e()
@@ -59209,7 +59309,11 @@ var render = function() {
                     staticClass: "modal-title",
                     attrs: { id: "addTaskModalLabel" }
                   },
-                  [_vm._v("Add task information")]
+                  [
+                    _vm._v(
+                      "\n                        Add task information\n                    "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
@@ -59349,11 +59453,11 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                                        " +
+                                "\n                                    " +
                                   _vm._s(member.first_name) +
-                                  "\n                                        " +
+                                  "\n                                    " +
                                   _vm._s(member.last_name) +
-                                  "\n                                    "
+                                  "\n                                "
                               )
                             ]
                           )
@@ -59598,7 +59702,9 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-footer" }, [
                       _c("small", [
-                        _vm._v("The member responsible will be notified.")
+                        _vm._v(
+                          "The member responsible will be\n                                notified."
+                        )
                       ]),
                       _vm._v(" "),
                       _c(
@@ -59608,7 +59714,11 @@ var render = function() {
                           attrs: { type: "button" },
                           on: { click: _vm.hide }
                         },
-                        [_vm._v("Close")]
+                        [
+                          _vm._v(
+                            "\n                                Close\n                            "
+                          )
+                        ]
                       ),
                       _vm._v(" "),
                       _c(
@@ -59620,7 +59730,11 @@ var render = function() {
                             disabled: _vm.form.errors.any()
                           }
                         },
-                        [_vm._v("Submit\n                                ")]
+                        [
+                          _vm._v(
+                            "\n                                Submit\n                            "
+                          )
+                        ]
                       )
                     ])
                   ]
@@ -59863,7 +59977,7 @@ var staticRenderFns = [
             staticStyle: { width: "15%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("\n\t\t\t\t\t\tCreator\n\t\t\t\t\t")]
+          [_vm._v("\n                        Creator\n                    ")]
         ),
         _vm._v(" "),
         _c(
@@ -59872,7 +59986,11 @@ var staticRenderFns = [
             staticStyle: { width: "15%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("\n\t\t\t\t\t\tPerson responsible\n\t\t\t\t\t")]
+          [
+            _vm._v(
+              "\n                        Person responsible\n                    "
+            )
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -59881,7 +59999,7 @@ var staticRenderFns = [
             staticStyle: { width: "10%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("\n\t\t\t\t\t\tStatus\n\t\t\t\t\t")]
+          [_vm._v("\n                        Status\n                    ")]
         ),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col text-center" } }, [
@@ -72868,7 +72986,7 @@ function () {
     key: "reset",
     value: function reset() {
       for (var field in this.originalData) {
-        this[field] = '';
+        this[field] = "";
       }
 
       this.errors.clear();
@@ -72882,7 +73000,7 @@ function () {
   }, {
     key: "post",
     value: function post(url) {
-      return this.submit('post', url);
+      return this.submit("post", url);
     }
     /**
      * Send a PUT request to the given URL.
@@ -72893,7 +73011,7 @@ function () {
   }, {
     key: "put",
     value: function put(url) {
-      return this.submit('put', url);
+      return this.submit("put", url);
     }
     /**
      * Send a PATCH request to the given URL.
@@ -72904,7 +73022,7 @@ function () {
   }, {
     key: "patch",
     value: function patch(url) {
-      return this.submit('patch', url);
+      return this.submit("patch", url);
     }
     /**
      * Send a DELETE request to the given URL.
@@ -72915,7 +73033,7 @@ function () {
   }, {
     key: "delete",
     value: function _delete(url) {
-      return this.submit('delete', url);
+      return this.submit("delete", url);
     }
     /**
      * Submit the form.

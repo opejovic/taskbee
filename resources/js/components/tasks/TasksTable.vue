@@ -103,6 +103,7 @@ export default {
                         )
                         .then(response => {
                             this.refresh();
+                            window.events.$emit("task-deleted");
                             this.$toasted.show("Task deleted!");
                         });
                 }

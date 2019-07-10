@@ -63,7 +63,7 @@ export default {
 
     methods: {
         updateStatus(taskStatus) {
-            if (this.task.status == taskStatus) {
+            if (this.task.status === taskStatus) {
                 return;
             }
 
@@ -78,6 +78,7 @@ export default {
                 )
                 .then(response => {
                     this.$emit("task-updated");
+                    window.events.$emit("task-updated");
                     this.$toasted.show("Task updated!");
                 })
                 .catch(error => {
@@ -86,7 +87,7 @@ export default {
         },
 
         checkError(message) {
-            if (message == "Too Many Attempts.") {
+            if (message === "Too Many Attempts.") {
                 this.$toasted.show(
                     "You can update up to 10 tasks per minute. Try again shortly."
                 );

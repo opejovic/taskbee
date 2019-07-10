@@ -13,13 +13,17 @@
                             Some data about the user
                         </div>
 
-                        <div class="card-footer">
-                            <form action="/workspaces/{{$workspace->id}}/members/{{$member->user_id}}" method="POST">
-                                @method('PATCH')
-                                @csrf
-                                <button type="submit" class="btn btn-danger">Remove</button>
-                            </form>
-                        </div>
+                        @if(auth()->user()->owns($workspace))
+                            @if(auth()->id() !== $member->user_id)
+                                <div class="card-footer">
+                                    <form action="/workspaces/{{$workspace->id}}/members/{{$member->user_id}}" method="POST">
+                                        @method('PATCH')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                    </form>
+                                </div>
+                            @endif
+                        @endif
                     </div>
                     <br>
                 </div>

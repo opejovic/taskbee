@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
         ->name('notifications.index');
     Route::delete('/profiles/{user}/notifications/{notificationId}', 'UserNotificationsController@destroy')
         ->name('notifications.delete');
+
+    Route::delete('/profiles/{user}/notifications/', 'ClearAllNotificationsController@destroy')
+        ->name('notifications.delete-all');
 });
 
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {

@@ -6,18 +6,18 @@
             :class="{ 'btn-loading': processing }"
             :disabled="processing"
         >
-            <span
+            <div
                 :class="
                     processing ? 'd-flex align-items-center' : 'text-center'
                 "
             >
                 <span v-text="state">Loading...</span>
-                <span
-                    class="spinner-border spinner-border-sm"
+                <div
+                    class="spinner-border ml-auto spinner-border-sm"
                     role="status"
                     v-show="processing"
-                ></span>
-            </span>
+                ></div>
+            </div>
         </button>
     </div>
 </template>
@@ -48,8 +48,7 @@ export default {
                 .then(response => {
                     // return a link for the hosted invoice instead of redirecting the user.
                     window.location = response.data.hosted_invoice_url;
-                })
-                .catch((this.processing = false));
+                });
         }
     }
 };
