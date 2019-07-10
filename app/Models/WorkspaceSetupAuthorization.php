@@ -41,18 +41,19 @@ class WorkspaceSetupAuthorization extends Model
      * Create an authorization for subscription.
      *
      * @param \App\Models\Subscription $subscription
-     * @return void 
+     *
+     * @return void
      */
     public static function authorize($subscription)
     {
         self::create([
-            'email' => $subscription->email,
-            'customer' => $subscription->customer,
+            'email'           => $subscription->email,
+            'customer'        => $subscription->customer,
             'members_invited' => 1,
-            'code' => AuthorizationCode::generate(),
-            'subscription_id'=> $subscription->stripe_id,
-            'plan_id'=> $subscription->plan_id,
-            'members_limit' => $subscription->plan->members_limit,
+            'code'            => AuthorizationCode::generate(),
+            'subscription_id' => $subscription->stripe_id,
+            'plan_id'         => $subscription->plan_id,
+            'members_limit'   => $subscription->plan->members_limit,
         ])->send();
     }
 
@@ -68,14 +69,15 @@ class WorkspaceSetupAuthorization extends Model
     /**
      * Get the WorkspaceSetupAuthorization by its code.
      *
-     * @param string $code 
+     * @param string $code
+     *
      * @return \App\Models\WorkspaceSetupAuthorization
      */
     public static function findByCode($code)
     {
         return self::whereCode($code)->first();
     }
-    
+
     /**
      * Has the workspace setup authorization been used?
      *
@@ -83,8 +85,8 @@ class WorkspaceSetupAuthorization extends Model
      */
     public function hasBeenUsed()
     {
-        return $this->admin_id !== null 
-            && $this->workspace_id !== null 
+        return $this->admin_id !== null
+            && $this->workspace_id !== null
             && $this->members_invited >= $this->members_limit;
     }
 
@@ -122,7 +124,7 @@ class WorkspaceSetupAuthorization extends Model
      * How many invites remain for this authorization.
      *
      * @return void
-     * @author 
+     * @author
      */
     public function getInvitesRemainingAttribute()
     {

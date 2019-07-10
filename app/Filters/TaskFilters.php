@@ -12,7 +12,7 @@ class TaskFilters extends Filters
      * summary
      *
      * @return void
-     * @author 
+     * @author
      */
     public function my()
     {
@@ -23,7 +23,7 @@ class TaskFilters extends Filters
      * summary
      *
      * @return void
-     * @author 
+     * @author
      */
     public function creator($id)
     {
@@ -31,12 +31,12 @@ class TaskFilters extends Filters
             return $this->builder->where('created_by', $id);
         }
     }
-    
+
     /**
      * summary
      *
      * @return void
-     * @author 
+     * @author
      */
     public function responsibility($id)
     {

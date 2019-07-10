@@ -3,7 +3,8 @@
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -13,41 +14,43 @@
                 @auth
                     @if (auth()->user()->workspace_id !== null)
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 Browse <span class="caret"></span>
                             </a>
 
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks">
-                                {{ __('All tasks') }}
-                            </a>
-                            <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?my">
-                                {{ __('My Tasks') }}
-                            </a>
-                            <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?creator={{ auth()->user()->id }}">
-                                {{ __('Tasks I have created') }}
-                            </a>
-                        </div>
-                    </li>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks">
+                                    {{ __('All tasks') }}
+                                </a>
+                                <a class="dropdown-item" href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?my">
+                                    {{ __('My Tasks') }}
+                                </a>
+                                <a class="dropdown-item"
+                                   href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?creator={{ auth()->user()->id }}">
+                                    {{ __('Tasks I have created') }}
+                                </a>
+                            </div>
+                        </li>
 
-{{--                     <li class="nav-item">
-                        <a class="nav-link" 
-                            href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?responsibility={{ auth()->user()->id }}">
-                            {{ __('Tasks I have created') }}
-                        </a>
-                    </li> --}}
+                        {{--                     <li class="nav-item">
+                                                <a class="nav-link"
+                                                    href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?responsibility={{ auth()->user()->id }}">
+                                                    {{ __('Tasks I have created') }}
+                                                </a>
+                                            </li> --}}
                     @endif
-                @endauth    
+                @endauth
             </ul>
 
-			<ul class="navbar-nav ml-auto mr-auto">
-				@auth
-					@if (auth()->user()->workspace_id !== null)
-						<new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
-					@endif
-				@endauth
-			</ul>
-            
+            <ul class="navbar-nav ml-auto mr-auto">
+                @auth
+                    @if (auth()->user()->workspace_id !== null)
+                        <new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
+                    @endif
+                @endauth
+            </ul>
+
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -65,7 +68,8 @@
                     <user-notifications :user="{{ Auth::user() }}"></user-notifications>
 
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->first_name }} <span class="caret"></span>
                         </a>
 

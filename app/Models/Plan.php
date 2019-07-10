@@ -10,16 +10,16 @@ class Plan extends Model
      * Class constants.
      *
      */
-    const BASIC = 'Basic Monthly';
-    const BASIC_PRICE = 799; // per user
+    const BASIC               = 'Basic Monthly';
+    const BASIC_PRICE         = 799; // per user
     const BASIC_MEMBERS_LIMIT = 5;
 
-    const STANDARD = 'Standard Monthly';
-    const STANDARD_PRICE = 699;
+    const STANDARD               = 'Standard Monthly';
+    const STANDARD_PRICE         = 699;
     const STANDARD_MEMBERS_LIMIT = 10;
 
-    const PREMIUM = 'Premium Monthly';
-    const PREMIUM_PRICE = 599;
+    const PREMIUM               = 'Premium Monthly';
+    const PREMIUM_PRICE         = 599;
     const PREMIUM_MEMBERS_LIMIT = 15;
 
 
@@ -29,6 +29,7 @@ class Plan extends Model
      * Saves given plans from the array to db.
      *
      * @param array $data
+     *
      * @return void
      * @author
      */

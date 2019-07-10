@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Facades;
 
@@ -13,8 +13,8 @@ class InvitationCode extends Facade
      * @return string
      *
      */
-	protected static function getFacadeAccessor()
-	{
-		return InvitationCodeGenerator::class;
-	}	
+    protected static function getFacadeAccessor()
+    {
+        return InvitationCodeGenerator::class;
+    }
 }

@@ -1,4 +1,4 @@
-import Errors from './Errors';
+import Errors from "./Errors";
 
 class Form {
     /**
@@ -16,7 +16,6 @@ class Form {
         this.errors = new Errors();
     }
 
-
     /**
      * Fetch all relevant data for the form.
      */
@@ -30,18 +29,16 @@ class Form {
         return data;
     }
 
-
     /**
      * Reset the form fields.
      */
     reset() {
         for (let field in this.originalData) {
-            this[field] = '';
+            this[field] = "";
         }
 
         this.errors.clear();
     }
-
 
     /**
      * Send a POST request to the given URL.
@@ -49,9 +46,8 @@ class Form {
      * @param {string} url
      */
     post(url) {
-        return this.submit('post', url);
+        return this.submit("post", url);
     }
-
 
     /**
      * Send a PUT request to the given URL.
@@ -59,9 +55,8 @@ class Form {
      * @param {string} url
      */
     put(url) {
-        return this.submit('put', url);
+        return this.submit("put", url);
     }
-
 
     /**
      * Send a PATCH request to the given URL.
@@ -69,9 +64,8 @@ class Form {
      * @param {string} url
      */
     patch(url) {
-        return this.submit('patch', url);
+        return this.submit("patch", url);
     }
-
 
     /**
      * Send a DELETE request to the given URL.
@@ -79,9 +73,8 @@ class Form {
      * @param {string} url
      */
     delete(url) {
-        return this.submit('delete', url);
+        return this.submit("delete", url);
     }
-
 
     /**
      * Submit the form.
@@ -105,7 +98,6 @@ class Form {
         });
     }
 
-
     /**
      * Handle a successful form submission.
      *
@@ -114,7 +106,6 @@ class Form {
     onSuccess(data) {
         this.reset();
     }
-
 
     /**
      * Handle a failed form submission.

@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 namespace App\Billing;
 
-interface SubscriptionGateway 
+interface SubscriptionGateway
 {
-	public function fulfill($purchase);
+    public function fulfill($purchase);
 }

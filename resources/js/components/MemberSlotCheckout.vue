@@ -49,7 +49,7 @@ export default {
                     // return a link for the hosted invoice instead of redirecting the user.
                     window.location = response.data.hosted_invoice_url;
                 })
-                .catch(this.processing = false);
+                .catch((this.processing = false));
         }
     }
 };

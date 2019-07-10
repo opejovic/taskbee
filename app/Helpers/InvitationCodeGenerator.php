@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 namespace App\Helpers;
 
 interface InvitationCodeGenerator
 {
-	public function generate();
+    public function generate();
 }
