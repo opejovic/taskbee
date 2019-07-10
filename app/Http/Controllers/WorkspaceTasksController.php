@@ -26,16 +26,16 @@ class WorkspaceTasksController extends Controller
     {
         try {
             $this->authorize('update', $workspace);
-            
+
             $tasks = $workspace->getTasks($filters);
-                
+
             if (request()->wantsJson()) {
                 return response([$workspace, $tasks], 200);
             }
 
             return view('tasks.index', [
                 'workspace' => $workspace,
-                'tasks' => $tasks,
+                'tasks'     => $tasks,
             ]);
         } catch (SubscriptionExpiredException $e) {
             if (Auth::user()->owns($workspace)) {
@@ -61,12 +61,12 @@ class WorkspaceTasksController extends Controller
 
             return view('tasks.create', [
                 'workspace' => $workspace,
-                'members' => $workspace->allMembers(),
-            ]);    
+                'members'   => $workspace->allMembers(),
+            ]);
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription expired. Please renew your subscription.", 423);
         }
-        
+
     }
 
     /**
@@ -83,28 +83,27 @@ class WorkspaceTasksController extends Controller
             $this->authorize('update', $workspace);
 
             request()->validate([
-                'name' => ['required', 'min:3'],
+                'name'             => ['required', 'min:3', 'not_regex:/(.)\\1{4,}/'],
                 'user_responsible' => ['required'],
-                'start_date' => ['required'],
-                'finish_date' => ['required'],
-                'status' => ['required'],
+                'start_date'       => ['required'],
+                'finish_date'      => ['required'],
+                'status'           => ['required'],
             ]);
 
             $task = Task::create([
-                'created_by' => Auth::user()->id,
-                'workspace_id' => $workspace->id,
-                'name' => request('name'),
+                'created_by'       => Auth::user()->id,
+                'workspace_id'     => $workspace->id,
+                'name'             => request('name'),
                 'user_responsible' => request('user_responsible'),
-                'start_date' => request('start_date'),
-                'finish_date' => request('finish_date'),
-                'status' => request('status'),
+                'start_date'       => request('start_date'),
+                'finish_date'      => request('finish_date'),
+                'status'           => request('status'),
             ]);
 
-            // Temporary - excluded the email returned from the relationship. Also, passing Auth user to TaskCreatedEmail, beacuse of the excluded email..
             $assignee = User::find($task->assignee->id);
             Mail::to($assignee->email)->queue(new TaskCreatedEmail($task, Auth::user()));
 
-			$this->notifyUsers($task, TaskCreated::class);
+            $this->notifyUsers($task, TaskCreated::class);
 
             if (request()->wantsJson()) {
                 return $task;
@@ -134,13 +133,13 @@ class WorkspaceTasksController extends Controller
             request()->validate([
                 'status' => ['required'],
             ]);
-			
+
             $task->updateStatus(request('status'));
 
             return response(['message' => 'Task updated!'], 200);
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription expired. Please renew your subscription.", 423);
-        } 
+        }
     }
 
     /**
@@ -157,26 +156,27 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
 
-			$this->notifyUsers($task, TaskDeleted::class);
+            $this->notifyUsers($task, TaskDeleted::class);
 
-			$task->delete();
+            $task->delete();
 
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription expired. Please renew your subscription.", 423);
         }
-	}
-	
-	/**
-	 * Notify the members of workspace for the given task, about changes that occurred.
-	 *
-	 * @param \App\Models\Task $task
-	 * @param $class
-	 * @return void
-	 **/
-	public function notifyUsers($task, $class)
-	{
-		$task->workspace->members->each(function ($member) use ($task, $class) {
-			$member->notify(new $class($task, auth()->user()));
-		});
-	}
+    }
+
+    /**
+     * Notify the members of workspace for the given task, about changes that occurred.
+     *
+     * @param \App\Models\Task $task
+     * @param $class
+     *
+     * @return void
+     **/
+    public function notifyUsers($task, $class)
+    {
+        $task->workspace->members->each(function ($member) use ($task, $class) {
+            $member->notify(new $class($task, auth()->user()));
+        });
+    }
 }

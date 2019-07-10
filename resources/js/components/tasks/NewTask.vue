@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mx-auto text-center">
         <button class="btn btn-lg btn-block big-task" data-toggle="modal" data-target="#addTaskModal">
             <div class="d-flex justify-content-between">
                 <i class="material-icons add align-self-center">add</i>
@@ -225,7 +225,6 @@
         background-color: #6200ee;
         color: white;
         vertical-align: middle;
-        width: 10em;
     }
 
     .big-task:hover {

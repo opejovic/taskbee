@@ -6935,7 +6935,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.add {\n    vertical-align: middle;\n    font-size: 25px;\n}\n.big-task {\n    background-color: #6200ee;\n    color: white;\n    vertical-align: middle;\n    width: 10em;\n}\n.big-task:hover {\n    background-color: #2e006e;\n    color: white;\n}\n", ""]);
+exports.push([module.i, "\n.add {\n    vertical-align: middle;\n    font-size: 25px;\n}\n.big-task {\n    background-color: #6200ee;\n    color: white;\n    vertical-align: middle;\n}\n.big-task:hover {\n    background-color: #2e006e;\n    color: white;\n}\n", ""]);
 
 // exports
 
@@ -59177,7 +59177,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "mx-auto text-center" }, [
     _vm._m(0),
     _vm._v(" "),
     _c(

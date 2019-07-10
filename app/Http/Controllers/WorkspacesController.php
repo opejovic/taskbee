@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Workspace;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Exceptions\SubscriptionExpiredException;
 use App\Exceptions\SubscriptionCanceledException;
 
@@ -62,7 +61,6 @@ class WorkspacesController extends Controller
             ]);    
         } catch (SubscriptionExpiredException $e) {
             return redirect(route('subscription-expired.show', $workspace));
-            // return response("Subscription expired. Please renew your subscription.", 423);
         } catch (SubscriptionCanceledException $e) {
             return response("You have canceled your subscription.", 423);
         }

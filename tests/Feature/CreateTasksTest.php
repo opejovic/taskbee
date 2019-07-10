@@ -31,10 +31,10 @@ class CreateTasksTest extends TestCase
         $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
         $user = factory(User::class)->create();
         $workspace->members()->attach($user);
-        
+
         $this->actingAs($user)->get("/workspaces/{$workspace->id}/tasks/create")
             ->assertStatus(423); // locked
-        
+
         $this->actingAs($user)->post("/workspaces/{$workspace->id}/tasks")
             ->assertStatus(423); // locked
     }
@@ -52,13 +52,13 @@ class CreateTasksTest extends TestCase
         $this->assertCount(0, Task::all());
 
         $response = $this->actingAs($taskCreator)
-            ->json('POST', "workspaces/{$workspace->id}/tasks", 
+            ->json('POST', "workspaces/{$workspace->id}/tasks",
                 [
-                    'name'               => 'Create a YoY sales report.',
-                    'user_responsible'   => $member->id,
-                    'start_date'         => '2019-05-12',
-                    'finish_date'        => '2019-05-25',
-                    'status'             => Task::PLANNED,
+                    'name'             => 'Create a YoY sales report.',
+                    'user_responsible' => $member->id,
+                    'start_date'       => '2019-05-12',
+                    'finish_date'      => '2019-05-25',
+                    'status'           => Task::PLANNED,
                 ]
             );
 
@@ -69,7 +69,7 @@ class CreateTasksTest extends TestCase
         $this->assertTrue($taskCreator->tasksCreated()->first()->is($task));
 
         Mail::assertQueued(TaskCreatedEmail::class, function ($mail) use ($task, $member) {
-            return $mail->hasTo($member->email) 
+            return $mail->hasTo($member->email)
                 && $mail->task->is($task);
         });
     }
@@ -84,9 +84,9 @@ class CreateTasksTest extends TestCase
         $workspace->members()->attach($jane);
 
         $johnsTask = factory(Task::class)->create([
-            'created_by' => $john->id,
+            'created_by'       => $john->id,
             'user_responsible' => $john->id,
-            'workspace_id' => $workspace->id
+            'workspace_id'     => $workspace->id
         ]);
 
         $this->assertCount(1, Task::all());
@@ -105,9 +105,9 @@ class CreateTasksTest extends TestCase
         $workspace->members()->attach($jane);
 
         $johnsTask = factory(Task::class)->create([
-            'created_by' => $john->id,
+            'created_by'       => $john->id,
             'user_responsible' => $john->id,
-            'workspace_id' => $workspace->id
+            'workspace_id'     => $workspace->id
         ]);
 
         $endpoint = "workspaces/{$workspace->id}/tasks/{$johnsTask->id}";
@@ -124,6 +124,28 @@ class CreateTasksTest extends TestCase
         $response = $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::PLANNED]);
         $response->assertStatus(429); // Too many requests
         $this->assertEquals(Task::WAITING, $john->tasks->fresh()->first()->status);
+    }
 
+    /** @test */
+    function task_cannot_be_created_if_the_name_of_the_task_contains_key_held_down_characters()
+    {
+        $workspace = factory(Workspace::class)->create();
+        $taskCreator = factory(User::class)->states('member')->create();
+        $workspace->members()->attach($taskCreator);
+        $this->assertCount(0, Task::all());
+
+        $response = $this->actingAs($taskCreator)
+            ->json('POST', "workspaces/{$workspace->id}/tasks",
+                [
+                    'name'             => 'SPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM',
+                    'user_responsible' => $taskCreator->id,
+                    'start_date'       => '2019-05-12',
+                    'finish_date'      => '2019-05-25',
+                    'status'           => Task::PLANNED,
+                ]
+            );
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('name');
+        $this->assertCount(0, Task::all());
     }
 }
