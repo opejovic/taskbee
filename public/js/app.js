@@ -2423,8 +2423,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     checkError: function checkError(message) {
-      if (message === "Too Many Attempts.") {
-        this.$toasted.show("You can update up to 10 tasks per minute. Try again shortly.");
+      if (message === "Task may be updated only once per minute.") {
+        this.$toasted.show(message);
       }
     }
   }

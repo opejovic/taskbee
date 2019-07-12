@@ -130,6 +130,10 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
 
+            if ($task->wasUpdatedRecently()) {
+                return response(['message' => 'Task may be updated only once per minute.'], 429);
+            }
+
             request()->validate([
                 'status' => ['required'],
             ]);

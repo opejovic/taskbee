@@ -16,7 +16,7 @@ Auth::routes();
 Route::post('stripe-webhook', 'WebhookController@handle')->name('webhook.handle');
 Route::get('home', 'HomeController@index')->name('home');
 Route::get('plans', 'SubscriptionPlansController@index');
-Route::post('register', 'Auth\RegisterController@register')->name('register')->middleware('guest');
+Route::middleware('guest')->post('register', 'Auth\RegisterController@register')->name('register');
 
 Route::middleware('auth')->group(function () {
     Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout');
@@ -50,9 +50,7 @@ Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace'
 
 Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
 
-Route::post('register-invitees', 'Auth\RegisterController@registerInvitees')
-    ->name('invitees.register')
-    ->middleware('guest');
+Route::middleware('guest')->post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
     Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
@@ -60,8 +58,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
     Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
     Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
 
-    Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update')
-        ->middleware('throttle:5,1');
+    Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update');
 
     Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
 

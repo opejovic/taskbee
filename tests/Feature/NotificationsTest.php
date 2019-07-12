@@ -17,6 +17,7 @@ class NotificationsTest extends TestCase
 	/** @test */
 	function notifications_are_prepared_when_the_task_is_updated()
 	{
+	    // Arrange: Workspace, workspace member and a task belonging to that workspace
 		$workspace = factory(Workspace::class)->create();
 		$member = factory(User::class)->create(['workspace_id' => $workspace->id]);
 		$workspace->members()->attach($member);
@@ -27,6 +28,7 @@ class NotificationsTest extends TestCase
 			'created_by' => $workspace->creator->id,
 			'user_responsible' => $member->id,
 			'status' => Task::PLANNED,
+            'updated_at' => now()->subDay(), // because of the wasUpdatedRecently method on the task.
 		]);
 		$this->assertCount(0, $member->unreadNotifications);
 		$this->assertCount(0, $workspace->creator->unreadNotifications);

@@ -75,6 +75,16 @@ class Task extends Model
     }
 
     /**
+     * Was task updated less than a minute ago?
+     *
+     * @return boolean
+     */
+    public function wasUpdatedRecently()
+    {
+        return $this->updated_at->gt(now()->subMinute());
+    }
+
+    /**
      * Query scope, uses ThreadFilter $filters, if provided.
      *
      * @param \Illuminate\Database\Query\Builder $query

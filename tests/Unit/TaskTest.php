@@ -45,4 +45,14 @@ class TaskTest extends TestCase
 
 		$this->assertEquals('May 22, 2019', $task->formatted_finish_date);
 	}
+
+	/** @test */
+	function it_knows_if_its_been_updated_recently()
+	{
+        $task = factory(Task::class)->create(['updated_at' => now()]);
+        $this->assertTrue($task->wasUpdatedRecently());
+
+        $task->updated_at = now()->subWeek();
+        $this->assertFalse($task->wasUpdatedRecently());
+	}
 }
