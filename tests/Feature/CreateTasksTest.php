@@ -19,13 +19,13 @@ class CreateTasksTest extends TestCase
     // todo: 8. Every team member can also change any task attribute or edit the name etc.
 
     /** @test */
-    function unauthenticated_users_cannot_create_new_tasks()
+    public function unauthenticated_users_cannot_create_new_tasks()
     {
         $this->post("workspaces/1/tasks", [])->assertRedirect('login');
     }
 
     /** @test */
-    function workspace_is_locked_and_tasks_cannot_be_created_if_subscription_is_expired()
+    public function workspace_is_locked_and_tasks_cannot_be_created_if_subscription_is_expired()
     {
         $subscription = factory(Subscription::class)->states('unpaid')->create();
         $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
@@ -40,7 +40,7 @@ class CreateTasksTest extends TestCase
     }
 
     /** @test */
-    function team_members_can_assign_new_tasks_to_other_members()
+    public function team_members_can_assign_new_tasks_to_other_members()
     {
         Mail::fake();
 
@@ -52,7 +52,9 @@ class CreateTasksTest extends TestCase
         $this->assertCount(0, Task::all());
 
         $response = $this->actingAs($taskCreator)
-            ->json('POST', "workspaces/{$workspace->id}/tasks",
+            ->json(
+                'POST',
+                "workspaces/{$workspace->id}/tasks",
                 [
                     'name'             => 'Create a YoY sales report.',
                     'user_responsible' => $member->id,
@@ -75,7 +77,7 @@ class CreateTasksTest extends TestCase
     }
 
     /** @test */
-    function team_members_can_delete_any_task_belonging_to_their_workspace()
+    public function team_members_can_delete_any_task_belonging_to_their_workspace()
     {
         $workspace = factory(Workspace::class)->create();
         $john = factory(User::class)->create();
@@ -96,7 +98,7 @@ class CreateTasksTest extends TestCase
     }
 
     /** @test */
-    function team_members_can_update_a_task_belonging_to_their_workspace_only_once_per_minute()
+    public function team_members_can_update_a_task_belonging_to_their_workspace_only_once_per_minute()
     {
         $workspace = factory(Workspace::class)->create();
         $john = factory(User::class)->create();
@@ -121,7 +123,7 @@ class CreateTasksTest extends TestCase
     }
 
     /** @test */
-    function task_cannot_be_created_if_the_name_of_the_task_contains_key_held_down_characters()
+    public function task_cannot_be_created_if_the_name_of_the_task_contains_key_held_down_characters()
     {
         $workspace = factory(Workspace::class)->create();
         $taskCreator = factory(User::class)->states('member')->create();
@@ -129,7 +131,9 @@ class CreateTasksTest extends TestCase
         $this->assertCount(0, Task::all());
 
         $response = $this->actingAs($taskCreator)
-            ->json('POST', "workspaces/{$workspace->id}/tasks",
+            ->json(
+                'POST',
+                "workspaces/{$workspace->id}/tasks",
                 [
                     'name'             => 'SPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM',
                     'user_responsible' => $taskCreator->id,

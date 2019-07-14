@@ -113,7 +113,6 @@ var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "./node_modules/
 var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
 var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
 var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(/*! ./../helpers/btoa */ "./node_modules/axios/lib/helpers/btoa.js");
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -125,22 +124,6 @@ module.exports = function xhrAdapter(config) {
     }
 
     var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if ( true &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
 
     // HTTP basic authentication
     if (config.auth) {
@@ -155,8 +138,8 @@ module.exports = function xhrAdapter(config) {
     request.timeout = config.timeout;
 
     // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
+    request.onreadystatechange = function handleLoad() {
+      if (!request || request.readyState !== 4) {
         return;
       }
 
@@ -173,15 +156,26 @@ module.exports = function xhrAdapter(config) {
       var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
       var response = {
         data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        status: request.status,
+        statusText: request.statusText,
         headers: responseHeaders,
         config: config,
         request: request
       };
 
       settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle browser request cancellation (as opposed to a manual cancellation)
+    request.onabort = function handleAbort() {
+      if (!request) {
+        return;
+      }
+
+      reject(createError('Request aborted', config, 'ECONNABORTED', request));
 
       // Clean up request
       request = null;
@@ -214,8 +208,8 @@ module.exports = function xhrAdapter(config) {
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
-          cookies.read(config.xsrfCookieName) :
-          undefined;
+        cookies.read(config.xsrfCookieName) :
+        undefined;
 
       if (xsrfValue) {
         requestHeaders[config.xsrfHeaderName] = xsrfValue;
@@ -302,6 +296,7 @@ module.exports = function xhrAdapter(config) {
 var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
 var Axios = __webpack_require__(/*! ./core/Axios */ "./node_modules/axios/lib/core/Axios.js");
+var mergeConfig = __webpack_require__(/*! ./core/mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
 var defaults = __webpack_require__(/*! ./defaults */ "./node_modules/axios/lib/defaults.js");
 
 /**
@@ -331,7 +326,7 @@ axios.Axios = Axios;
 
 // Factory for creating new instances
 axios.create = function create(instanceConfig) {
-  return createInstance(utils.merge(defaults, instanceConfig));
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
 };
 
 // Expose Cancel & CancelToken
@@ -480,10 +475,11 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var defaults = __webpack_require__(/*! ./../defaults */ "./node_modules/axios/lib/defaults.js");
 var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var buildURL = __webpack_require__(/*! ../helpers/buildURL */ "./node_modules/axios/lib/helpers/buildURL.js");
 var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "./node_modules/axios/lib/core/InterceptorManager.js");
 var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "./node_modules/axios/lib/core/dispatchRequest.js");
+var mergeConfig = __webpack_require__(/*! ./mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
 
 /**
  * Create a new instance of Axios
@@ -507,13 +503,14 @@ Axios.prototype.request = function request(config) {
   /*eslint no-param-reassign:0*/
   // Allow for axios('example/url'[, config]) a la fetch API
   if (typeof config === 'string') {
-    config = utils.merge({
-      url: arguments[0]
-    }, arguments[1]);
+    config = arguments[1] || {};
+    config.url = arguments[0];
+  } else {
+    config = config || {};
   }
 
-  config = utils.merge(defaults, {method: 'get'}, this.defaults, config);
-  config.method = config.method.toLowerCase();
+  config = mergeConfig(this.defaults, config);
+  config.method = config.method ? config.method.toLowerCase() : 'get';
 
   // Hook up interceptors middleware
   var chain = [dispatchRequest, undefined];
@@ -532,6 +529,11 @@ Axios.prototype.request = function request(config) {
   }
 
   return promise;
+};
+
+Axios.prototype.getUri = function getUri(config) {
+  config = mergeConfig(this.defaults, config);
+  return buildURL(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
 };
 
 // Provide aliases for supported request methods
@@ -778,9 +780,93 @@ module.exports = function enhanceError(error, config, code, request, response) {
   if (code) {
     error.code = code;
   }
+
   error.request = request;
   error.response = response;
+  error.isAxiosError = true;
+
+  error.toJSON = function() {
+    return {
+      // Standard
+      message: this.message,
+      name: this.name,
+      // Microsoft
+      description: this.description,
+      number: this.number,
+      // Mozilla
+      fileName: this.fileName,
+      lineNumber: this.lineNumber,
+      columnNumber: this.columnNumber,
+      stack: this.stack,
+      // Axios
+      config: this.config,
+      code: this.code
+    };
+  };
   return error;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/core/mergeConfig.js":
+/*!****************************************************!*\
+  !*** ./node_modules/axios/lib/core/mergeConfig.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(/*! ../utils */ "./node_modules/axios/lib/utils.js");
+
+/**
+ * Config-specific merge-function which creates a new config-object
+ * by merging two configuration objects together.
+ *
+ * @param {Object} config1
+ * @param {Object} config2
+ * @returns {Object} New object resulting from merging config2 to config1
+ */
+module.exports = function mergeConfig(config1, config2) {
+  // eslint-disable-next-line no-param-reassign
+  config2 = config2 || {};
+  var config = {};
+
+  utils.forEach(['url', 'method', 'params', 'data'], function valueFromConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    }
+  });
+
+  utils.forEach(['headers', 'auth', 'proxy'], function mergeDeepProperties(prop) {
+    if (utils.isObject(config2[prop])) {
+      config[prop] = utils.deepMerge(config1[prop], config2[prop]);
+    } else if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (utils.isObject(config1[prop])) {
+      config[prop] = utils.deepMerge(config1[prop]);
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  utils.forEach([
+    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'maxContentLength',
+    'validateStatus', 'maxRedirects', 'httpAgent', 'httpsAgent', 'cancelToken',
+    'socketPath'
+  ], function defaultToConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  return config;
 };
 
 
@@ -807,8 +893,7 @@ var createError = __webpack_require__(/*! ./createError */ "./node_modules/axios
  */
 module.exports = function settle(resolve, reject, response) {
   var validateStatus = response.config.validateStatus;
-  // Note: status is not exposed by XDomainRequest
-  if (!response.status || !validateStatus || validateStatus(response.status)) {
+  if (!validateStatus || validateStatus(response.status)) {
     resolve(response);
   } else {
     reject(createError(
@@ -881,12 +966,13 @@ function setContentTypeIfUnset(headers, value) {
 
 function getDefaultAdapter() {
   var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
-  } else if (typeof process !== 'undefined') {
+  // Only Node.JS has a process variable that is of [[Class]] process
+  if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
     // For node use HTTP adapter
     adapter = __webpack_require__(/*! ./adapters/http */ "./node_modules/axios/lib/adapters/xhr.js");
+  } else if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
   }
   return adapter;
 }
@@ -895,6 +981,7 @@ var defaults = {
   adapter: getDefaultAdapter(),
 
   transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Accept');
     normalizeHeaderName(headers, 'Content-Type');
     if (utils.isFormData(data) ||
       utils.isArrayBuffer(data) ||
@@ -988,54 +1075,6 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ "./node_modules/axios/lib/helpers/btoa.js":
-/*!************************************************!*\
-  !*** ./node_modules/axios/lib/helpers/btoa.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
-
-var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-function E() {
-  this.message = 'String contains an invalid character';
-}
-E.prototype = new Error;
-E.prototype.code = 5;
-E.prototype.name = 'InvalidCharacterError';
-
-function btoa(input) {
-  var str = String(input);
-  var output = '';
-  for (
-    // initialize result and counter
-    var block, charCode, idx = 0, map = chars;
-    // if the next str index does not exist:
-    //   change the mapping table to "="
-    //   check if d has no fractional digits
-    str.charAt(idx | 0) || (map = '=', idx % 1);
-    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
-  ) {
-    charCode = str.charCodeAt(idx += 3 / 4);
-    if (charCode > 0xFF) {
-      throw new E();
-    }
-    block = block << 8 | charCode;
-  }
-  return output;
-}
-
-module.exports = btoa;
-
-
-/***/ }),
-
 /***/ "./node_modules/axios/lib/helpers/buildURL.js":
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/helpers/buildURL.js ***!
@@ -1105,6 +1144,11 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   }
 
   if (serializedParams) {
+    var hashmarkIndex = url.indexOf('#');
+    if (hashmarkIndex !== -1) {
+      url = url.slice(0, hashmarkIndex);
+    }
+
     url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
   }
 
@@ -1156,50 +1200,50 @@ module.exports = (
   utils.isStandardBrowserEnv() ?
 
   // Standard browser envs support document.cookie
-  (function standardBrowserEnv() {
-    return {
-      write: function write(name, value, expires, path, domain, secure) {
-        var cookie = [];
-        cookie.push(name + '=' + encodeURIComponent(value));
+    (function standardBrowserEnv() {
+      return {
+        write: function write(name, value, expires, path, domain, secure) {
+          var cookie = [];
+          cookie.push(name + '=' + encodeURIComponent(value));
 
-        if (utils.isNumber(expires)) {
-          cookie.push('expires=' + new Date(expires).toGMTString());
+          if (utils.isNumber(expires)) {
+            cookie.push('expires=' + new Date(expires).toGMTString());
+          }
+
+          if (utils.isString(path)) {
+            cookie.push('path=' + path);
+          }
+
+          if (utils.isString(domain)) {
+            cookie.push('domain=' + domain);
+          }
+
+          if (secure === true) {
+            cookie.push('secure');
+          }
+
+          document.cookie = cookie.join('; ');
+        },
+
+        read: function read(name) {
+          var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+          return (match ? decodeURIComponent(match[3]) : null);
+        },
+
+        remove: function remove(name) {
+          this.write(name, '', Date.now() - 86400000);
         }
-
-        if (utils.isString(path)) {
-          cookie.push('path=' + path);
-        }
-
-        if (utils.isString(domain)) {
-          cookie.push('domain=' + domain);
-        }
-
-        if (secure === true) {
-          cookie.push('secure');
-        }
-
-        document.cookie = cookie.join('; ');
-      },
-
-      read: function read(name) {
-        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-        return (match ? decodeURIComponent(match[3]) : null);
-      },
-
-      remove: function remove(name) {
-        this.write(name, '', Date.now() - 86400000);
-      }
-    };
-  })() :
+      };
+    })() :
 
   // Non standard browser env (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return {
-      write: function write() {},
-      read: function read() { return null; },
-      remove: function remove() {}
-    };
-  })()
+    (function nonStandardBrowserEnv() {
+      return {
+        write: function write() {},
+        read: function read() { return null; },
+        remove: function remove() {}
+      };
+    })()
 );
 
 
@@ -1248,64 +1292,64 @@ module.exports = (
 
   // Standard browser envs have full support of the APIs needed to test
   // whether the request URL is of the same origin as current location.
-  (function standardBrowserEnv() {
-    var msie = /(msie|trident)/i.test(navigator.userAgent);
-    var urlParsingNode = document.createElement('a');
-    var originURL;
+    (function standardBrowserEnv() {
+      var msie = /(msie|trident)/i.test(navigator.userAgent);
+      var urlParsingNode = document.createElement('a');
+      var originURL;
 
-    /**
+      /**
     * Parse a URL to discover it's components
     *
     * @param {String} url The URL to be parsed
     * @returns {Object}
     */
-    function resolveURL(url) {
-      var href = url;
+      function resolveURL(url) {
+        var href = url;
 
-      if (msie) {
+        if (msie) {
         // IE needs attribute set twice to normalize properties
+          urlParsingNode.setAttribute('href', href);
+          href = urlParsingNode.href;
+        }
+
         urlParsingNode.setAttribute('href', href);
-        href = urlParsingNode.href;
+
+        // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+        return {
+          href: urlParsingNode.href,
+          protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+          host: urlParsingNode.host,
+          search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+          hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+          hostname: urlParsingNode.hostname,
+          port: urlParsingNode.port,
+          pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+            urlParsingNode.pathname :
+            '/' + urlParsingNode.pathname
+        };
       }
 
-      urlParsingNode.setAttribute('href', href);
+      originURL = resolveURL(window.location.href);
 
-      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
-      return {
-        href: urlParsingNode.href,
-        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
-        host: urlParsingNode.host,
-        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
-        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
-        hostname: urlParsingNode.hostname,
-        port: urlParsingNode.port,
-        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
-                  urlParsingNode.pathname :
-                  '/' + urlParsingNode.pathname
-      };
-    }
-
-    originURL = resolveURL(window.location.href);
-
-    /**
+      /**
     * Determine if a URL shares the same origin as the current location
     *
     * @param {String} requestURL The URL to test
     * @returns {boolean} True if URL shares the same origin, otherwise false
     */
-    return function isURLSameOrigin(requestURL) {
-      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
-      return (parsed.protocol === originURL.protocol &&
+      return function isURLSameOrigin(requestURL) {
+        var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+        return (parsed.protocol === originURL.protocol &&
             parsed.host === originURL.host);
-    };
-  })() :
+      };
+    })() :
 
   // Non standard browser envs (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return function isURLSameOrigin() {
-      return true;
-    };
-  })()
+    (function nonStandardBrowserEnv() {
+      return function isURLSameOrigin() {
+        return true;
+      };
+    })()
 );
 
 
@@ -1450,7 +1494,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -1626,9 +1670,13 @@ function trim(str) {
  *
  * react-native:
  *  navigator.product -> 'ReactNative'
+ * nativescript
+ *  navigator.product -> 'NativeScript' or 'NS'
  */
 function isStandardBrowserEnv() {
-  if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+  if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
+                                           navigator.product === 'NativeScript' ||
+                                           navigator.product === 'NS')) {
     return false;
   }
   return (
@@ -1710,6 +1758,32 @@ function merge(/* obj1, obj2, obj3, ... */) {
 }
 
 /**
+ * Function equal to merge with the difference being that no reference
+ * to original objects is kept.
+ *
+ * @see merge
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function deepMerge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = deepMerge(result[key], val);
+    } else if (typeof val === 'object') {
+      result[key] = deepMerge({}, val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
  * Extends object a by mutably adding to it the properties of object b.
  *
  * @param {Object} a The object to be extended
@@ -1747,10 +1821,110 @@ module.exports = {
   isStandardBrowserEnv: isStandardBrowserEnv,
   forEach: forEach,
   merge: merge,
+  deepMerge: deepMerge,
   extend: extend,
   trim: trim
 };
 
+
+/***/ }),
+
+/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+module.exports = function isBuffer (obj) {
+  return obj != null && obj.constructor != null &&
+    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AvatarForm.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AvatarForm.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["profileuser"],
+  data: function data() {
+    return {
+      avatar: this.profileuser.avatar_path
+    };
+  },
+  computed: {
+    canUpload: function canUpload() {
+      return this.profileuser.id == auth.id;
+    }
+  },
+  methods: {
+    onChange: function onChange(event) {
+      var _this = this;
+
+      if (!event.target.files.length) return;
+      var avatar = event.target.files[0];
+      var data = new FileReader();
+      data.readAsDataURL(avatar);
+
+      data.onload = function (event) {
+        _this.avatar = event.target.result;
+      };
+
+      this.persist(avatar);
+    },
+    persist: function persist(avatar) {
+      var _this2 = this;
+
+      var data = new FormData();
+      data.append("avatar", avatar);
+      axios.post("/profiles/".concat(this.profileuser.id, "/avatar"), data).then(function () {
+        return _this2.$toasted.show("Avatar saved.");
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -1989,10 +2163,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["user"],
@@ -2008,6 +2178,11 @@ __webpack_require__.r(__webpack_exports__);
       _this.fetch();
     });
     this.fetch();
+  },
+  computed: {
+    hasNotifications: function hasNotifications() {
+      return this.notifications.length ? 'notifications_active' : 'notifications_none';
+    }
   },
   methods: {
     fetch: function fetch() {
@@ -2446,6 +2621,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TaskStatus_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TaskStatus.vue */ "./resources/js/components/tasks/TaskStatus.vue");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var v_tooltip__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! v-tooltip */ "./node_modules/v-tooltip/dist/v-tooltip.esm.js");
 //
 //
 //
@@ -2491,10 +2667,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
 
 
 
@@ -2505,7 +2678,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      items: {}
+      items: {},
+      msg: "Delete"
     };
   },
   methods: {
@@ -2531,12 +2705,12 @@ __webpack_require__.r(__webpack_exports__);
 
       sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: "You won't be able to revert this.",
         type: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonColor: "#6200ee",
+        cancelButtonColor: "#db3236",
+        confirmButtonText: "Yes, delete it."
       }).then(function (result) {
         if (result.value) {
           axios["delete"]("/workspaces/".concat(_this2.workspace.id, "/tasks/").concat(task.id)).then(function (response) {
@@ -2557,6 +2731,9 @@ __webpack_require__.r(__webpack_exports__);
     window.events.$on("task-added", function () {
       _this3.refresh();
     });
+  },
+  mounted: function mounted() {
+    $("#delete").tooltip("enable");
   }
 });
 
@@ -7057,7 +7234,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.icon {\n    font-size: 15px;\n    vertical-align: middle;\n}\n", ""]);
+exports.push([module.i, "\n.icon {\n\tfont-size: 15px;\n\tvertical-align: middle;\n}\n", ""]);
 
 // exports
 
@@ -7146,38 +7323,6 @@ function toComment(sourceMap) {
 	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
 
 	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/is-buffer/index.js":
-/*!*****************************************!*\
-  !*** ./node_modules/is-buffer/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-// The _isBuffer check is for Safari 5-7 support, because it's missing
-// Object.prototype.constructor. Remove this eventually
-module.exports = function (obj) {
-  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
-}
-
-function isBuffer (obj) {
-  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
-
-// For Node v0.10 support. Remove this eventually.
-function isSlowBuffer (obj) {
-  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
 
@@ -58994,6 +59139,1971 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/v-tooltip/dist/v-tooltip.esm.js":
+/*!******************************************************!*\
+  !*** ./node_modules/v-tooltip/dist/v-tooltip.esm.js ***!
+  \******************************************************/
+/*! exports provided: default, Dropdown, Popper, PopperContent, PopperMethods, PopperWrapper, ThemeClass, Tooltip, TooltipDirective, VClosePopper, VTooltip, createTooltip, destroyTooltip, install, options */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Dropdown", function() { return Dropdown; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Popper", function() { return Popper; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PopperContent", function() { return PopperContent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PopperMethods", function() { return PopperMethods; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PopperWrapper", function() { return PopperWrapper; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ThemeClass", function() { return ThemeClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Tooltip", function() { return Tooltip; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TooltipDirective", function() { return TooltipDirective; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VClosePopper", function() { return VClosePopper; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VTooltip", function() { return VTooltip; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createTooltip", function() { return createTooltip; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "destroyTooltip", function() { return destroyTooltip; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "options", function() { return options; });
+/* harmony import */ var popper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js");
+/* harmony import */ var vue_resize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-resize */ "./node_modules/vue-resize/dist/vue-resize.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+function assign(to, from) {
+  for (var key in from) {
+    if (Object.prototype.hasOwnProperty.call(from, key)) {
+      if (_typeof(from[key]) === 'object' && to[key]) {
+        assign(to[key], from[key]);
+      } else {
+        to[key] = from[key];
+      }
+    }
+  }
+}
+
+var config = {
+  // Disable popper components
+  disabled: false,
+  // Default position offset (px)
+  offset: 0,
+  // Default container where the tooltip will be appended
+  container: 'body',
+  // Element used to compute position and size boundaries
+  boundariesElement: undefined,
+  // Skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
+  instantMove: false,
+  // Auto destroy tooltip DOM nodes (ms)
+  disposeTimeout: 5000,
+  // Options passed to Popper constructor
+  popperOptions: {},
+  // Themes
+  themes: {
+    tooltip: {
+      // Default tooltip placement relative to target element
+      placement: 'top',
+      // Default events that trigger the tooltip
+      trigger: ['hover', 'focus', 'touch'],
+      // Close tooltip on click on tooltip target
+      triggerHide: function triggerHide(events) {
+        return [].concat(_toConsumableArray(events), ['click']);
+      },
+      // Delay (ms)
+      delay: {
+        show: 200,
+        hide: 0
+      },
+      // Update popper on content resize
+      handleResize: false,
+      // Enable HTML content in directive
+      contentHtml: true,
+      // Displayed when tooltip content is loading
+      loadingContent: '...'
+    },
+    dropdown: {
+      // Default dropdown placement relative to target element
+      placement: 'bottom',
+      // Default events that trigger the dropdown
+      trigger: ['click'],
+      // Delay (ms)
+      delay: 0,
+      // Update popper on content resize
+      handleResize: true,
+      // Hide on clock outside
+      autoHide: true
+    }
+  }
+  /**
+   * Get default config value depending on theme
+   */
+
+};
+function getDefaultConfig(theme, key) {
+  var themeConfig = config.themes[theme] || {};
+  var value;
+
+  do {
+    value = themeConfig[key];
+
+    if (typeof value === 'undefined') {
+      // Support theme extend
+      if (themeConfig.$extend) {
+        themeConfig = config.themes[themeConfig.$extend] || {};
+      } else {
+        // Base config
+        themeConfig = null;
+        value = config[key];
+      }
+    } else {
+      themeConfig = null;
+    }
+  } while (themeConfig);
+
+  return value;
+}
+/**
+ * Theme CSS inheritance
+ */
+
+function getThemeClasses(theme) {
+  var result = [theme];
+  var themeConfig = config.themes[theme] || {};
+
+  do {
+    // Support theme extend
+    if (themeConfig.$extend && !themeConfig.$resetCss) {
+      result.push(themeConfig.$extend);
+      themeConfig = config.themes[themeConfig.$extend] || {};
+    } else {
+      themeConfig = null;
+    }
+  } while (themeConfig);
+
+  return result.map(function (c) {
+    return "v-popper--theme-".concat(c);
+  });
+}
+
+var supportsPassive = false;
+
+if (typeof window !== 'undefined') {
+  supportsPassive = false;
+
+  try {
+    var opts = Object.defineProperty({}, 'passive', {
+      get: function get() {
+        supportsPassive = true;
+      }
+    });
+    window.addEventListener('test', null, opts);
+  } catch (e) {}
+}
+
+var SHOW_EVENT_MAP = {
+  hover: 'mouseenter',
+  focus: 'focus',
+  click: 'click',
+  touch: 'touchstart'
+};
+var HIDE_EVENT_MAP = {
+  hover: 'mouseleave',
+  focus: 'blur',
+  click: 'click',
+  touch: 'touchend'
+};
+var EVENTS = Object.keys(SHOW_EVENT_MAP);
+var isIOS = false;
+
+if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+  isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+var openPoppers = [];
+var hidingPopper = null;
+
+var Element = function Element() {};
+
+if (typeof window !== 'undefined') {
+  Element = window.Element;
+}
+
+var script = {
+  name: 'VPopper',
+  props: {
+    theme: {
+      type: String,
+      required: true
+    },
+    targetNode: {
+      type: Function,
+      required: true
+    },
+    popperNode: {
+      type: Function,
+      required: true
+    },
+    arrowNode: {
+      type: Function,
+      default: null
+    },
+    open: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'disabled');
+      }
+    },
+    placement: {
+      type: String,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'placement');
+      },
+      validator: function validator(value) {
+        return popper_js__WEBPACK_IMPORTED_MODULE_0__["default"].placements.includes(value);
+      }
+    },
+    delay: {
+      type: [String, Number, Object],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'delay');
+      }
+    },
+    offset: {
+      type: [String, Number],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'offset');
+      }
+    },
+    trigger: {
+      type: [String, Array],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'trigger');
+      }
+    },
+    triggerShow: {
+      type: [String, Array, Function],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'triggerShow');
+      }
+    },
+    triggerHide: {
+      type: [String, Array, Function],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'triggerHide');
+      }
+    },
+    container: {
+      type: [String, Object, Element, Boolean],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'container');
+      }
+    },
+    boundariesElement: {
+      type: [String, Element],
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'boundariesElement');
+      }
+    },
+    popperOptions: {
+      type: Object,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'popperOptions');
+      }
+    },
+    autoHide: {
+      type: Boolean,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'autoHide');
+      }
+    },
+    handleResize: {
+      type: Boolean,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'handleResize');
+      }
+    },
+    openGroup: {
+      type: String,
+      default: null
+    },
+    instantMove: {
+      type: Boolean,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'instantMove');
+      }
+    }
+  },
+  data: function data() {
+    return {
+      isOpen: false,
+      skipTransition: false
+    };
+  },
+  watch: {
+    open: '$_autoShowHide',
+    disabled: function disabled(value) {
+      if (value) {
+        this.dispose();
+      } else {
+        this.init();
+      }
+    },
+    container: function container(val) {
+      if (this.isOpen && this.popperInstance) {
+        var container = this.$_findContainer(this.container, this.$_targetNode);
+
+        if (!container) {
+          console.warn('No container for popover', this);
+          return;
+        }
+
+        container.appendChild(this.$_popperNode);
+        this.popperInstance.scheduleUpdate();
+      }
+    },
+    trigger: function trigger(val) {
+      this.$_removeEventListeners();
+      this.$_addEventListeners();
+    },
+    placement: function placement(val) {
+      var _this = this;
+
+      this.$_updatePopper(function () {
+        _this.popperInstance.options.placement = val;
+      });
+    },
+    offset: '$_restartPopper',
+    boundariesElement: '$_restartPopper',
+    popperOptions: {
+      handler: '$_restartPopper',
+      deep: true
+    }
+  },
+  created: function created() {
+    this.popperId = "popper_".concat(Math.random().toString(36).substr(2, 10));
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  activated: function activated() {
+    this.$_autoShowHide();
+  },
+  deactivated: function deactivated() {
+    this.hide();
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.dispose();
+  },
+  methods: {
+    show: function show() {
+      var _this2 = this;
+
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          event = _ref.event,
+          _ref$skipDelay = _ref.skipDelay,
+          skipDelay = _ref$skipDelay === void 0 ? false : _ref$skipDelay,
+          _ref$force = _ref.force,
+          force = _ref$force === void 0 ? false : _ref$force;
+
+      if (force || !this.disabled) {
+        this.$_scheduleShow(event, skipDelay);
+        this.$emit('show');
+      }
+
+      this.$emit('update:open', true);
+      this.$_beingShowed = true;
+      requestAnimationFrame(function () {
+        _this2.$_beingShowed = false;
+      });
+    },
+    hide: function hide() {
+      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          event = _ref2.event,
+          _ref2$skipDelay = _ref2.skipDelay,
+          skipDelay = _ref2$skipDelay === void 0 ? false : _ref2$skipDelay;
+
+      this.$_scheduleHide(event, skipDelay);
+      this.$emit('hide');
+      this.$emit('update:open', false);
+    },
+    init: function init() {
+      this.$_isDisposed = false;
+      this.$_mounted = false;
+      this.$_events = [];
+      this.$_preventOpen = false; // Nodes
+
+      this.$_targetNode = this.targetNode();
+      this.$_popperNode = this.popperNode();
+      swapAttrs(this.$_targetNode, 'title', 'data-original-title');
+      this.$_detachPopperNode();
+      this.$_init();
+
+      if (this.open) {
+        this.show();
+      }
+    },
+    dispose: function dispose() {
+      this.$_isDisposed = true;
+      this.$_removeEventListeners();
+      this.hide({
+        skipDelay: true
+      });
+
+      if (this.popperInstance) {
+        this.popperInstance.destroy(); // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+
+        if (!this.popperInstance.options.removeOnDestroy) {
+          this.$_detachPopperNode();
+        }
+      }
+
+      this.$_mounted = false;
+      this.popperInstance = null;
+      this.isOpen = false;
+      swapAttrs(this.$_targetNode, 'data-original-title', 'title');
+      this.$emit('dispose');
+    },
+    onResize: function onResize() {
+      if (this.isOpen && this.popperInstance) {
+        this.popperInstance.scheduleUpdate();
+        this.$emit('resize');
+      }
+    },
+    $_init: function $_init() {
+      if (this.trigger.indexOf('manual') === -1) {
+        this.$_addEventListeners();
+      }
+    },
+    $_autoShowHide: function $_autoShowHide() {
+      if (this.open) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    },
+    $_show: function $_show() {
+      var _this3 = this;
+
+      var skipTransition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      clearTimeout(this.$_disposeTimer);
+      clearTimeout(this.$_scheduleTimer);
+      this.skipTransition = skipTransition; // Already open
+
+      if (this.isOpen) {
+        return;
+      } // Popper is already initialized
+
+
+      if (this.popperInstance) {
+        this.isOpen = true;
+        this.popperInstance.enableEventListeners();
+        this.popperInstance.scheduleUpdate();
+      }
+
+      if (!this.$_mounted) {
+        var container = this.$_findContainer(this.container, this.$_targetNode);
+
+        if (!container) {
+          console.warn('No container for popover', this);
+          return;
+        }
+
+        container.appendChild(this.$_popperNode);
+        this.$_mounted = true;
+      }
+
+      if (!this.popperInstance) {
+        var popperOptions = _objectSpread({}, this.popperOptions, {
+          placement: this.placement
+        });
+
+        popperOptions.modifiers = _objectSpread({}, popperOptions.modifiers, {
+          arrow: _objectSpread({}, popperOptions.modifiers && popperOptions.modifiers.arrow, {
+            element: this.arrowNode && this.arrowNode() || '[x-arrow]'
+          })
+        });
+
+        if (this.offset) {
+          var offset = this.$_getOffset();
+          popperOptions.modifiers.offset = _objectSpread({}, popperOptions.modifiers && popperOptions.modifiers.offset, {
+            offset: offset
+          });
+        }
+
+        if (this.boundariesElement) {
+          popperOptions.modifiers.preventOverflow = _objectSpread({}, popperOptions.modifiers && popperOptions.modifiers.preventOverflow, {
+            boundariesElement: this.boundariesElement
+          });
+        }
+
+        this.popperInstance = new popper_js__WEBPACK_IMPORTED_MODULE_0__["default"](this.$_targetNode, this.$_popperNode, popperOptions); // Fix position
+
+        requestAnimationFrame(function () {
+          if (_this3.hidden) {
+            _this3.hidden = false;
+
+            _this3.$_hide();
+
+            return;
+          }
+
+          if (!_this3.$_isDisposed && _this3.popperInstance) {
+            _this3.popperInstance.scheduleUpdate(); // Show the tooltip
+
+
+            requestAnimationFrame(function () {
+              if (_this3.hidden) {
+                _this3.hidden = false;
+
+                _this3.$_hide();
+
+                return;
+              }
+
+              if (!_this3.$_isDisposed) {
+                _this3.isOpen = true;
+              } else {
+                _this3.dispose();
+              }
+            });
+          } else {
+            _this3.dispose();
+          }
+        });
+      }
+
+      var openGroup = this.openGroup;
+
+      if (openGroup) {
+        var popover;
+
+        for (var i = 0; i < openPoppers.length; i++) {
+          popover = openPoppers[i];
+
+          if (popover.openGroup !== openGroup) {
+            popover.hide();
+            popover.$emit('close-group');
+          }
+        }
+      }
+
+      openPoppers.push(this);
+      this.$emit('apply-show');
+    },
+    $_hide: function $_hide() {
+      var _this4 = this;
+
+      var skipTransition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      clearTimeout(this.$_scheduleTimer);
+      this.skipTransition = skipTransition;
+      removeFromArray(openPoppers, this); // Already hidden
+
+      if (!this.isOpen) {
+        return;
+      }
+
+      if (hidingPopper === this) {
+        hidingPopper = null;
+      }
+
+      this.isOpen = false;
+
+      if (this.popperInstance) {
+        this.popperInstance.disableEventListeners();
+      }
+
+      clearTimeout(this.$_disposeTimer);
+      var disposeTime = getDefaultConfig(this.theme, 'disposeTimeout');
+
+      if (disposeTime !== null) {
+        this.$_disposeTimer = setTimeout(function () {
+          if (_this4.$_popperNode) {
+            // Don't remove popper instance, just the HTML element
+            _this4.$_detachPopperNode();
+
+            _this4.$_mounted = false;
+          }
+        }, disposeTime);
+      }
+
+      this.$emit('apply-hide');
+    },
+    $_findContainer: function $_findContainer(container, reference) {
+      // if container is a query, get the relative element
+      if (typeof container === 'string') {
+        container = window.document.querySelector(container);
+      } else if (container === false) {
+        // if container is `false`, set it to reference parent
+        container = reference.parentNode;
+      }
+
+      return container;
+    },
+    $_getOffset: function $_getOffset() {
+      var typeofOffset = _typeof(this.offset);
+
+      var offset = this.offset; // One value -> switch
+
+      if (typeofOffset === 'number' || typeofOffset === 'string' && offset.indexOf(',') === -1) {
+        offset = "0, ".concat(offset);
+      }
+
+      return offset;
+    },
+    $_addEventListeners: function $_addEventListeners() {
+      var _this5 = this;
+
+      var bothEvents = getEvents(this.trigger);
+
+      var addEvents = function addEvents(customTrigger, eventMap, handler) {
+        var events = bothEvents;
+
+        if (customTrigger != null) {
+          events = getEvents(typeof customTrigger === 'function' ? customTrigger(events) : customTrigger);
+        }
+
+        events.forEach(function (value) {
+          var event = eventMap[value];
+
+          _this5.$_events.push({
+            event: event,
+            handler: handler
+          });
+
+          _this5.$_targetNode.addEventListener(event, handler);
+        });
+      }; // Add trigger show events
+
+
+      addEvents(this.triggerShow, SHOW_EVENT_MAP, // Handle show
+      function (event) {
+        if (_this5.isOpen) {
+          return;
+        }
+
+        event.usedByTooltip = true;
+        !_this5.$_preventOpen && _this5.show({
+          event: event
+        });
+        _this5.hidden = false;
+      }); // Add trigger hide events
+
+      addEvents(this.triggerHide, HIDE_EVENT_MAP, // Handle hide
+      function (event) {
+        if (event.usedByTooltip) {
+          return;
+        }
+
+        _this5.hide({
+          event: event
+        });
+
+        _this5.hidden = true;
+      });
+    },
+    $_removeEventListeners: function $_removeEventListeners() {
+      var _this6 = this;
+
+      this.$_events.forEach(function (_ref3) {
+        var event = _ref3.event,
+            handler = _ref3.handler;
+
+        _this6.$_targetNode.removeEventListener(event, handler);
+      });
+      this.$_events = [];
+    },
+    $_computeDelay: function $_computeDelay(type) {
+      var delay = this.delay;
+      return parseInt(delay && delay[type] || delay || 0);
+    },
+    $_scheduleShow: function $_scheduleShow() {
+      var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      clearTimeout(this.$_scheduleTimer);
+
+      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
+        hidingPopper.$_hide(true);
+        this.$_show(true);
+        return;
+      }
+
+      if (skipDelay) {
+        this.$_show();
+      } else {
+        this.$_scheduleTimer = setTimeout(this.$_show.bind(this), this.$_computeDelay('show'));
+      }
+    },
+    $_scheduleHide: function $_scheduleHide() {
+      var _this7 = this;
+
+      var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      clearTimeout(this.$_scheduleTimer);
+
+      if (this.isOpen) {
+        hidingPopper = this;
+      }
+
+      if (skipDelay) {
+        this.$_hide();
+      } else {
+        this.$_scheduleTimer = setTimeout(function () {
+          if (!_this7.isOpen) {
+            return;
+          } // if we are hiding because of a mouseleave, we must check that the new
+          // reference isn't the tooltip, because in this case we don't want to hide it
+
+
+          if (event && event.type === 'mouseleave') {
+            var isSet = _this7.$_setTooltipNodeEvent(event); // if we set the new event, don't hide the tooltip yet
+            // the new event will take care to hide it if necessary
+
+
+            if (isSet) {
+              return;
+            }
+          }
+
+          _this7.$_hide();
+        }, this.$_computeDelay('hide'));
+      }
+    },
+    $_setTooltipNodeEvent: function $_setTooltipNodeEvent(event) {
+      var _this8 = this;
+
+      var relatedreference = event.relatedreference || event.toElement || event.relatedTarget;
+
+      var callback = function callback(event2) {
+        var relatedreference2 = event2.relatedreference || event2.toElement || event2.relatedTarget; // Remove event listener after call
+
+        _this8.$_popperNode.removeEventListener(event.type, callback); // If the new reference is not the reference element
+
+
+        if (!_this8.$_targetNode.contains(relatedreference2)) {
+          // Schedule to hide tooltip
+          _this8.hide({
+            event: event2
+          });
+        }
+      };
+
+      if (this.$_popperNode.contains(relatedreference)) {
+        // listen to mouseleave on the tooltip element to be able to hide the tooltip
+        this.$_popperNode.addEventListener(event.type, callback);
+        return true;
+      }
+
+      return false;
+    },
+    $_updatePopper: function $_updatePopper(cb) {
+      if (this.popperInstance) {
+        cb();
+        if (this.isOpen) this.popperInstance.scheduleUpdate();
+      }
+    },
+    $_restartPopper: function $_restartPopper() {
+      if (this.popperInstance) {
+        var isOpen = this.isOpen;
+        this.dispose();
+        this.$_isDisposed = false;
+        this.$_init();
+
+        if (isOpen) {
+          this.show({
+            skipDelay: true,
+            force: true
+          });
+        }
+      }
+    },
+    $_handleGlobalClose: function $_handleGlobalClose(event) {
+      var _this9 = this;
+
+      var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      if (this.$_beingShowed) return;
+      this.hide({
+        event: event
+      });
+
+      if (event.closePopover) {
+        this.$emit('close-directive');
+      } else {
+        this.$emit('auto-hide');
+      }
+
+      if (touch) {
+        this.$_preventOpen = true;
+        setTimeout(function () {
+          _this9.$_preventOpen = false;
+        }, 300);
+      }
+    },
+    $_detachPopperNode: function $_detachPopperNode() {
+      this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode);
+    }
+  },
+  render: function render(h) {
+    return this.$scopedSlots.default(this)[0];
+  }
+};
+
+if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+  if (isIOS) {
+    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive ? {
+      passive: true,
+      capture: true
+    } : true);
+  } else {
+    window.addEventListener('click', handleGlobalClick, true);
+  }
+}
+
+function handleGlobalClick(event) {
+  handleGlobalClose(event);
+}
+
+function handleGlobalTouchend(event) {
+  handleGlobalClose(event, true);
+}
+
+function handleGlobalClose(event) {
+  var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  var _loop = function _loop(i) {
+    var popper = openPoppers[i];
+    var popperContent = popper.popperNode();
+    var contains = popperContent.contains(event.target);
+    requestAnimationFrame(function () {
+      if (event.closeAllPopover || event.closePopover && contains || popper.autoHide && !contains) {
+        popper.$_handleGlobalClose(event, touch);
+      }
+    });
+  };
+
+  // Delay so that close directive has time to set values
+  for (var i = 0; i < openPoppers.length; i++) {
+    _loop(i);
+  }
+}
+
+function swapAttrs(node, attrFrom, attrTo) {
+  var value = node.getAttribute(attrFrom);
+
+  if (value) {
+    node.removeAttribute(attrFrom);
+    node.setAttribute(attrTo, value);
+  }
+}
+
+function getEvents(rawEvents) {
+  var events = typeof rawEvents === 'string' ? rawEvents.split(/\s+/g) : rawEvents;
+  events = events.filter(function (trigger) {
+    return EVENTS.indexOf(trigger) !== -1;
+  });
+  return events;
+}
+
+function removeFromArray(array, item) {
+  var index = array.indexOf(item);
+
+  if (index !== -1) {
+    array.splice(index, 1);
+  }
+}
+
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
+/* server only */
+, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  if (typeof shadowMode !== 'boolean') {
+    createInjectorSSR = createInjector;
+    createInjector = shadowMode;
+    shadowMode = false;
+  } // Vue.extend constructor export interop.
+
+
+  var options = typeof script === 'function' ? script.options : script; // render functions
+
+  if (template && template.render) {
+    options.render = template.render;
+    options.staticRenderFns = template.staticRenderFns;
+    options._compiled = true; // functional template
+
+    if (isFunctionalTemplate) {
+      options.functional = true;
+    }
+  } // scopedId
+
+
+  if (scopeId) {
+    options._scopeId = scopeId;
+  }
+
+  var hook;
+
+  if (moduleIdentifier) {
+    // server build
+    hook = function hook(context) {
+      // 2.3 injection
+      context = context || // cached call
+      this.$vnode && this.$vnode.ssrContext || // stateful
+      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
+      // 2.2 with runInNewContext: true
+
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__;
+      } // inject component styles
+
+
+      if (style) {
+        style.call(this, createInjectorSSR(context));
+      } // register component module identifier for async chunk inference
+
+
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier);
+      }
+    }; // used by ssr in case component is cached and beforeCreate
+    // never gets called
+
+
+    options._ssrRegister = hook;
+  } else if (style) {
+    hook = shadowMode ? function () {
+      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
+    } : function (context) {
+      style.call(this, createInjector(context));
+    };
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // register for functional component in vue file
+      var originalRender = options.render;
+
+      options.render = function renderWithStyleInjection(h, context) {
+        hook.call(context);
+        return originalRender(h, context);
+      };
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate;
+      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+    }
+  }
+
+  return script;
+}
+
+var normalizeComponent_1 = normalizeComponent;
+
+/* script */
+const __vue_script__ = script;
+
+/* template */
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = undefined;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var PrivatePopper = normalizeComponent_1(
+    {},
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    undefined,
+    undefined
+  );
+
+var PrivateThemeClass = {
+  computed: {
+    themeClass: function themeClass() {
+      return getThemeClasses(this.theme);
+    }
+  }
+};
+
+//
+var script$1 = {
+  name: 'VPopperContent',
+  components: {
+    ResizeObserver: vue_resize__WEBPACK_IMPORTED_MODULE_1__["ResizeObserver"]
+  },
+  mixins: [PrivateThemeClass],
+  props: {
+    popperId: String,
+    theme: String,
+    isOpen: Boolean,
+    skipTransition: Boolean,
+    autoHide: Boolean,
+    handleResize: Boolean
+  }
+};
+
+/* script */
+const __vue_script__$1 = script$1;
+/* template */
+var __vue_render__ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      ref: "popover",
+      staticClass: "v-popper__popper",
+      class: [
+        _vm.themeClass,
+        {
+          "v-popper__popper--open": _vm.isOpen,
+          "v-popper__popper--skip-transition": _vm.skipTransition
+        }
+      ],
+      attrs: {
+        id: _vm.popperId,
+        "aria-hidden": _vm.isOpen ? "false" : "true",
+        tabindex: _vm.autoHide ? 0 : undefined
+      },
+      on: {
+        keyup: function($event) {
+          if (
+            !$event.type.indexOf("key") &&
+            _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+          ) {
+            return null
+          }
+          _vm.autoHide && _vm.$emit("hide");
+        }
+      }
+    },
+    [
+      _c("div", { staticClass: "v-popper__wrapper" }, [
+        _c(
+          "div",
+          {
+            ref: "inner",
+            staticClass: "v-popper__inner",
+            staticStyle: { position: "relative" }
+          },
+          [
+            _c("div", [_vm._t("default")], 2),
+            _vm._v(" "),
+            _vm.handleResize
+              ? _c("ResizeObserver", {
+                  on: {
+                    notify: function($event) {
+                      return _vm.$emit("resize", $event)
+                    }
+                  }
+                })
+              : _vm._e()
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { ref: "arrow", staticClass: "v-popper__arrow" })
+      ])
+    ]
+  )
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$1 = undefined;
+  /* scoped */
+  const __vue_scope_id__$1 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$1 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$1 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var PrivatePopperContent = normalizeComponent_1(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__$1,
+    __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
+    undefined,
+    undefined
+  );
+
+// @vue/component
+var PrivatePopperMethods = {
+  methods: {
+    show: function show() {
+      var _this$$refs$popper;
+
+      return (_this$$refs$popper = this.$refs.popper).show.apply(_this$$refs$popper, arguments);
+    },
+    hide: function hide() {
+      var _this$$refs$popper2;
+
+      return (_this$$refs$popper2 = this.$refs.popper).hide.apply(_this$$refs$popper2, arguments);
+    },
+    dispose: function dispose() {
+      var _this$$refs$popper3;
+
+      return (_this$$refs$popper3 = this.$refs.popper).dispose.apply(_this$$refs$popper3, arguments);
+    },
+    onResize: function onResize() {
+      var _this$$refs$popper4;
+
+      return (_this$$refs$popper4 = this.$refs.popper).onResize.apply(_this$$refs$popper4, arguments);
+    }
+  }
+};
+
+//
+var script$2 = {
+  name: 'VPopperWrapper',
+  components: {
+    Popper: PrivatePopper,
+    PopperContent: PrivatePopperContent
+  },
+  mixins: [PrivatePopperMethods, PrivateThemeClass],
+  inheritAttrs: false,
+  props: {
+    theme: {
+      type: String,
+      default: function _default() {
+        return this.$options.vPopperTheme;
+      }
+    },
+    title: String
+  }
+};
+
+/* script */
+const __vue_script__$2 = script$2;
+
+/* template */
+var __vue_render__$1 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "Popper",
+    _vm._g(
+      _vm._b(
+        {
+          ref: "popper",
+          attrs: {
+            theme: _vm.theme,
+            "target-node": function() {
+              return _vm.$refs.trigger
+            },
+            "popper-node": function() {
+              return _vm.$refs.popperContent.$el
+            },
+            "arrow-node": function() {
+              return _vm.$refs.popperContent.$refs.arrow
+            }
+          },
+          scopedSlots: _vm._u(
+            [
+              {
+                key: "default",
+                fn: function(ref) {
+                  var popperId = ref.popperId;
+                  var isOpen = ref.isOpen;
+                  var skipTransition = ref.skipTransition;
+                  var trigger = ref.trigger;
+                  var autoHide = ref.autoHide;
+                  var hide = ref.hide;
+                  var handleResize = ref.handleResize;
+                  var onResize = ref.onResize;
+                  return [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "v-popper",
+                        class: [
+                          _vm.themeClass,
+                          {
+                            "v-popper--open": isOpen
+                          }
+                        ]
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            ref: "trigger",
+                            staticClass: "v-popper__trigger",
+                            attrs: {
+                              title: _vm.title,
+                              "aria-describedby": popperId,
+                              tabindex:
+                                trigger.indexOf("focus") !== -1 ? 0 : undefined
+                            }
+                          },
+                          [_vm._t("default")],
+                          2
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "PopperContent",
+                          {
+                            ref: "popperContent",
+                            attrs: {
+                              "popper-id": popperId,
+                              theme: _vm.theme,
+                              "is-open": isOpen,
+                              "skip-transition": skipTransition,
+                              "auto-hide": autoHide,
+                              "handle-resize": handleResize
+                            },
+                            on: { hide: hide, resize: onResize }
+                          },
+                          [_vm._t("popper")],
+                          2
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                }
+              }
+            ],
+            null,
+            true
+          )
+        },
+        "Popper",
+        _vm.$attrs,
+        false
+      ),
+      _vm.$listeners
+    )
+  )
+};
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$2 = undefined;
+  /* scoped */
+  const __vue_scope_id__$2 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$2 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$2 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var PrivatePopperWrapper = normalizeComponent_1(
+    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+    __vue_inject_styles__$2,
+    __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
+    undefined,
+    undefined
+  );
+
+var script$3 = _objectSpread({}, PrivatePopperWrapper, {
+  name: 'VDropdown',
+  vPopperTheme: 'dropdown'
+});
+
+/* script */
+const __vue_script__$3 = script$3;
+/* template */
+
+  /* style */
+  const __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  const __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = undefined;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var PrivateDropdown = normalizeComponent_1(
+    {},
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    undefined,
+    undefined
+  );
+
+var script$4 = _objectSpread({}, PrivatePopperWrapper, {
+  name: 'VTooltip',
+  vPopperTheme: 'tooltip'
+});
+
+/* script */
+const __vue_script__$4 = script$4;
+/* template */
+
+  /* style */
+  const __vue_inject_styles__$4 = undefined;
+  /* scoped */
+  const __vue_scope_id__$4 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$4 = undefined;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var PrivateTooltip = normalizeComponent_1(
+    {},
+    __vue_inject_styles__$4,
+    __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    undefined,
+    undefined
+  );
+
+//
+var script$5 = {
+  name: 'VTooltipDirective',
+  components: {
+    Popper: PrivatePopper,
+    PopperContent: PrivatePopperContent
+  },
+  mixins: [PrivatePopperMethods],
+  inheritAttrs: false,
+  props: {
+    theme: {
+      type: String,
+      default: 'tooltip'
+    },
+    contentHtml: {
+      type: Boolean,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'contentHtml');
+      }
+    },
+    content: {
+      type: [String, Number, Function],
+      default: null
+    },
+    loadingContent: {
+      type: String,
+      default: function _default() {
+        return getDefaultConfig(this.theme, 'loadingContent');
+      }
+    }
+  },
+  data: function data() {
+    return {
+      asyncContent: null
+    };
+  },
+  computed: {
+    isContentAsync: function isContentAsync() {
+      return typeof this.content === 'function';
+    },
+    loading: function loading() {
+      return this.isContentAsync && this.asyncContent == null;
+    },
+    finalContent: function finalContent() {
+      if (this.isContentAsync) {
+        return this.loading ? this.loadingContent : this.asyncContent;
+      }
+
+      return this.content;
+    }
+  },
+  watch: {
+    content: {
+      handler: function handler() {
+        this.fetchContent(true);
+      },
+      immediate: true
+    },
+    finalContent: function finalContent(value) {
+      var _this = this;
+
+      this.$nextTick(function () {
+        _this.$refs.popper.onResize();
+      });
+    }
+  },
+  created: function created() {
+    this.$_fetchId = 0;
+  },
+  methods: {
+    fetchContent: function fetchContent(force) {
+      var _this2 = this;
+
+      if (typeof this.content === 'function' && this.$_isOpen && (force || !this.$_loading && this.asyncContent == null)) {
+        this.asyncContent = null;
+        this.$_loading = true;
+        var fetchId = ++this.$_fetchId;
+        var result = this.content(this);
+
+        if (result.then) {
+          result.then(function (res) {
+            return _this2.onResult(fetchId, res);
+          });
+        } else {
+          this.onResult(fetchId, result);
+        }
+      }
+    },
+    onResult: function onResult(fetchId, result) {
+      if (fetchId !== this.$_fetchId) return;
+      this.$_loading = false;
+      this.asyncContent = result;
+    },
+    onShow: function onShow() {
+      this.$_isOpen = true;
+      this.fetchContent();
+    },
+    onHide: function onHide() {
+      this.$_isOpen = false;
+    }
+  }
+};
+
+/* script */
+const __vue_script__$5 = script$5;
+
+/* template */
+var __vue_render__$2 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "Popper",
+    _vm._g(
+      _vm._b(
+        {
+          ref: "popper",
+          attrs: {
+            theme: _vm.theme,
+            "popper-node": function() {
+              return _vm.$refs.popperContent.$el
+            },
+            "arrow-node": function() {
+              return _vm.$refs.popperContent.$refs.arrow
+            }
+          },
+          on: { "apply-show": _vm.onShow, "apply-hide": _vm.onHide },
+          scopedSlots: _vm._u([
+            {
+              key: "default",
+              fn: function(ref) {
+                var popperId = ref.popperId;
+                var isOpen = ref.isOpen;
+                var skipTransition = ref.skipTransition;
+                var autoHide = ref.autoHide;
+                var hide = ref.hide;
+                var handleResize = ref.handleResize;
+                var onResize = ref.onResize;
+                return [
+                  _c(
+                    "PopperContent",
+                    {
+                      ref: "popperContent",
+                      class: {
+                        "v-popper--tooltip-loading": _vm.loading
+                      },
+                      attrs: {
+                        "popper-id": popperId,
+                        theme: _vm.theme,
+                        "is-open": isOpen,
+                        "skip-transition": skipTransition,
+                        "auto-hide": autoHide,
+                        "handle-resize": handleResize
+                      },
+                      on: { hide: hide, resize: onResize }
+                    },
+                    [
+                      _vm.contentHtml
+                        ? _c("div", {
+                            domProps: { innerHTML: _vm._s(_vm.finalContent) }
+                          })
+                        : _c("div", {
+                            domProps: { textContent: _vm._s(_vm.finalContent) }
+                          })
+                    ]
+                  )
+                ]
+              }
+            }
+          ])
+        },
+        "Popper",
+        _vm.$attrs,
+        false
+      ),
+      _vm.$listeners
+    )
+  )
+};
+var __vue_staticRenderFns__$2 = [];
+__vue_render__$2._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$5 = undefined;
+  /* scoped */
+  const __vue_scope_id__$5 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$5 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var PrivateTooltipDirective = normalizeComponent_1(
+    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+    __vue_inject_styles__$5,
+    __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    undefined,
+    undefined
+  );
+
+var TARGET_CLASS = "v-popper--has-tooltip";
+/**
+ * Support placement as directive modifier
+ */
+
+function getPlacement(options, modifiers) {
+  var result = options.placement;
+
+  if (!result && modifiers) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = popper_js__WEBPACK_IMPORTED_MODULE_0__["default"].placements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var pos = _step.value;
+
+        if (modifiers[pos]) {
+          result = pos;
+        }
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+  }
+
+  if (!result) {
+    result = getDefaultConfig(options.theme || 'tooltip', 'placement');
+  }
+
+  return result;
+}
+function getOptions(el, value, modifiers) {
+  var options;
+
+  var type = _typeof(value);
+
+  if (type === 'string') {
+    options = {
+      content: value
+    };
+  } else if (value && type === 'object') {
+    options = value;
+  } else {
+    options = {
+      content: false
+    };
+  }
+
+  options.placement = getPlacement(options, modifiers);
+
+  options.targetNode = function () {
+    return el;
+  };
+
+  return options;
+}
+function createTooltip(el, value, modifiers) {
+  var options = getOptions(el, value, modifiers);
+  var tooltipApp = el.$_popper = new vue__WEBPACK_IMPORTED_MODULE_2___default.a({
+    data: {
+      options: options
+    },
+    render: function render(h) {
+      var options = this.options;
+      return h(PrivateTooltipDirective, {
+        attrs: _objectSpread({}, options, {
+          // Delete props from attrs to prevent Vue from
+          // mutating `this.options` when removing props
+          // from `$attrs` automatically
+          theme: undefined,
+          contentHtml: undefined,
+          content: undefined,
+          loadingContent: undefined
+        }),
+        props: options,
+        ref: 'tooltip'
+      });
+    }
+  });
+  var mountTarget = document.createElement('div');
+  document.body.appendChild(mountTarget);
+  tooltipApp.$mount(mountTarget); // Class on target
+
+  if (el.classList) {
+    el.classList.add(TARGET_CLASS);
+  }
+
+  return tooltipApp;
+}
+function destroyTooltip(el) {
+  if (el.$_popper) {
+    el.$_popper.$destroy();
+    delete el.$_popper;
+    delete el.$_popperOldOpen;
+  }
+
+  if (el.classList) {
+    el.classList.remove(TARGET_CLASS);
+  }
+}
+function bind(el, _ref) {
+  var value = _ref.value,
+      oldValue = _ref.oldValue,
+      modifiers = _ref.modifiers;
+  var options = getOptions(el, value, modifiers);
+
+  if (!options.content || getDefaultConfig(options.theme || 'tooltip', 'disabled')) {
+    destroyTooltip(el);
+  } else {
+    var tooltipApp;
+
+    if (el.$_popper) {
+      tooltipApp = el.$_popper;
+      tooltipApp.options = options;
+    } else {
+      tooltipApp = createTooltip(el, value, modifiers);
+    } // Manual show
+
+
+    if (typeof value.open !== 'undefined' && value.open !== el.$_popperOldOpen) {
+      el.$_popperOldOpen = value.open;
+      value.open ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide();
+    }
+  }
+}
+var PrivateVTooltip = {
+  bind: bind,
+  update: bind,
+  unbind: function unbind(el) {
+    destroyTooltip(el);
+  }
+};
+
+function addListeners(el) {
+  el.addEventListener('click', onClick);
+  el.addEventListener('touchstart', onTouchStart, supportsPassive ? {
+    passive: true
+  } : false);
+}
+
+function removeListeners(el) {
+  el.removeEventListener('click', onClick);
+  el.removeEventListener('touchstart', onTouchStart);
+  el.removeEventListener('touchend', onTouchEnd);
+  el.removeEventListener('touchcancel', onTouchCancel);
+}
+
+function onClick(event) {
+  var el = event.currentTarget;
+  event.closePopover = !el.$_vclosepopover_touch;
+  event.closeAllPopover = el.$_closePopoverModifiers && !!el.$_closePopoverModifiers.all;
+}
+
+function onTouchStart(event) {
+  if (event.changedTouches.length === 1) {
+    var el = event.currentTarget;
+    el.$_vclosepopover_touch = true;
+    var touch = event.changedTouches[0];
+    el.$_vclosepopover_touchPoint = touch;
+    el.addEventListener('touchend', onTouchEnd);
+    el.addEventListener('touchcancel', onTouchCancel);
+  }
+}
+
+function onTouchEnd(event) {
+  var el = event.currentTarget;
+  el.$_vclosepopover_touch = false;
+
+  if (event.changedTouches.length === 1) {
+    var touch = event.changedTouches[0];
+    var firstTouch = el.$_vclosepopover_touchPoint;
+    event.closePopover = Math.abs(touch.screenY - firstTouch.screenY) < 20 && Math.abs(touch.screenX - firstTouch.screenX) < 20;
+    event.closeAllPopover = el.$_closePopoverModifiers && !!el.$_closePopoverModifiers.all;
+  }
+}
+
+function onTouchCancel(event) {
+  var el = event.currentTarget;
+  el.$_vclosepopover_touch = false;
+}
+
+var PrivateVClosePopper = {
+  bind: function bind(el, _ref) {
+    var value = _ref.value,
+        modifiers = _ref.modifiers;
+    el.$_closePopoverModifiers = modifiers;
+
+    if (typeof value === 'undefined' || value) {
+      addListeners(el);
+    }
+  },
+  update: function update(el, _ref2) {
+    var value = _ref2.value,
+        oldValue = _ref2.oldValue,
+        modifiers = _ref2.modifiers;
+    el.$_closePopoverModifiers = modifiers;
+
+    if (value !== oldValue) {
+      if (typeof value === 'undefined' || value) {
+        addListeners(el);
+      } else {
+        removeListeners(el);
+      }
+    }
+  },
+  unbind: function unbind(el) {
+    removeListeners(el);
+  }
+};
+
+/* Exports */
+
+var options = config; // Directive
+
+var VTooltip = PrivateVTooltip;
+var VClosePopper = PrivateVClosePopper; // Components
+
+var Dropdown = PrivateDropdown;
+var Popper = PrivatePopper;
+var PopperContent = PrivatePopperContent;
+var PopperMethods = PrivatePopperMethods;
+var PopperWrapper = PrivatePopperWrapper;
+var ThemeClass = PrivateThemeClass;
+var Tooltip = PrivateTooltip;
+var TooltipDirective = PrivateTooltipDirective;
+/* Vue plugin */
+
+function install(Vue) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  if (install.installed) return;
+  install.installed = true;
+  assign(config, options); // Directive
+
+  Vue.directive('tooltip', PrivateVTooltip);
+  Vue.directive('close-popper', PrivateVClosePopper); // Components
+
+  Vue.component('v-dropdown', PrivateDropdown);
+  Vue.component('VDropdown', PrivateDropdown);
+  Vue.component('v-tooltip', PrivateTooltip);
+  Vue.component('VTooltip', PrivateTooltip);
+}
+var plugin = {
+  install: install,
+  options: config // Auto-install
+
+};
+var GlobalVue = null;
+
+if (typeof window !== 'undefined') {
+  GlobalVue = window.Vue;
+} else if (typeof global !== 'undefined') {
+  GlobalVue = global.Vue;
+}
+
+if (GlobalVue) {
+  GlobalVue.use(plugin);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (plugin);
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AvatarForm.vue?vue&type=template&id=296473e8&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AvatarForm.vue?vue&type=template&id=296473e8& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "display-4 d-flex align-items-center" }, [
+      _c("img", {
+        staticClass: "mr-2",
+        staticStyle: { "border-radius": "50%" },
+        attrs: {
+          src: _vm.avatar,
+          width: "60px",
+          height: "60px",
+          alt: "avatar"
+        },
+        on: {
+          click: function($event) {
+            return _vm.$refs.fileInput.click()
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", [_vm._v(_vm._s(_vm.profileuser.full_name))])
+    ]),
+    _vm._v(" "),
+    _vm.canUpload
+      ? _c(
+          "form",
+          { attrs: { method: "post", enctype: "multipart/form-data" } },
+          [
+            _c("input", {
+              ref: "fileInput",
+              staticStyle: { display: "none" },
+              attrs: { type: "file", name: "avatar", accept: "image/*" },
+              on: { change: _vm.onChange }
+            })
+          ]
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MemberSlotCheckout.vue?vue&type=template&id=1119afc9&":
 /*!*********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MemberSlotCheckout.vue?vue&type=template&id=1119afc9& ***!
@@ -59179,69 +61289,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.notifications.length
-    ? _c("li", { staticClass: "nav-item dropdown" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "dropdown-menu dropdown-menu-right",
-            attrs: { "aria-labelledby": "navbarDropdown" }
-          },
-          [
-            _c("li", { staticClass: "dropdown-item text-right" }, [
-              _c(
-                "a",
-                {
-                  staticStyle: { "text-decoration": "none" },
-                  attrs: { href: "#" },
-                  on: { click: _vm.clearAll }
-                },
-                [_vm._v("Clear all")]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "dropdown-divider" }),
-            _vm._v(" "),
-            _vm._l(_vm.notifications, function(notification, index) {
-              return _c(
-                "li",
-                { key: notification.id, staticClass: "dropdown-item" },
-                [
-                  _c("a", {
-                    staticStyle: { "text-decoration": "none" },
-                    attrs: { href: "#" },
-                    domProps: {
-                      textContent: _vm._s(_vm.notificationText(notification))
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.markAsRead(notification, index)
-                      }
-                    }
-                  })
-                ]
-              )
-            })
-          ],
-          2
-        )
-      ])
-    : _vm._e()
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
+  return _c("li", { staticClass: "nav-item dropdown mt-1" }, [
+    _c(
       "a",
       {
-        pre: true,
+        staticClass: "nav-link",
         attrs: {
           id: "navbarDropdown",
-          class: "nav-link dropdown-toggle",
           href: "#",
           role: "button",
           "data-toggle": "dropdown",
@@ -59250,12 +61304,74 @@ var staticRenderFns = [
         }
       },
       [
-        _vm._v("\n        Notifications\n        "),
-        _c("span", { pre: true, attrs: { class: "caret" } })
+        _c("i", {
+          staticClass: "material-icons",
+          attrs: { id: "navbarDropdown" },
+          domProps: { innerHTML: _vm._s(_vm.hasNotifications) }
+        })
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "dropdown-menu dropdown-menu-right",
+        attrs: { "aria-labelledby": "navbarDropdown" }
+      },
+      [
+        _vm.notifications.length
+          ? _c(
+              "div",
+              [
+                _c("li", { staticClass: "dropdown-item text-right" }, [
+                  _c(
+                    "a",
+                    {
+                      staticStyle: { "text-decoration": "none" },
+                      attrs: { href: "#" },
+                      on: { click: _vm.clearAll }
+                    },
+                    [_vm._v("Clear all")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "dropdown-divider" }),
+                _vm._v(" "),
+                _vm._l(_vm.notifications, function(notification, index) {
+                  return _c(
+                    "li",
+                    { key: notification.id, staticClass: "dropdown-item" },
+                    [
+                      _c("a", {
+                        staticStyle: { "text-decoration": "none" },
+                        attrs: { href: "#" },
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.notificationText(notification)
+                          )
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.markAsRead(notification, index)
+                          }
+                        }
+                      })
+                    ]
+                  )
+                })
+              ],
+              2
+            )
+          : _c("div", [
+              _c("li", { staticClass: "dropdown-item" }, [
+                _vm._v("\n\t\t\t\tThere are no new notifcations.\n\t\t\t")
+              ])
+            ])
       ]
     )
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -59927,6 +62043,12 @@ var render = function() {
                         "td",
                         {
                           staticStyle: { cursor: "pointer" },
+                          attrs: {
+                            id: "delete",
+                            "data-toggle": "tooltip",
+                            "data-placement": "right",
+                            title: "Delete the task"
+                          },
                           on: {
                             click: function($event) {
                               return _vm.deleteTask(task)
@@ -59934,14 +62056,9 @@ var render = function() {
                           }
                         },
                         [
-                          _c(
-                            "i",
-                            {
-                              staticClass: "material-icons icon",
-                              attrs: { title: "Delete" }
-                            },
-                            [_vm._v("delete")]
-                          )
+                          _c("i", { staticClass: "material-icons icon" }, [
+                            _vm._v("delete")
+                          ])
                         ]
                       )
                     ],
@@ -59977,7 +62094,7 @@ var staticRenderFns = [
             staticStyle: { width: "15%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("\n                        Creator\n                    ")]
+          [_vm._v("Creator")]
         ),
         _vm._v(" "),
         _c(
@@ -59986,11 +62103,7 @@ var staticRenderFns = [
             staticStyle: { width: "15%" },
             attrs: { scope: "col text-center" }
           },
-          [
-            _vm._v(
-              "\n                        Person responsible\n                    "
-            )
-          ]
+          [_vm._v("Person responsible")]
         ),
         _vm._v(" "),
         _c(
@@ -59999,7 +62112,7 @@ var staticRenderFns = [
             staticStyle: { width: "10%" },
             attrs: { scope: "col text-center" }
           },
-          [_vm._v("\n                        Status\n                    ")]
+          [_vm._v("Status")]
         ),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col text-center" } }, [
@@ -60128,6 +62241,137 @@ function normalizeComponent (
   }
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/vue-resize/dist/vue-resize.esm.js":
+/*!********************************************************!*\
+  !*** ./node_modules/vue-resize/dist/vue-resize.esm.js ***!
+  \********************************************************/
+/*! exports provided: install, ResizeObserver, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResizeObserver", function() { return ResizeObserver; });
+function getInternetExplorerVersion() {
+	var ua = window.navigator.userAgent;
+
+	var msie = ua.indexOf('MSIE ');
+	if (msie > 0) {
+		// IE 10 or older => return version number
+		return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+	}
+
+	var trident = ua.indexOf('Trident/');
+	if (trident > 0) {
+		// IE 11 => return version number
+		var rv = ua.indexOf('rv:');
+		return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+	}
+
+	var edge = ua.indexOf('Edge/');
+	if (edge > 0) {
+		// Edge (IE 12+) => return version number
+		return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+	}
+
+	// other browser
+	return -1;
+}
+
+var isIE = void 0;
+
+function initCompat() {
+	if (!initCompat.init) {
+		initCompat.init = true;
+		isIE = getInternetExplorerVersion() !== -1;
+	}
+}
+
+var ResizeObserver = { render: function render() {
+		var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "resize-observer", attrs: { "tabindex": "-1" } });
+	}, staticRenderFns: [], _scopeId: 'data-v-b329ee4c',
+	name: 'resize-observer',
+
+	methods: {
+		compareAndNotify: function compareAndNotify() {
+			if (this._w !== this.$el.offsetWidth || this._h !== this.$el.offsetHeight) {
+				this._w = this.$el.offsetWidth;
+				this._h = this.$el.offsetHeight;
+				this.$emit('notify');
+			}
+		},
+		addResizeHandlers: function addResizeHandlers() {
+			this._resizeObject.contentDocument.defaultView.addEventListener('resize', this.compareAndNotify);
+			this.compareAndNotify();
+		},
+		removeResizeHandlers: function removeResizeHandlers() {
+			if (this._resizeObject && this._resizeObject.onload) {
+				if (!isIE && this._resizeObject.contentDocument) {
+					this._resizeObject.contentDocument.defaultView.removeEventListener('resize', this.compareAndNotify);
+				}
+				delete this._resizeObject.onload;
+			}
+		}
+	},
+
+	mounted: function mounted() {
+		var _this = this;
+
+		initCompat();
+		this.$nextTick(function () {
+			_this._w = _this.$el.offsetWidth;
+			_this._h = _this.$el.offsetHeight;
+		});
+		var object = document.createElement('object');
+		this._resizeObject = object;
+		object.setAttribute('aria-hidden', 'true');
+		object.setAttribute('tabindex', -1);
+		object.onload = this.addResizeHandlers;
+		object.type = 'text/html';
+		if (isIE) {
+			this.$el.appendChild(object);
+		}
+		object.data = 'about:blank';
+		if (!isIE) {
+			this.$el.appendChild(object);
+		}
+	},
+	beforeDestroy: function beforeDestroy() {
+		this.removeResizeHandlers();
+	}
+};
+
+// Install the components
+function install(Vue) {
+	Vue.component('resize-observer', ResizeObserver);
+	Vue.component('ResizeObserver', ResizeObserver);
+}
+
+// Plugin
+var plugin = {
+	// eslint-disable-next-line no-undef
+	version: "0.4.5",
+	install: install
+};
+
+// Auto-install
+var GlobalVue = null;
+if (typeof window !== 'undefined') {
+	GlobalVue = window.Vue;
+} else if (typeof global !== 'undefined') {
+	GlobalVue = global.Vue;
+}
+if (GlobalVue) {
+	GlobalVue.use(plugin);
+}
+
+
+/* harmony default export */ __webpack_exports__["default"] = (plugin);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -72194,6 +74438,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.Form = _utilities_Form__WEBPACK_IMPORTED_MODULE_0__["default"];
 window.events = new Vue();
+Vue.prototype.auth = window.auth;
 
 Vue.use(vue_toasted__WEBPACK_IMPORTED_MODULE_1___default.a, {
   theme: "toasted-primary",
@@ -72222,6 +74467,7 @@ Vue.component('renew-subscription', __webpack_require__(/*! ./components/RenewSu
 Vue.component('new-task', __webpack_require__(/*! ./components/tasks/NewTask.vue */ "./resources/js/components/tasks/NewTask.vue")["default"]);
 Vue.component('tasks-table', __webpack_require__(/*! ./components/tasks/TasksTable.vue */ "./resources/js/components/tasks/TasksTable.vue")["default"]);
 Vue.component('user-notifications', __webpack_require__(/*! ./components/UserNotifications.vue */ "./resources/js/components/UserNotifications.vue")["default"]);
+Vue.component('avatar-form', __webpack_require__(/*! ./components/AvatarForm.vue */ "./resources/js/components/AvatarForm.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -72289,6 +74535,75 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/AvatarForm.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/AvatarForm.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AvatarForm_vue_vue_type_template_id_296473e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AvatarForm.vue?vue&type=template&id=296473e8& */ "./resources/js/components/AvatarForm.vue?vue&type=template&id=296473e8&");
+/* harmony import */ var _AvatarForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AvatarForm.vue?vue&type=script&lang=js& */ "./resources/js/components/AvatarForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AvatarForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AvatarForm_vue_vue_type_template_id_296473e8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AvatarForm_vue_vue_type_template_id_296473e8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AvatarForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/AvatarForm.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/AvatarForm.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AvatarForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AvatarForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AvatarForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AvatarForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AvatarForm.vue?vue&type=template&id=296473e8&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/AvatarForm.vue?vue&type=template&id=296473e8& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AvatarForm_vue_vue_type_template_id_296473e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AvatarForm.vue?vue&type=template&id=296473e8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AvatarForm.vue?vue&type=template&id=296473e8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AvatarForm_vue_vue_type_template_id_296473e8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AvatarForm_vue_vue_type_template_id_296473e8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

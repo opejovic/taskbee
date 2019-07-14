@@ -123,5 +123,17 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
-    }
+	}
+
+    /**
+     * Get the avatar path attribute, if there is one. Otherwise, return the default avatar path.
+     *
+     * @return string
+     */
+    public function getAvatarPathAttribute($avatar)
+    {
+        return $avatar ? asset("storage/{$avatar}") : asset('storage/avatars/default.png');
+	}
+	
+	
 }

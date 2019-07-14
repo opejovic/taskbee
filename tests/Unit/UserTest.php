@@ -83,4 +83,14 @@ class UserTest extends TestCase
 
 		$this->assertEquals('Dane Boghart', $user->full_name);
 	}
+
+	/** @test */
+	function can_get_avatar_path_attribute()
+	{
+		$user = factory(User::class)->create(['avatar_path' => null]);
+		$this->assertEquals("https://taskmonkey.test/storage/avatars/default.png", $user->avatar_path);
+
+		$otherUser = factory(User::class)->create(['avatar_path' => 'avatars/me.jpg']);
+		$this->assertEquals("https://taskmonkey.test/storage/avatars/me.jpg", $otherUser->avatar_path);
+	}
 }

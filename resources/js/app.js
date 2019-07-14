@@ -11,8 +11,9 @@ window.Vue = require('vue');
 window.Form = Form;
 window.events = new Vue();
 
-import Toasted from 'vue-toasted';
+Vue.prototype.auth = window.auth;
 
+import Toasted from 'vue-toasted';
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
     position: "bottom-left", 
@@ -43,6 +44,7 @@ Vue.component('renew-subscription', require('./components/RenewSubscription.vue'
 Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
 Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
 Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
+Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

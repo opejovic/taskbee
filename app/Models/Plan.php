@@ -23,6 +23,10 @@ class Plan extends Model
     const PREMIUM_MEMBERS_LIMIT = 15;
 
 
+    /**
+     * Attributes that are not mass-assignable.
+     *
+     */
     protected $guarded = [];
 
     /**

@@ -9,42 +9,38 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateAccountTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function authenticated_users_cannot_see_the_registration_page()
-	{
-		$user = factory(User::class)->create();
-		$response = $this->actingAs($user)->get('register')->assertRedirect('home');
-	}
+    /** @test */
+    public function authenticated_users_cannot_see_the_registration_page()
+    {
+        $user = factory(User::class)->create();
+        $response = $this->actingAs($user)->get('register')->assertRedirect('home');
+    }
 
-	/** @test */
-	function guests_can_see_the_registration_page()
-	{
-		$this->withoutExceptionHandling();
-		$response = $this->get('register')->assertViewIs('auth.register');
-	}
+    /** @test */
+    public function guests_can_see_the_registration_page()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->get('register')->assertViewIs('auth.register');
+    }
 
-	/** @test */
-	function guests_can_register()
-	{
-		$this->withoutExceptionHandling();
-		// Arrange
-		$this->assertCount(0, User::all());
+    /** @test */
+    public function guests_can_register()
+    {
+        $this->assertCount(0, User::all());
 
-		// Act: post to register route
-		$response = $this->json('POST', "/register", [
-			'first_name' => 'John',
-			'last_name' => 'Malkovich',
-			'email' => 'john@example.com',
-			'email_confirmation' => 'john@example.com',
-			'password' => 'password',
-			'password_confirmation' => 'password',
-		]);
+        $this->json('POST', "/register", [
+            'first_name' => 'John',
+            'last_name' => 'Malkovich',
+            'email' => 'john@example.com',
+            'email_confirmation' => 'john@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
 
-		// Assert: the user is created
-		$this->assertCount(1, User::all());
-		$user = User::whereEmail('john@example.com')->first();
-		$this->assertNotNull($user);
-	}
+        $this->assertCount(1, User::all());
+        $user = User::whereEmail('john@example.com')->first();
+        $this->assertNotNull($user);
+    }
 }
