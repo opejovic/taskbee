@@ -10,25 +10,25 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ViewWorkspaceMembersTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function authorized_users_can_view_their_workspace_team_members()
-	{
-		$user = factory(User::class)->create();
-		$workspace = factory(Workspace::class)->create(['created_by' => $user]);
+    /** @test */
+    public function authorized_users_can_view_their_workspace_team_members()
+    {
+        $user = factory(User::class)->create();
+        $workspace = factory(Workspace::class)->create(['created_by' => $user]);
 
-		$memberA = factory(User::class)->create();
-		$memberB = factory(User::class)->create();
-		$otherWorkspaceMember = factory(User::class)->create();
-		$workspace->members()->attach($memberA);
-		$workspace->members()->attach($memberB);
+        $memberA = factory(User::class)->create();
+        $memberB = factory(User::class)->create();
+        $otherWorkspaceMember = factory(User::class)->create();
+        $workspace->members()->attach($memberA);
+        $workspace->members()->attach($memberB);
 
-		$response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/members");
+        $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/members");
 
-		$response->assertViewIs('workspace-members.index');
-		$response->assertSee($memberB->full_name);
-		$response->assertSee($memberA->full_name);
-		$response->assertDontSee($otherWorkspaceMember->full_name);
-	}
+        $response->assertViewIs('workspace-members.index');
+        $response->assertSee($memberB->full_name);
+        $response->assertSee($memberA->full_name);
+        $response->assertDontSee($otherWorkspaceMember->full_name);
+    }
 }

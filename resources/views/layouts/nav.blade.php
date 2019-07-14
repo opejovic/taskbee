@@ -65,17 +65,22 @@
                         </li>
                     @endif
                 @else
-                    <user-notifications :user="{{ Auth::user() }}"></user-notifications>
+					<user-notifications :user="{{ Auth::user() }}"></user-notifications>
 
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+						<img class="mr-2" src="{{ auth()->user()->avatar_path }}" width="35px" height="35px" alt="avatar" style="border-radius: 50%;">
                             {{ Auth::user()->first_name }} <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('dashboard') }}">
                                 {{ __('Dashboard') }}
+							</a>
+							
+                            <a class="dropdown-item" href="{{ route('profile', auth()->user()) }}">
+                                {{ __('My Profile') }}
                             </a>
 
                             <a class="dropdown-item" href="{{ route('logout') }}"

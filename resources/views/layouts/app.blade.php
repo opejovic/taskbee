@@ -11,7 +11,10 @@
 
     <!-- Scripts -->
     @stack('beforeScripts')
-    <script src="{{ asset('js/app.js') }}" defer></script>
+	<script src="{{ asset('js/app.js') }}" defer></script>
+	<script>
+		window.auth = {!! json_encode(Auth::user(), JSON_HEX_TAG) !!};
+	</script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

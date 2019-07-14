@@ -39,7 +39,12 @@ Route::middleware('auth')->group(function () {
         ->name('notifications.delete');
 
     Route::delete('/profiles/{user}/notifications/', 'ClearAllNotificationsController@destroy')
-        ->name('notifications.delete-all');
+		->name('notifications.delete-all');
+
+	Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
+
+	Route::post('/profiles/{user}/avatar', 'UsersAvatarController@store')
+		->name('avatar.store');
 });
 
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
