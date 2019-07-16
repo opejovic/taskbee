@@ -15,6 +15,7 @@
 		</div>
 
 		<form method="post" enctype="multipart/form-data" v-if="canUpload">
+
 			<div class="form-group">
 				<input
 					type="file"
@@ -35,6 +36,14 @@
 					<strong v-text="get('avatar')"></strong>
 				</span>
 			</div>
+
+			<input 
+				type="file"
+				style="display: none;"
+				name="avatar" 
+				@change="onChange" 
+				accept="image/*" 
+				ref="fileInput" />
 		</form>
 	</div>
 </template>
@@ -58,7 +67,7 @@
 
 		methods: {
 			onChange(event) {
-				if (!event.target.files.length) return;
+				if (! event.target.files.length) return;
 
 				let avatar = event.target.files[0];
 				let data = new FileReader();
