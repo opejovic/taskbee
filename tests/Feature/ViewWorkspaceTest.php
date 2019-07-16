@@ -25,7 +25,7 @@ class ViewWorkspaceTest extends TestCase
         $subscription = factory(Subscription::class)->states('unpaid')->create();
         $workspace = factory(Workspace::class)->create(['subscription_id' => $subscription->stripe_id]);
         $user = factory(User::class)->create();
-        $workspace->members()->attach($user);
+        $workspace->addMember($user);
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}");
 
         // $response->assertStatus(423); // locked
@@ -38,7 +38,7 @@ class ViewWorkspaceTest extends TestCase
     {
         $workspace = factory(Workspace::class)->create();
         $member = factory(User::class)->create();
-        $workspace->members()->attach($member);
+        $workspace->addMember($member);
 
         $response = $this->actingAs($member)->get("/workspaces/{$workspace->id}");
 

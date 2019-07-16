@@ -59,7 +59,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
         $customer = \Stripe\Customer::retrieve($subscription->customer);
 
         // If the customer with the given email doesnt exist, create it.
-        if (!Customer::where('email', $customer['email'])->exists()) {
+        if (! Customer::where('email', $customer['email'])->exists()) {
             Customer::create([
                 'email'     => $customer['email'],
                 'stripe_id' => $customer['id'],

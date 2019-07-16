@@ -31,9 +31,9 @@ class RemoveMemberTest extends TestCase
 
         $member = factory(User::class)->create(['id' => 123]);
         $josh = factory(User::class)->create(['id' => 1232]);
-        $workspace->members()->attach($owner);
-        $workspace->members()->attach($member);
-        $workspace->members()->attach($josh);
+        $workspace->addMember($owner);
+        $workspace->addMember($member);
+        $workspace->addMember($josh);
         $this->assertCount(3, $workspace->fresh()->members);
 
         // Act: owner removes a member
@@ -56,8 +56,8 @@ class RemoveMemberTest extends TestCase
         $workspace = factory(Workspace::class)->create(['created_by' => $owner->id]);
 
         $member = factory(User::class)->create();
-        $workspace->members()->attach($owner);
-        $workspace->members()->attach($member);
+        $workspace->addMember($owner);
+        $workspace->addMember($member);
         $this->assertCount(2, $workspace->fresh()->members);
         $this->assertEquals(1, $workspace->fresh()->members_invited);
 
@@ -78,7 +78,7 @@ class RemoveMemberTest extends TestCase
         // Arrange: workspace, owner, a member and an used invitation
         $owner = factory(User::class)->create();
         $workspace = factory(Workspace::class)->create(['created_by' => $owner->id]);
-        $workspace->members()->attach($owner);
+        $workspace->addMember($owner);
 
         factory(WorkspaceSetupAuthorization::class)->create([
             'workspace_id' => $workspace->id,
@@ -91,7 +91,7 @@ class RemoveMemberTest extends TestCase
             'user_id' => $member->id
         ]);
 
-        $workspace->members()->attach($member);
+        $workspace->addMember($member);
         $this->assertCount(2, $workspace->fresh()->members);
         $this->assertEquals(1, $workspace->fresh()->members_invited);
 
@@ -115,7 +115,7 @@ class RemoveMemberTest extends TestCase
         // Arrange: existing workspace and workspace owner
         $owner = factory(User::class)->create();
         $workspace = factory(Workspace::class)->create(['created_by' => $owner->id]);
-        $workspace->members()->attach($owner);
+        $workspace->addMember($owner);
 
         factory(WorkspaceSetupAuthorization::class)->create([
             'workspace_id' => $workspace->id,

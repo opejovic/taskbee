@@ -19,7 +19,7 @@ class ViewTasksTest extends TestCase
 
         $this->member = factory(User::class)->create();
         $this->workspace = factory(Workspace::class)->create();
-        $this->workspace->members()->attach($this->member);
+        $this->workspace->addMember($this->member);
     }
 
     /** @test */
@@ -31,8 +31,8 @@ class ViewTasksTest extends TestCase
             'workspace_id' => $this->workspace->id
         ]);
 
-        $this->workspace->members()->attach($don);
-        $this->workspace->members()->attach($jackie);
+        $this->workspace->addMember($don);
+        $this->workspace->addMember($jackie);
 
 
         $this->actingAs($don)->get("/workspaces/{$this->workspace->id}/tasks")

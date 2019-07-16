@@ -25,7 +25,7 @@ class ViewDashboardTest extends TestCase
         // Arrange: existing workspace and workspace owner
         $owner = factory(User::class)->create();
         $workspace = factory(Workspace::class)->create(['created_by' => $owner->id]);
-        $workspace->members()->attach($owner);
+        $workspace->addMember($owner);
         factory(WorkspaceSetupAuthorization::class)->create(['workspace_id' => $workspace->id]);
 
         // Act: visit /dashboard

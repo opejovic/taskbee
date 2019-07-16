@@ -20,7 +20,6 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 	/** @test */
 	function can_authorize_subscriptions()
 	{
-		$this->withoutExceptionHandling();
 		Mail::fake();
 		AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 

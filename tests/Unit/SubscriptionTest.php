@@ -17,9 +17,8 @@ class SubscriptionTest extends TestCase
 	/** @test */
 	function can_be_built_from_stripes_subscription_and_an_email()
 	{
-		$this->withoutExceptionHandling();
 		$email = factory(User::class)->create(['email' => 'john@example.com'])->email;
-		$sub = Subscription::buildFrom($this->stripeSubscription(), $email);
+		Subscription::buildFrom($this->stripeSubscription(), $email);
 
 		$this->assertCount(1, Subscription::all());
 		$this->assertEquals(Subscription::first()->email, 'john@example.com');

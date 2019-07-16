@@ -41,8 +41,6 @@ class UploadAvatarsTest extends TestCase
 			]);
 
 		$this->assertEquals("https://taskmonkey.test/storage/avatars/{$file->hashName()}", $user->avatar_path);
-				'avatar' => $file = UploadedFile::fake()->image('avatar.jpg'), 
-			]);
 			
 		Storage::disk('public')->assertExists("avatars/{$file->hashName()}");
 	}
