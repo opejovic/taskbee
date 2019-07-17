@@ -39,7 +39,7 @@ Artisan::command('generate-plans', function () {
 Artisan::command('stripe-webhook', function () {
     
     \Stripe\WebhookEndpoint::create([
-        "url" => config('services.ngrok.url'),
+        "url" => config('services.ngrok.url') . "/stripe-webhook",
         "enabled_events" => [
             "customer.subscription.created",
             "customer.subscription.updated",

@@ -75,11 +75,11 @@ class RegisterController extends Controller
             'email' => request('email'),
             'password' => Hash::make(request('password')),
             'email_verified_at' => Carbon::now(),
-        ]);
+		]);
 
         Auth::login($user);
 
-        return redirect('home');
+		return response('created', 200);
     }
 
     /**

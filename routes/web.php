@@ -70,3 +70,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
     Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
 
+Route::get('signup', 'SubscriptionsController@create');
+

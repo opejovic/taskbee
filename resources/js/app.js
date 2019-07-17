@@ -39,6 +39,7 @@ Vue.use(Toasted,  {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('subscription-checkout', require('./components/SubscriptionCheckout.vue').default);
+Vue.component('sign-up', require('./components/SignUp.vue').default);
 Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.vue').default);
 Vue.component('renew-subscription', require('./components/RenewSubscription.vue').default);
 Vue.component('new-task', require('./components/tasks/NewTask.vue').default);

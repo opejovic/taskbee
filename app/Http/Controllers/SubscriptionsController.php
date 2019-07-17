@@ -8,6 +8,19 @@ use App\Models\WorkspaceSetupAuthorization;
 
 class SubscriptionsController extends Controller
 {
+	/**
+	 * Show the form for subscribing.
+	 *
+	 * @return \Illuminate\Http\Response
+	 * @throws conditon
+	 **/
+	public function create()
+	{
+		return view('subscriptions.create', [
+			'plans' => Plan::all(),
+		]);
+	}
+
     /**
      * Create a Stripe checkout session.
      *
