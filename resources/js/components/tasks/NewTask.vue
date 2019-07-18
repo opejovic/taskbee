@@ -203,6 +203,7 @@
 					.post(`/workspaces/${this.workspace.id}/tasks`)
 					.then(response => {
 						// Passing a task to the emited event.
+						this.form.reset();
 						window.events.$emit("task-added", response);
 						$("#addTaskModal").modal("hide");
 

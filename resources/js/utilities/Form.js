@@ -86,7 +86,7 @@ class Form {
         return new Promise((resolve, reject) => {
             axios[requestType](url, this.data())
                 .then(response => {
-                    this.onSuccess(response.data);
+                    // this.onSuccess(response.data);
 
                     resolve(response.data);
                 })

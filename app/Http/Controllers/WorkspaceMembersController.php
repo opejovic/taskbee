@@ -19,6 +19,8 @@ class WorkspaceMembersController extends Controller
      */
     public function index(Workspace $workspace)
     {
+		$this->authorize('update', $workspace);
+
         // We avoid passing in emails in our vue components, which can be visible to anyone.
         $members = $workspace->members()->select(['user_id', 'first_name', 'last_name'])->get();
 

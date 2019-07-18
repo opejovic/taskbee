@@ -2288,7 +2288,8 @@ __webpack_require__.r(__webpack_exports__);
       }),
       processing: false,
       spinning: false,
-      selectedPlan: {}
+      selectedPlan: 1 // by default the selected plan is the plan with the id of 1.
+
     };
   },
   computed: {
@@ -2298,10 +2299,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     choose: function choose(plan) {
-      this.selectedPlan = plan;
+      this.selectedPlan = plan.id;
     },
     clicked: function clicked(id) {
-      return this.selectedPlan.id === id ? true : false;
+      return this.selectedPlan === id ? true : false;
     },
     register: function register() {
       var _this = this;
@@ -2316,7 +2317,7 @@ __webpack_require__.r(__webpack_exports__);
     checkout: function checkout() {
       var stripe = Stripe("pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE");
       this.processing = true;
-      axios.post("/plans/".concat(this.selectedPlan.id, "/checkout"), {}).then(function (response) {
+      axios.post("/plans/".concat(this.selectedPlan, "/checkout"), {}).then(function (response) {
         stripe.redirectToCheckout({
           // Make the id field from the Checkout Session creation API response
           // available to this file, so you can provide it as parameter here
@@ -2719,6 +2720,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.form.post("/workspaces/".concat(this.workspace.id, "/tasks")).then(function (response) {
         // Passing a task to the emited event.
+        _this.form.reset();
+
         window.events.$emit("task-added", response);
         $("#addTaskModal").modal("hide"); // flash a message to the user
 
@@ -7430,7 +7433,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.blue {\n\tbackground-color: lavender;\n}\n", ""]);
+exports.push([module.i, "\n.blue {\n\tbackground-color: rgb(184, 184, 252);\n}\n", ""]);
 
 // exports
 
@@ -76223,8 +76226,7 @@ function () {
 
       return new Promise(function (resolve, reject) {
         axios[requestType](url, _this.data()).then(function (response) {
-          _this.onSuccess(response.data);
-
+          // this.onSuccess(response.data);
           resolve(response.data);
         })["catch"](function (error) {
           _this.onFail(error.response.data.errors);

@@ -196,7 +196,7 @@
 
 				processing: false,
 				spinning: false,
-				selectedPlan: {},
+				selectedPlan: 1, // by default the selected plan is the plan with the id of 1.
 			};
 		},
 
@@ -210,11 +210,11 @@
 
 		methods: {
 			choose(plan) {
-				this.selectedPlan = plan;
+				this.selectedPlan = plan.id;
 			},
 
 			clicked(id) {
-				return this.selectedPlan.id === id ? true : false;
+				return this.selectedPlan === id ? true : false;
 			},
 
 			register() {
@@ -235,7 +235,7 @@
 				this.processing = true;
 
 				axios
-					.post(`/plans/${this.selectedPlan.id}/checkout`, {})
+					.post(`/plans/${this.selectedPlan}/checkout`, {})
 					.then(response => {
 						stripe
 							.redirectToCheckout({
@@ -257,6 +257,6 @@
 
 <style>
 	.blue {
-		background-color: lavender;
+		background-color: rgb(184, 184, 252);
 	}
 </style>

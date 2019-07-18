@@ -16,7 +16,7 @@ Vue.prototype.auth = window.auth;
 import Toasted from 'vue-toasted';
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
-    position: "bottom-left", 
+	position: "bottom-left", 
     duration: 5000,
     action: {
         text: 'Close',
