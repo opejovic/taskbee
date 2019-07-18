@@ -2274,6 +2274,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["plans"],
   data: function data() {
@@ -2294,7 +2305,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     state: function state() {
-      return this.processing ? "Proceeding to checkout" : "Create my account";
+      return this.processing ? "PROCESSING... " : "PROCEED TO CHECKOUT";
     }
   },
   methods: {
@@ -2308,7 +2319,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.form.post("/register").then(function (response) {
-        // create a customer than proceede to checkout with the customer
+        // create a customer and then proceed to checkout with the customer
         _this.checkout();
       })["catch"](function (error) {
         console.log(error.response.data.errors);
@@ -7433,7 +7444,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.blue {\n\tbackground-color: rgb(184, 184, 252);\n}\n", ""]);
+exports.push([module.i, "\n.indie-border {\n\tborder-width: 2px;\n\tborder-color: rgb(82, 0, 177);\n}\n.unclickable {\n\tpointer-events: none;\n}\n.indie-text {\n\tcolor: rgb(82, 0, 177);\n}\n.indie-btn {\n\tbackground-color: rgb(82, 0, 177);\n\tborder-color:  rgb(82, 0, 177);\n\tborder-width: 2px;\n\tcolor: rgb(255, 255, 255);\n}\n.indie-btn.disabled,\n.indie-btn:disabled {\n\tbackground-color: rgb(82, 0, 177);\n\tborder-color:  rgb(82, 0, 177);\n\tborder-width: 2px;\n\tcolor: rgb(255, 255, 255);\n}\n.indie-btn:hover {\n\tbackground-color: rgb(135, 74, 211);\n\tborder-color:  rgb(135, 74, 211);\n\tborder-width: 2px;\n\tcolor: rgb(255, 255, 255);\n}\n.indie-btn-loading {\n\tbackground-color: rgb(135, 74, 211);\n\tborder-color:  rgb(135, 74, 211);\n\tborder-width: 2px;\n}\n", ""]);
 
 // exports
 
@@ -61555,32 +61566,47 @@ var render = function() {
         _vm._v(" "),
         _vm._l(_vm.plans, function(plan) {
           return _c("div", { key: plan.id, attrs: { type: "button" } }, [
-            _c(
-              "div",
-              {
-                staticClass: "card mb-2",
-                class: _vm.clicked(plan.id) ? "blue" : "",
-                on: {
-                  click: function($event) {
-                    return _vm.choose(plan)
+            _c("div", { class: { unclickable: _vm.processing } }, [
+              _c(
+                "div",
+                {
+                  staticClass: "card mb-2",
+                  class: { "indie-border": _vm.clicked(plan.id) },
+                  on: {
+                    click: function($event) {
+                      return _vm.choose(plan)
+                    }
                   }
-                }
-              },
-              [
-                _c("div", {
-                  staticClass: "card-header",
-                  domProps: { textContent: _vm._s(plan.name) }
-                }),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t" +
-                      _vm._s((plan.amount * plan.members_limit) / 100) +
-                      " EUR /\n\t\t\t\t\t\tmonthly\n\t\t\t\t\t"
-                  )
-                ])
-              ]
-            )
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "card-header d-flex align-middle justify-content-between"
+                    },
+                    [
+                      _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(plan.name) + " "),
+                      _vm.clicked(plan.id)
+                        ? _c(
+                            "i",
+                            { staticClass: "material-icons indie-text" },
+                            [_vm._v("check_circle_outline")]
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-body" }, [
+                    _vm._v(
+                      "\n\t\t\t\t\t\t\t" +
+                        _vm._s((plan.amount * plan.members_limit) / 100) +
+                        " EUR /\n\t\t\t\t\t\t\tmonthly\n\t\t\t\t\t\t"
+                    )
+                  ])
+                ]
+              )
+            ])
           ])
         })
       ],
@@ -61627,7 +61653,8 @@ var render = function() {
                       name: "first_name",
                       id: "first_name",
                       placeholder: "Enter your first name",
-                      required: ""
+                      required: "",
+                      disabled: _vm.processing
                     },
                     domProps: { value: _vm.form.first_name },
                     on: {
@@ -61683,7 +61710,8 @@ var render = function() {
                       name: "last_name",
                       id: "last_name",
                       placeholder: "Enter your last name",
-                      required: ""
+                      required: "",
+                      disabled: _vm.processing
                     },
                     domProps: { value: _vm.form.last_name },
                     on: {
@@ -61739,7 +61767,8 @@ var render = function() {
                     id: "email",
                     "aria-describedby": "emailHelp",
                     placeholder: "Enter email",
-                    required: ""
+                    required: "",
+                    disabled: _vm.processing
                   },
                   domProps: { value: _vm.form.email },
                   on: {
@@ -61790,7 +61819,8 @@ var render = function() {
                     id: "email-confirm",
                     "aria-describedby": "emailHelp",
                     placeholder: "Confirm email",
-                    required: ""
+                    required: "",
+                    disabled: _vm.processing
                   },
                   domProps: { value: _vm.form.email_confirmation },
                   on: {
@@ -61861,7 +61891,8 @@ var render = function() {
                     name: "password",
                     id: "password",
                     placeholder: "Password",
-                    required: ""
+                    required: "",
+                    disabled: _vm.processing
                   },
                   domProps: { value: _vm.form.password },
                   on: {
@@ -61911,7 +61942,8 @@ var render = function() {
                     name: "password_confirmation",
                     id: "password-confirm",
                     placeholder: "Confirm password",
-                    required: ""
+                    required: "",
+                    disabled: _vm.processing
                   },
                   domProps: { value: _vm.form.password_confirmation },
                   on: {
@@ -61951,8 +61983,8 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary btn-block",
-                  class: { "btn-loading": _vm.processing },
+                  staticClass: "btn btn-block indie-btn",
+                  class: { "btn btn-block indie-btn": _vm.processing },
                   attrs: { type: "submit", disabled: _vm.processing }
                 },
                 [
@@ -61964,11 +61996,9 @@ var render = function() {
                         : "text-center"
                     },
                     [
-                      _c(
-                        "span",
-                        { domProps: { textContent: _vm._s(_vm.state) } },
-                        [_vm._v("Loading...")]
-                      ),
+                      _c("span", {
+                        domProps: { textContent: _vm._s(_vm.state) }
+                      }),
                       _vm._v(" "),
                       _c("div", {
                         directives: [
