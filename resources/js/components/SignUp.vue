@@ -5,15 +5,21 @@
 			<h4>Choose your plan:</h4>
 			<div v-for="plan in plans" :key="plan.id" type="button">
 				<!-- this can be its own component Plan or Plans -->
-				<div :class="{'unclickable' : processing}">
+				<div :class="{ 'unclickable' : processing }">
 					<div
-						class="card mb-2"
+						class="card mb-2 simple-border"
 						@click="choose(plan)"
-						:class="{ 'indie-border' : clicked(plan.id) }"
+						:class="{ 'indie-border': clicked(plan.id) }"
 					>
-					
-						<div class="card-header d-flex align-middle justify-content-between">
-							{{ plan.name }} <i class="material-icons indie-text" v-if="clicked(plan.id)">check_circle_outline</i>
+						<div
+							class="card-header d-flex align-middle justify-content-between"
+						>
+							{{ plan.name }}
+							<i
+								class="material-icons indie-text"
+								v-if="clicked(plan.id)"
+								>check_circle_outline</i
+							>
 						</div>
 						<div class="card-body">
 							{{ (plan.amount * plan.members_limit) / 100 }} EUR /
@@ -36,10 +42,10 @@
 									type="text"
 									class="form-control"
 									:class="
-                                        form.errors.has('first_name')
-                                            ? ' is-invalid'
-                                            : ''
-                                    "
+										form.errors.has('first_name')
+											? ' is-invalid'
+											: ''
+									"
 									name="first_name"
 									id="first_name"
 									placeholder="Enter your first name"
@@ -48,8 +54,14 @@
 									:disabled="processing"
 								/>
 
-								<span class="invalid-feedback" role="alert" v-if="form.errors.has('first_name')">
-									<strong v-text="form.errors.get('first_name')"></strong>
+								<span
+									class="invalid-feedback"
+									role="alert"
+									v-if="form.errors.has('first_name')"
+								>
+									<strong
+										v-text="form.errors.get('first_name')"
+									></strong>
 								</span>
 							</div>
 							<div class="form-group col-md-6">
@@ -58,10 +70,10 @@
 									type="text"
 									class="form-control"
 									:class="
-                                        form.errors.has('last_name')
-                                            ? ' is-invalid'
-                                            : ''
-                                    "
+										form.errors.has('last_name')
+											? ' is-invalid'
+											: ''
+									"
 									name="last_name"
 									id="last_name"
 									placeholder="Enter your last name"
@@ -69,8 +81,14 @@
 									required
 									:disabled="processing"
 								/>
-								<span class="invalid-feedback" role="alert" v-if="form.errors.has('last_name')">
-									<strong v-text="form.errors.get('last_name')"></strong>
+								<span
+									class="invalid-feedback"
+									role="alert"
+									v-if="form.errors.has('last_name')"
+								>
+									<strong
+										v-text="form.errors.get('last_name')"
+									></strong>
 								</span>
 							</div>
 						</div>
@@ -93,8 +111,14 @@
 								:disabled="processing"
 							/>
 
-							<span class="invalid-feedback" role="alert" v-if="form.errors.has('email')">
-								<strong v-text="form.errors.get('email')"></strong>
+							<span
+								class="invalid-feedback"
+								role="alert"
+								v-if="form.errors.has('email')"
+							>
+								<strong
+									v-text="form.errors.get('email')"
+								></strong>
 							</span>
 						</div>
 						<div class="form-group">
@@ -114,8 +138,16 @@
 								required
 								:disabled="processing"
 							/>
-							<span class="invalid-feedback" role="alert" v-if="form.errors.has('email_confirmation')">
-								<strong v-text="form.errors.get('email_confirmation')"></strong>
+							<span
+								class="invalid-feedback"
+								role="alert"
+								v-if="form.errors.has('email_confirmation')"
+							>
+								<strong
+									v-text="
+										form.errors.get('email_confirmation')
+									"
+								></strong>
 							</span>
 							<small id="emailHelp" class="form-text text-muted">
 								We'll never share your email with anyone else.
@@ -138,8 +170,14 @@
 								required
 								:disabled="processing"
 							/>
-							<span class="invalid-feedback" role="alert" v-if="form.errors.has('password')">
-								<strong v-text="form.errors.get('password')"></strong>
+							<span
+								class="invalid-feedback"
+								role="alert"
+								v-if="form.errors.has('password')"
+							>
+								<strong
+									v-text="form.errors.get('password')"
+								></strong>
 							</span>
 						</div>
 						<div class="form-group">
@@ -158,8 +196,16 @@
 								required
 								:disabled="processing"
 							/>
-							<span class="invalid-feedback" role="alert" v-if="form.errors.has('password_confirmation')">
-								<strong v-text="form.errors.get('password_confirmation')"></strong>
+							<span
+								class="invalid-feedback"
+								role="alert"
+								v-if="form.errors.has('password_confirmation')"
+							>
+								<strong
+									v-text="
+										form.errors.get('password_confirmation')
+									"
+								></strong>
 							</span>
 						</div>
 
@@ -202,20 +248,18 @@
 					email: null,
 					email_confirmation: null,
 					password: null,
-					password_confirmation: null,
+					password_confirmation: null
 				}),
 
 				processing: false,
 				spinning: false,
-				selectedPlan: 1, // by default the selected plan is the plan with the id of 1.
+				selectedPlan: 1 // by default the selected plan is the plan with the id of 1.
 			};
 		},
 
 		computed: {
 			state() {
-				return this.processing
-					? "PROCESSING... "
-					: "PROCEED TO CHECKOUT";
+				return this.processing ? "PROCESSING... " : "PROCEED TO CHECKOUT";
 			}
 		},
 
@@ -229,7 +273,8 @@
 			},
 
 			register() {
-				this.form.post("/register")
+				this.form
+					.post("/register")
 					.then(response => {
 						// create a customer and then proceed to checkout with the customer
 						this.checkout();
@@ -267,7 +312,6 @@
 
 <style>
 	.indie-border {
-		border-width: 2px;
 		border-color: rgb(82, 0, 177);
 	}
 
@@ -278,10 +322,10 @@
 	.indie-text {
 		color: rgb(82, 0, 177);
 	}
-	
+
 	.indie-btn {
 		background-color: rgb(82, 0, 177);
-		border-color:  rgb(82, 0, 177);
+		border-color: rgb(82, 0, 177);
 		border-width: 2px;
 		color: rgb(255, 255, 255);
 	}
@@ -289,22 +333,25 @@
 	.indie-btn.disabled,
 	.indie-btn:disabled {
 		background-color: rgb(82, 0, 177);
-		border-color:  rgb(82, 0, 177);
+		border-color: rgb(82, 0, 177);
 		border-width: 2px;
 		color: rgb(255, 255, 255);
 	}
 
 	.indie-btn:hover {
 		background-color: rgb(135, 74, 211);
-		border-color:  rgb(135, 74, 211);
+		border-color: rgb(135, 74, 211);
 		border-width: 2px;
 		color: rgb(255, 255, 255);
-
 	}
 
 	.indie-btn-loading {
 		background-color: rgb(135, 74, 211);
-		border-color:  rgb(135, 74, 211);
+		border-color: rgb(135, 74, 211);
 		border-width: 2px;
+	}
+
+	.simple-border {
+		border-width: 1.5px;
 	}
 </style>

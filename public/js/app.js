@@ -2285,6 +2285,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["plans"],
   data: function data() {
@@ -7444,7 +7490,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.indie-border {\n\tborder-width: 2px;\n\tborder-color: rgb(82, 0, 177);\n}\n.unclickable {\n\tpointer-events: none;\n}\n.indie-text {\n\tcolor: rgb(82, 0, 177);\n}\n.indie-btn {\n\tbackground-color: rgb(82, 0, 177);\n\tborder-color:  rgb(82, 0, 177);\n\tborder-width: 2px;\n\tcolor: rgb(255, 255, 255);\n}\n.indie-btn.disabled,\n.indie-btn:disabled {\n\tbackground-color: rgb(82, 0, 177);\n\tborder-color:  rgb(82, 0, 177);\n\tborder-width: 2px;\n\tcolor: rgb(255, 255, 255);\n}\n.indie-btn:hover {\n\tbackground-color: rgb(135, 74, 211);\n\tborder-color:  rgb(135, 74, 211);\n\tborder-width: 2px;\n\tcolor: rgb(255, 255, 255);\n}\n.indie-btn-loading {\n\tbackground-color: rgb(135, 74, 211);\n\tborder-color:  rgb(135, 74, 211);\n\tborder-width: 2px;\n}\n", ""]);
+exports.push([module.i, ".indie-border {\n  border-color: rgb(82, 0, 177);\n}\n.unclickable {\n  pointer-events: none;\n}\n.indie-text {\n  color: rgb(82, 0, 177);\n}\n.indie-btn {\n  background-color: rgb(82, 0, 177);\n  border-color: rgb(82, 0, 177);\n  border-width: 2px;\n  color: rgb(255, 255, 255);\n}\n.indie-btn.disabled,\n.indie-btn:disabled {\n  background-color: rgb(82, 0, 177);\n  border-color: rgb(82, 0, 177);\n  border-width: 2px;\n  color: rgb(255, 255, 255);\n}\n.indie-btn:hover {\n  background-color: rgb(135, 74, 211);\n  border-color: rgb(135, 74, 211);\n  border-width: 2px;\n  color: rgb(255, 255, 255);\n}\n.indie-btn-loading {\n  background-color: rgb(135, 74, 211);\n  border-color: rgb(135, 74, 211);\n  border-width: 2px;\n}\n.simple-border {\n  border-width: 1.5px;\n}\n", ""]);
 
 // exports
 
@@ -7463,7 +7509,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.add {\n\tvertical-align: middle;\n\tfont-size: 25px;\n}\n.big-task {\n\tbackground-color: #6200ee;\n\tcolor: white;\n\tvertical-align: middle;\n}\n.big-task:hover {\n\tbackground-color: #2e006e;\n\tcolor: white;\n}\n", ""]);
+exports.push([module.i, ".add {\n  vertical-align: middle;\n  font-size: 25px;\n}\n.big-task {\n  background-color: #6200ee;\n  color: white;\n  vertical-align: middle;\n}\n.big-task:hover {\n  background-color: #2e006e;\n  color: white;\n}\n", ""]);
 
 // exports
 
@@ -7482,7 +7528,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.cursor {\n    cursor: pointer;\n}\n.done {\n    background-color: #00b365;\n    color: white;\n}\n.planned {\n    background-color: #6200ee;\n    color: white;\n}\n.testing {\n    background-color: #dae0e5;\n}\n.inprogress {\n    background-color: #f06900;\n    color: white;\n}\n", ""]);
+exports.push([module.i, ".cursor {\n  cursor: pointer;\n}\n.done {\n  background-color: #00b365;\n  color: white;\n}\n.planned {\n  background-color: #6200ee;\n  color: white;\n}\n.testing {\n  background-color: #dae0e5;\n}\n.inprogress {\n  background-color: #f06900;\n  color: white;\n}\n", ""]);
 
 // exports
 
@@ -7501,7 +7547,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.icon {\n\tfont-size: 15px;\n\tvertical-align: middle;\n}\n", ""]);
+exports.push([module.i, ".icon {\n  font-size: 15px;\n  vertical-align: middle;\n}\n", ""]);
 
 // exports
 
@@ -61570,7 +61616,7 @@ var render = function() {
               _c(
                 "div",
                 {
-                  staticClass: "card mb-2",
+                  staticClass: "card mb-2 simple-border",
                   class: { "indie-border": _vm.clicked(plan.id) },
                   on: {
                     click: function($event) {
@@ -61586,7 +61632,9 @@ var render = function() {
                         "card-header d-flex align-middle justify-content-between"
                     },
                     [
-                      _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(plan.name) + " "),
+                      _vm._v(
+                        "\n\t\t\t\t\t\t" + _vm._s(plan.name) + "\n\t\t\t\t\t\t"
+                      ),
                       _vm.clicked(plan.id)
                         ? _c(
                             "i",
@@ -61599,9 +61647,9 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body" }, [
                     _vm._v(
-                      "\n\t\t\t\t\t\t\t" +
+                      "\n\t\t\t\t\t\t" +
                         _vm._s((plan.amount * plan.members_limit) / 100) +
-                        " EUR /\n\t\t\t\t\t\t\tmonthly\n\t\t\t\t\t\t"
+                        " EUR /\n\t\t\t\t\t\tmonthly\n\t\t\t\t\t"
                     )
                   ])
                 ]
@@ -61864,7 +61912,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n\t\t\t\t\t\t\t\tWe'll never share your email with anyone else.\n\t\t\t\t\t\t\t"
+                      "\n\t\t\t\t\t\t\tWe'll never share your email with anyone else.\n\t\t\t\t\t\t"
                     )
                   ]
                 )

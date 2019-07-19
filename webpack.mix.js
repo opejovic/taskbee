@@ -1,4 +1,7 @@
-const mix = require('laravel-mix');
+let mix = require('laravel-mix');
+
+require('laravel-mix-tailwind');
+const tailwindcss = require('tailwindcss');
 
 mix.disableNotifications();
 
@@ -14,4 +17,5 @@ mix.disableNotifications();
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/app.scss', 'public/css')
+    .tailwind();

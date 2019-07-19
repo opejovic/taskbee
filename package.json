@@ -15,6 +15,7 @@
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
+        "laravel-mix-tailwind": "^0.1.0",
         "lodash": "^4.17.14",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
@@ -26,6 +27,7 @@
     "dependencies": {
         "moment": "^2.24.0",
         "sweetalert2": "^8.13.1",
+        "tailwindcss": "^1.0.5",
         "v-tooltip": "^3.0.0-alpha.11",
         "vue-toasted": "^1.1.27"
     }
