@@ -8,6 +8,6 @@ class NavTestController extends Controller
 {
 	public function show()
 	{
-		return view('nav.nav');
+		return view('nav.testnav');
 	}
 }
