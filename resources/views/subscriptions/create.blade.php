@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div>
+        <div>
 				<sign-up :plans="{{ $plans }}"></sign-up>
         </div>
 	</div>
+
+	
 @endsection
 
 @push('beforeScripts')

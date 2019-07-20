@@ -28,9 +28,11 @@
 
 	<body>
 		<div id="app">
-			@include('layouts.nav')
+			@if (! request()->routeIs(['login', 'signup', 'testnav']))
+				@include('layouts.nav')
+			@endif
 
-			<main class="py-4">
+			<main>
 				@yield('content')
 			</main>
 		</div>

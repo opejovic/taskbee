@@ -72,4 +72,4 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 
 Route::middleware('guest')->get('signup', 'SubscriptionsController@create')->name('signup');
 
-Route::get('/nav', 'NavTestController@show');
+Route::get('/nav', 'NavTestController@show')->name('testnav');
