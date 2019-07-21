@@ -1,6 +1,7 @@
 <nav class="flex items-center justify-between shadow flex-wrap bg-gray-100 p-5">
 	<div class="flex items-center flex-shrink-0 text-indigo-900 mr-6">
-		<span class="font-semibold text-xl tracking-tight"><a href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a></span>
+		<span class="font-semibold text-xl tracking-tight"><a
+				href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a></span>
 	</div>
 	<div class="block lg:hidden">
 		<button
@@ -16,20 +17,8 @@
 		<div class="text-sm lg:flex-grow">
 			@auth
 			@if (auth()->user()->workspace_id !== null)
-			<a href="/workspaces/{{ auth()->user()->workspace_id }}/tasks"
-				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
-				{{ __('All tasks') }}
-			</a>
-			<a href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?my"
-				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
-				{{ __('My Tasks') }}
-			</a>
-			<a href="/workspaces/{{ auth()->user()->workspace_id }}/tasks?creator={{ auth()->user()->id }}"
-				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
-				{{ __('Tasks I have created') }}
-			</a>
+			<task-filter-dropdown></task-filter-dropdown>
 
-			{{-- <new-task :workspace="{{ auth()->user()->workspace }}"></new-task> --}}
 			<new-task-modal :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
 			@endif
 			@endauth
@@ -58,7 +47,6 @@
 			</a>
 		</div>
 	</div>
-
 	@else
 	<user-notifications :user="{{ Auth::user() }}"></user-notifications>
 
@@ -69,6 +57,7 @@
 			<img class="mr-2" src="{{ auth()->user()->avatar_path }}" width="35px" height="35px" alt="avatar"
 				style="border-radius: 50%;">
 			{{ Auth::user()->first_name }} <span class="caret"></span>
+
 		</a>
 
 		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

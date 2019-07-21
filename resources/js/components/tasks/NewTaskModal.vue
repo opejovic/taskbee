@@ -50,7 +50,6 @@
 										name="name"
 										id="name"
 										v-model="form.name"
-										:disabled="processing"
 										@keydown="form.errors.clear('name')"
 									/>
 

@@ -1,39 +1,47 @@
 <template>
-	<li class="nav-item dropdown mt-1">
-		<a
-			id="navbarDropdown"
-			class="nav-link"
-			href="#"
-			role="button"
-			data-toggle="dropdown"
-			aria-haspopup="true"
-			aria-expanded="false"
-		>
-			<i id="navbarDropdown" v-html="hasNotifications" class="material-icons"></i>
-		</a>
+	<div>
+		<div class="dropdown">
+			<span class="dropdown__header" @click="toggleDropdown($event)">
+				<span
+					class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4"
+					><i
+					v-html="hasNotifications"
+					class="material-icons"
+				></i></span
+				>
+			</span>
 
-		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-			<div v-if="notifications.length">
-			<li class="dropdown-item text-right">
-				<a href="#" style="text-decoration: none;" @click="clearAll">Clear all</a>
-			</li>
-			<div class="dropdown-divider"></div>
-			<li class="dropdown-item" v-for="(notification, index) in notifications" :key="notification.id">
-				<a
-					href="#"
-					style="text-decoration: none;"
-					@click="markAsRead(notification, index)"
-					v-text="notificationText(notification)"
-				></a>
-			</li>
-			</div>
-			<div v-else>
-				<li class="dropdown-item">
-					There are no new notifcations.
-				</li>
+			<div class="dropdown__content bg-gray-200 rounded border fixed mr-10 text-xs">
+				<ul>
+					<div v-if="notifications.length">
+						<li class="text-left border-b-2 border-blue-900 hover:text-indigo-600">
+							<a
+								href="#"
+								@click="clearAll"
+								>Clear all</a
+							>
+						</li>
+						<li
+							v-for="(notification, index) in notifications"
+							:key="notification.id"
+							class="border-b border-gray-600 mb-1 hover:text-indigo-600"
+						>- 
+							<a
+								href="#"
+								@click="markAsRead(notification, index)"
+								v-text="notificationText(notification)"
+							></a>
+						</li>
+					</div>
+					<div v-else>
+						<li>
+							There are no new notifcations.
+						</li>
+					</div>
+				</ul>
 			</div>
 		</div>
-	</li>
+	</div>
 </template>
 
 <script>
@@ -61,11 +69,17 @@
 
 		computed: {
 			hasNotifications() {
-				return this.notifications.length ? 'notifications_active' : 'notifications_none';
+				return this.notifications.length
+					? "notifications_active"
+					: "notifications_none";
 			}
 		},
 
 		methods: {
+			toggleDropdown(event) {
+				event.currentTarget.classList.toggle("is-active");
+			},
+
 			fetch() {
 				axios
 					.get(`/profiles/${this.user.id}/notifications`)
@@ -90,11 +104,12 @@
 					.then(this.notifications.splice(index, 1));
 			},
 
-			clearAll() {
+			clearAll(event) {
 				axios
 					.delete(`/profiles/${this.user.id}/notifications/`)
 					.then(response => {
 						this.notifications = false;
+						this.toggleDropdown(event);
 						this.$toasted.show("Notifications cleared.");
 					});
 			},
@@ -115,3 +130,31 @@
 		}
 	};
 </script>
+
+<style lang="scss" scoped>
+	.dropdown {
+		&__header {
+			cursor: pointer;
+			line-height: 50px;
+			padding-left: 10px;
+			padding-right: 50px;
+			position: relative;
+			text-overflow: ellipsis;
+			&.is-active {
+				+ .dropdown__content {
+					height: auto;
+					opacity: 1;
+					visibility: visible;
+				}
+			}
+		}
+		&__content {
+			height: 0;
+			opacity: 0;
+			overflow: hidden;
+			padding: 15px 15px;
+			transition: opacity 0.3s;
+			visibility: hidden;
+		}
+	}
+</style>

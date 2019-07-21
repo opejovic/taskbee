@@ -9,7 +9,6 @@ require('./bootstrap');
 import Form from './utilities/Form';
 import VModal from 'vue-js-modal';
 import Toasted from 'vue-toasted';
-import Dropdown from 'bp-vuejs-dropdown';
 
 window.Vue = require('vue');
 window.Form = Form;
@@ -17,7 +16,6 @@ window.events = new Vue();
 
 Vue.prototype.auth = window.auth;
 
-Vue.use(Dropdown);
 Vue.use(VModal);
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
@@ -51,6 +49,7 @@ Vue.component('user-notifications', require('./components/UserNotifications.vue'
 Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 Vue.component('new-task-modal', require('./components/tasks/NewTaskModal.vue').default);
 Vue.component('navbar', require('./components/Navbar.vue').default);
+Vue.component('task-filter-dropdown', require('./components/tasks/TaskFilterDropdown.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
