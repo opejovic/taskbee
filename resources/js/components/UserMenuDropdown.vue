@@ -1,72 +1,65 @@
 <template>
-    <span class="dropdown mt-1">
-        <span
-            class="dropdown__header"
-            @click="toggleDropdown($event)"
-        >
-            <span class="text-indigo-800 hover:text-indigo-500">Browse</span>
+    <div class="dropdown">
+        <span class="dropdown__header" @click="toggleDropdown($event)">
+            <span
+                class="block text-sm mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4"
+                v-text="auth.first_name"
+            ></span>
             <i class="fa fa-angle-down" aria-hidden="true"></i>
             <i class="fa fa-angle-up" aria-hidden="true"></i>
         </span>
 
-        <div
-            class="dropdown__content bg-gray-200 rounded border fixed shadow text-sm"
-        >
+        <div class="dropdown__content bg-gray-200 rounded border fixed text-sm">
             <ul>
                 <li>
                     <a
-                        :href="allTasks"
+                        href="/dashboard"
                         class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4"
                     >
-                        All tasks
+                        Dashboard
                     </a>
                 </li>
                 <li>
                     <a
-                        :href="myTasks"
+                        :href="profilePage"
                         class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4"
                     >
-                        My Tasks
+                        My profile
                     </a>
                 </li>
                 <li>
                     <a
-                        :href="tasksByMe"
                         class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4"
+                        href="/logout"
+                        onclick="event.preventDefault();
+								document.getElementById('logout-form').submit();"
                     >
-                        Tasks I have created
+                        Logout
                     </a>
+                    <form
+                        id="logout-form"
+                        action="/logout"
+                        method="POST"
+                        style="display: none;"
+                    ></form>
                 </li>
             </ul>
         </div>
-    </span>
+    </div>
 </template>
 
 <script>
     export default {
         computed: {
-            allTasks() {
-                return '/workspaces/' + auth.workspace_id + '/tasks';
-            },
-
-            myTasks() {
-                return '/workspaces/' + auth.workspace_id + '/tasks?my';
-            },
-
-            tasksByMe() {
-                return (
-                    '/workspaces/' +
-                    auth.workspace_id +
-                    '/tasks?creator=' +
-                    auth.id
-                );
+            profilePage() {
+                return '/profiles/' + auth.id;
             }
         },
 
         methods: {
             toggleDropdown(event) {
                 event.currentTarget.classList.toggle('is-active');
-            },
+            }
         }
     };
 </script>

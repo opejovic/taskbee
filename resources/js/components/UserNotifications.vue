@@ -3,19 +3,21 @@
 		<div class="dropdown">
 			<span class="dropdown__header" @click="toggleDropdown($event)">
 				<span
-					class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4"
+					class="mt-4 text-indigo-800 hover:text-indigo-500 -mr-8"
 					><i
 					v-html="hasNotifications"
 					class="material-icons"
+					style="font-size: 1em;"
 				></i></span
 				>
 			</span>
 
-			<div class="dropdown__content bg-gray-200 rounded border fixed mr-10 text-xs">
+			<div class="dropdown__content bg-gray-200 rounded shadow border fixed mr-32 -ml-64 text-xs w-auto h-auto">
 				<ul>
 					<div v-if="notifications.length">
-						<li class="text-left border-b-2 border-blue-900 hover:text-indigo-600">
+						<li class="text-left border-b-2 border-blue-900">
 							<a
+								class="hover:text-indigo-600"
 								href="#"
 								@click="clearAll"
 								>Clear all</a
@@ -24,10 +26,11 @@
 						<li
 							v-for="(notification, index) in notifications"
 							:key="notification.id"
-							class="border-b border-gray-600 mb-1 hover:text-indigo-600"
+							class="border-b border-gray-600 mt-1 mb-1"
 						>- 
 							<a
 								href="#"
+								class="hover:text-indigo-600"
 								@click="markAsRead(notification, index)"
 								v-text="notificationText(notification)"
 							></a>
@@ -109,7 +112,6 @@
 					.delete(`/profiles/${this.user.id}/notifications/`)
 					.then(response => {
 						this.notifications = false;
-						this.toggleDropdown(event);
 						this.$toasted.show("Notifications cleared.");
 					});
 			},
@@ -135,7 +137,6 @@
 	.dropdown {
 		&__header {
 			cursor: pointer;
-			line-height: 50px;
 			padding-left: 10px;
 			padding-right: 50px;
 			position: relative;

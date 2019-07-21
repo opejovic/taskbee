@@ -1,5 +1,5 @@
 <nav class="flex items-center justify-between shadow flex-wrap bg-gray-100 p-5">
-	<div class="flex items-center flex-shrink-0 text-indigo-900 mr-6">
+	<div class="flex items-center flex-shrink-0 text-indigo-900 mr-6 ml-4">
 		<span class="font-semibold text-xl tracking-tight"><a
 				href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a></span>
 	</div>
@@ -14,13 +14,13 @@
 	</div>
 	<div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
 
-		<div class="text-sm lg:flex-grow">
+		<div class="text-sm flex lg:flex-grow">
 			@auth
-			@if (auth()->user()->workspace_id !== null)
-			<task-filter-dropdown></task-filter-dropdown>
+				@if (auth()->user()->workspace_id !== null)
+				<task-filter-dropdown></task-filter-dropdown>
 
-			<new-task-modal :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
-			@endif
+				<new-task-modal class="ml-auto mr-auto" :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
+				@endif
 			@endauth
 
 			@guest
@@ -48,37 +48,18 @@
 		</div>
 	</div>
 	@else
-	<user-notifications :user="{{ Auth::user() }}"></user-notifications>
-
-	<li class="nav-item dropdown">
-		<a id="navbarDropdown"
-			class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4" href="#"
-			role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-			<img class="mr-2" src="{{ auth()->user()->avatar_path }}" width="35px" height="35px" alt="avatar"
-				style="border-radius: 50%;">
-			{{ Auth::user()->first_name }} <span class="caret"></span>
-
-		</a>
-
-		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-			<a class="dropdown-item" href="{{ route('dashboard') }}">
-				{{ __('Dashboard') }}
-			</a>
-
-			<a class="dropdown-item" href="{{ route('profile', auth()->user()) }}">
-				{{ __('My Profile') }}
-			</a>
-
-			<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-			                                             document.getElementById('logout-form').submit();">
-				{{ __('Logout') }}
-			</a>
-
-			<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-				@csrf
-			</form>
+	<user-notifications class="-mb-2" :user="{{ Auth::user() }}"></user-notifications>
+		<div class="flex items-center">
+			<img
+			class="object-contain -mr-12"
+			src="{{ Auth::user()->avatar_path }}"
+			width="30px"
+			height="30px"
+			alt="avatar"
+			style="border-radius: 50%;"
+			/>
+			<user-menu-dropdown class="text-right"></user-menu-dropdown>
 		</div>
-	</li>
 	@endguest
 	</ul>
 </nav>

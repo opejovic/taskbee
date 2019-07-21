@@ -50,6 +50,7 @@ Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 Vue.component('new-task-modal', require('./components/tasks/NewTaskModal.vue').default);
 Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('task-filter-dropdown', require('./components/tasks/TaskFilterDropdown.vue').default);
+Vue.component('user-menu-dropdown', require('./components/UserMenuDropdown.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
