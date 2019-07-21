@@ -12,7 +12,7 @@
                 <div class="w-full md:w-3/3 px-3">
                     <span
                         class="font-semibold text-3xl tracking-tight text-indigo-900"
-                        ><a href="{{ route('home') }}">taskmonkey.</a></span
+                        ><a href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a></span
                     >
                 </div>
             </div>

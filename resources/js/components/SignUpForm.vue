@@ -8,7 +8,7 @@
 				<div class="w-full md:w-3/3 flex align">
 					<span
 						class="font-semibold text-xl flex-1 tracking-tight text-indigo-900"
-						><a href="/home">taskmonkey.</a>
+						><a href="/home">taskbee.</a>
 					</span>
 					<a
 						href="/login"
@@ -313,7 +313,7 @@
 		computed: {
 			state() {
 				return this.processing ? "PROCESSING... " : "PROCEED TO CHECKOUT";
-			}
+			},
 		},
 
 		methods: {

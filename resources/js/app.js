@@ -9,7 +9,7 @@ require('./bootstrap');
 import Form from './utilities/Form';
 import VModal from 'vue-js-modal';
 import Toasted from 'vue-toasted';
-
+import Dropdown from 'bp-vuejs-dropdown';
 
 window.Vue = require('vue');
 window.Form = Form;
@@ -17,6 +17,7 @@ window.events = new Vue();
 
 Vue.prototype.auth = window.auth;
 
+Vue.use(Dropdown);
 Vue.use(VModal);
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
@@ -29,7 +30,6 @@ Vue.use(Toasted,  {
         }
     },
 });
-
 
 /**
  * The following block of code may be used to automatically register your
@@ -46,7 +46,6 @@ Vue.component('subscription-checkout', require('./components/SubscriptionCheckou
 Vue.component('sign-up-form', require('./components/SignUpForm.vue').default);
 Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.vue').default);
 Vue.component('renew-subscription', require('./components/RenewSubscription.vue').default);
-Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
 Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
 Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
 Vue.component('avatar-form', require('./components/AvatarForm.vue').default);

@@ -1,6 +1,6 @@
 <nav class="flex items-center justify-between shadow flex-wrap bg-gray-100 p-5">
 	<div class="flex items-center flex-shrink-0 text-indigo-900 mr-6">
-		<span class="font-semibold text-xl tracking-tight"><a href="{{ url('/home') }}">taskmonkey.</a></span>
+		<span class="font-semibold text-xl tracking-tight"><a href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a></span>
 	</div>
 	<div class="block lg:hidden">
 		<button

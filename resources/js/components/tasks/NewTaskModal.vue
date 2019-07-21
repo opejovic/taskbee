@@ -1,5 +1,5 @@
 <template>
-	<div class="">
+	<div>
 		<button
 			class="block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
 			@click="showModal"
@@ -14,14 +14,20 @@
 			height="auto"
 			id="addTaskModal"
 		>
-			<div class="px-4 h-full w-full" role="document">
+			<div class="px-8 py-8 h-full w-full" role="document">
+					
 				<div class="w-full mx-auto px-3">
-					<div class="py-5 text-center">
+				<div class="text-xs text-indigo-900 text-right align-middle">
+						<button type="button" @click="hide" class="close">
+							<span aria-hidden="true" class="text-lg">&times;</span>
+						</button>
+					</div>
+					<div class="text-center mb-5 -mt-5">
 						<div
-							class="text-sm uppercase tracking-tight text-indigo-900"
+							class="text-lg uppercase tracking-tight text-indigo-900"
 							id="addTaskModalLabel"
 						>
-							Add task information
+							Add new task
 						</div>
 					</div>
 					<div class="modal-body">
@@ -194,9 +200,8 @@
 								<div class="w-full md:w-3/3 px-3">
 									<p
 										class="text-xs tracking-tight text-indigo-900"
-										for="start_date"
 									>
-										Who has to complete this task?
+										What is the status of the task?
 									</p>
 									<div class="relative">
 										<select
@@ -247,7 +252,7 @@
 								</div>
 							</div>
 
-							<div class="py-5">
+							<div class="py-4">
 								<p
 									class="text-xs tracking-tight text-indigo-900"
 								>
@@ -255,16 +260,10 @@
 									email.
 								</p>
 								<div class="flex w-full text-right">
-									<button
-										type="button"
-										class="flex-1 mr-1 block uppercase mx-auto  bg-gray-400 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
-										@click="hide"
-									>
-										Cancel
-									</button>
+									
 									<button
 										type="submit"
-										class="flex-1 ml-1 block uppercase mx-auto shadow  bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+										class="flex-1 block uppercase mx-auto shadow  bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
 										:disabled="form.errors.any()"
 									>
 										Submit
