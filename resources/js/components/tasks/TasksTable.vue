@@ -90,7 +90,7 @@
 					text: "You won't be able to revert this.",
 					type: "warning",
 					showCancelButton: true,
-					confirmButtonColor: "#6200ee",
+					confirmButtonColor: "#434190",
 					cancelButtonColor: "#db3236",
 					confirmButtonText: "Yes, delete it."
 				}).then(result => {

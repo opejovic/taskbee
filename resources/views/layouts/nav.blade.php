@@ -29,10 +29,12 @@
 				{{ __('Tasks I have created') }}
 			</a>
 
-			<new-task :workspace="{{ auth()->user()->workspace }}"></new-task>
+			{{-- <new-task :workspace="{{ auth()->user()->workspace }}"></new-task> --}}
+			<new-task-modal :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
 			@endif
 			@endauth
 
+			@guest
 			<a href="#responsive-header"
 				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 				Features
@@ -41,10 +43,13 @@
 				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 				Pricing
 			</a>
+			@endguest
+
 		</div>
 		@guest
 		<div>
-			<a href="{{ route('login') }}" class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
+			<a href="{{ route('login') }}"
+				class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 				{{ __('Sign in') }}
 			</a>
 			<a href="{{ route('signup') }}"
@@ -54,36 +59,37 @@
 		</div>
 	</div>
 
-		@else
-		<user-notifications :user="{{ Auth::user() }}"></user-notifications>
+	@else
+	<user-notifications :user="{{ Auth::user() }}"></user-notifications>
 
-		<li class="nav-item dropdown">
-			<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-				aria-haspopup="true" aria-expanded="false" v-pre>
-				<img class="mr-2" src="{{ auth()->user()->avatar_path }}" width="35px" height="35px" alt="avatar"
-					style="border-radius: 50%;">
-				{{ Auth::user()->first_name }} <span class="caret"></span>
+	<li class="nav-item dropdown">
+		<a id="navbarDropdown"
+			class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4" href="#"
+			role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+			<img class="mr-2" src="{{ auth()->user()->avatar_path }}" width="35px" height="35px" alt="avatar"
+				style="border-radius: 50%;">
+			{{ Auth::user()->first_name }} <span class="caret"></span>
+		</a>
+
+		<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+			<a class="dropdown-item" href="{{ route('dashboard') }}">
+				{{ __('Dashboard') }}
 			</a>
 
-			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="{{ route('dashboard') }}">
-					{{ __('Dashboard') }}
-				</a>
+			<a class="dropdown-item" href="{{ route('profile', auth()->user()) }}">
+				{{ __('My Profile') }}
+			</a>
 
-				<a class="dropdown-item" href="{{ route('profile', auth()->user()) }}">
-					{{ __('My Profile') }}
-				</a>
-
-				<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+			<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
 			                                             document.getElementById('logout-form').submit();">
-					{{ __('Logout') }}
-				</a>
+				{{ __('Logout') }}
+			</a>
 
-				<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-					@csrf
-				</form>
-			</div>
-		</li>
-		@endguest
+			<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+				@csrf
+			</form>
+		</div>
+	</li>
+	@endguest
 	</ul>
 </nav>

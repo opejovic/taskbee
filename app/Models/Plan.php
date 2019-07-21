@@ -11,16 +11,16 @@ class Plan extends Model
 	 *
 	 */
 	const BASIC               = 'Basic Monthly';
-	const BASIC_PRICE         = 598; // per user
+	const BASIC_PRICE         = 580; // per user
 	const BASIC_MEMBERS_LIMIT = 5;
 
 	const STANDARD               = 'Standard Monthly';
-	const STANDARD_PRICE         = 399;
+	const STANDARD_PRICE         = 390;
 	const STANDARD_MEMBERS_LIMIT = 10;
 
 	const PREMIUM               = 'Premium Monthly';
-	const PREMIUM_PRICE         = 399;
-	const PREMIUM_MEMBERS_LIMIT = 15;
+	const PREMIUM_PRICE         = 295;
+	const PREMIUM_MEMBERS_LIMIT = 20;
 
 
 	/**

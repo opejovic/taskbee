@@ -5,7 +5,11 @@
  */
 
 require('./bootstrap');
+
 import Form from './utilities/Form';
+import VModal from 'vue-js-modal';
+import Toasted from 'vue-toasted';
+
 
 window.Vue = require('vue');
 window.Form = Form;
@@ -13,7 +17,7 @@ window.events = new Vue();
 
 Vue.prototype.auth = window.auth;
 
-import Toasted from 'vue-toasted';
+Vue.use(VModal);
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
 	position: "bottom-left", 
@@ -46,6 +50,8 @@ Vue.component('new-task', require('./components/tasks/NewTask.vue').default);
 Vue.component('tasks-table', require('./components/tasks/TasksTable.vue').default);
 Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
 Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
+Vue.component('new-task-modal', require('./components/tasks/NewTaskModal.vue').default);
+Vue.component('navbar', require('./components/Navbar.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
