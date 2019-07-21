@@ -38,7 +38,7 @@
                             <div
                                 class="text-sm tracking-tight text-indigo-900 mb-2 border-2 border-gray-400 px-6 py-4 rounded"
                                 @click="choose(plan)"
-                                :class="{ 'indie-border': clicked(plan.id) }"
+                                :class="{ 'indie-border' : clicked(plan.id) }"
                             >
                                 <div class="mb-1">
                                     <div class="text-lg font-light flex items-center">

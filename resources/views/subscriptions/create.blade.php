@@ -3,11 +3,9 @@
 @section('content')
     <div>
         <div>
-				<sign-up :plans="{{ $plans }}"></sign-up>
+			<sign-up-form :plans="{{ $plans }}"></sign-up-form>
         </div>
 	</div>
-
-	
 @endsection
 
 @push('beforeScripts')

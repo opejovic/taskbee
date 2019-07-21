@@ -45,7 +45,7 @@
 		@guest
 		<div>
 			<a href="{{ route('login') }}" class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
-				{{ __('Login') }}
+				{{ __('Sign in') }}
 			</a>
 			<a href="{{ route('signup') }}"
 				class="inline-block text-sm px-4 py-2 leading-none border rounded text-indigo-800 border-indigo-700 hover:border-transparent hover:text-white hover:bg-indigo-900 mt-4 lg:mt-0">
