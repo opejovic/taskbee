@@ -3322,12 +3322,11 @@ __webpack_require__.r(__webpack_exports__);
   props: ["task"],
   data: function data() {
     return {
-      statuses: ["Planned", "In progress", "Waiting", "Testing", "Done"],
       currentStatus: this.task.status
     };
   },
   computed: {
-    statusez: function statusez() {
+    statuses: function statuses() {
       var arr = ["Planned", "In progress", "Waiting", "Testing", "Done"];
 
       for (var i = 0; i < arr.length; i++) {
@@ -3500,9 +3499,9 @@ __webpack_require__.r(__webpack_exports__);
         title: "Are you sure?",
         text: "You won't be able to revert this.",
         type: "warning",
-        showCancelButton: true,
+        showCancelButton: false,
         confirmButtonColor: "#434190",
-        cancelButtonColor: "#db3236",
+        cancelButtonColor: "#a0aec0",
         confirmButtonText: "Yes, delete it."
       }).then(function (result) {
         if (result.value) {
@@ -61398,7 +61397,7 @@ var render = function() {
             [
               _c("i", {
                 staticClass: "material-icons",
-                staticStyle: { "font-size": "1em" },
+                staticStyle: { "font-size": "1.3em" },
                 domProps: { innerHTML: _vm._s(_vm.hasNotifications) }
               })
             ]
@@ -61533,8 +61532,7 @@ var render = function() {
                 _c(
                   "div",
                   {
-                    staticClass:
-                      "text-xs text-indigo-900 text-right align-middle"
+                    staticClass: "text-xs text-gray-700 text-right align-middle"
                   },
                   [
                     _c(
@@ -61563,7 +61561,7 @@ var render = function() {
                     "div",
                     {
                       staticClass:
-                        "text-lg uppercase tracking-tight text-indigo-900",
+                        "text-lg uppercase tracking-tight text-gray-700",
                       attrs: { id: "addTaskModalLabel" }
                     },
                     [_vm._v("\n\t\t\t\t\t\tAdd new task\n\t\t\t\t\t")]
@@ -61588,7 +61586,7 @@ var render = function() {
                             "p",
                             {
                               staticClass:
-                                "text-xs tracking-tight text-indigo-900"
+                                "text-xs tracking-tight text-gray-700"
                             },
                             [
                               _vm._v(
@@ -61607,7 +61605,7 @@ var render = function() {
                               }
                             ],
                             staticClass:
-                              "appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:border-indigo-600 focus:bg-white",
+                              "appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white",
                             class: _vm.form.errors.has("name")
                               ? " border-red-700 "
                               : "",
@@ -61650,7 +61648,7 @@ var render = function() {
                             "p",
                             {
                               staticClass:
-                                "text-xs tracking-tight text-indigo-900",
+                                "text-xs tracking-tight text-gray-700",
                               attrs: { for: "start_date" }
                             },
                             [
@@ -61673,7 +61671,7 @@ var render = function() {
                                   }
                                 ],
                                 staticClass:
-                                  "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600",
+                                  "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                                 class: _vm.form.errors.has("user_responsible")
                                   ? "border-red-700"
                                   : "",
@@ -61772,7 +61770,7 @@ var render = function() {
                             "p",
                             {
                               staticClass:
-                                "text-xs tracking-tight text-indigo-900"
+                                "text-xs tracking-tight text-gray-700"
                             },
                             [
                               _vm._v(
@@ -61791,7 +61789,7 @@ var render = function() {
                               }
                             ],
                             staticClass:
-                              "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600",
+                              "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                             class: _vm.form.errors.has("start_date")
                               ? " is-invalid"
                               : "",
@@ -61845,7 +61843,7 @@ var render = function() {
                             "p",
                             {
                               staticClass:
-                                "text-xs tracking-tight text-indigo-900"
+                                "text-xs tracking-tight text-gray-700"
                             },
                             [
                               _vm._v(
@@ -61864,7 +61862,7 @@ var render = function() {
                               }
                             ],
                             staticClass:
-                              "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600",
+                              "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                             class: _vm.form.errors.has("finish_date")
                               ? " is-invalid"
                               : "",
@@ -61920,7 +61918,7 @@ var render = function() {
                             "p",
                             {
                               staticClass:
-                                "text-xs tracking-tight text-indigo-900"
+                                "text-xs tracking-tight text-gray-700"
                             },
                             [
                               _vm._v(
@@ -61942,7 +61940,7 @@ var render = function() {
                                   }
                                 ],
                                 staticClass:
-                                  "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600",
+                                  "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                                 class: _vm.form.errors.has("status")
                                   ? "border-red-700"
                                   : "",
@@ -62042,8 +62040,7 @@ var render = function() {
                         _c(
                           "p",
                           {
-                            staticClass:
-                              "text-xs tracking-tight text-indigo-900"
+                            staticClass: "text-xs tracking-tight text-gray-700"
                           },
                           [
                             _vm._v(
@@ -62226,7 +62223,7 @@ var render = function() {
             domProps: { textContent: _vm._s(_vm.currentStatus) }
           }),
           _vm._v(" "),
-          _vm._l(_vm.statusez, function(taskStatus) {
+          _vm._l(_vm.statuses, function(taskStatus) {
             return _c("option", {
               key: taskStatus.id,
               domProps: { textContent: _vm._s(taskStatus) }
@@ -62296,7 +62293,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "w-full mx-auto h-full items-center block text-center mt-64 py-16 text-gray-600 text-normal font-semibold uppercase"
+                "w-full mx-auto h-full items-center block text-center py-16 text-gray-600 text-xl"
             },
             [_vm._v("You have not assigned any tasks yet.")]
           )

@@ -10,18 +10,15 @@ class Plan extends Model
 	 * Class constants.
 	 *
 	 */
-	const BASIC               = 'Basic Monthly';
-	const BASIC_PRICE         = 580; // per user
-	const BASIC_MEMBERS_LIMIT = 5;
-
+	const BASIC               	 = 'Basic Monthly';
 	const STANDARD               = 'Standard Monthly';
+	const PREMIUM                = 'Premium Monthly';
+	const BASIC_PRICE         	 = 580; // per user
 	const STANDARD_PRICE         = 390;
+	const PREMIUM_PRICE          = 295;
+	const BASIC_MEMBERS_LIMIT 	 = 5;
 	const STANDARD_MEMBERS_LIMIT = 10;
-
-	const PREMIUM               = 'Premium Monthly';
-	const PREMIUM_PRICE         = 295;
-	const PREMIUM_MEMBERS_LIMIT = 20;
-
+	const PREMIUM_MEMBERS_LIMIT  = 20;
 
 	/**
 	 * Attributes that are not mass-assignable.

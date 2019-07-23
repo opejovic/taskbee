@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="items.length == 0" class="w-full mx-auto h-full items-center block text-center mt-64 py-16 text-gray-600 text-normal font-semibold uppercase">You have not assigned any tasks yet.</div>
+		<div v-if="items.length == 0" class="w-full mx-auto h-full items-center block text-center py-16 text-gray-600 text-xl">You have not assigned any tasks yet.</div>
 
 		<div v-for="(tasks, status) in items" :key="tasks.id">
 			<h4 class="text-center text-gray-700 text-sm border-b mb-5 mt-5 uppercase">
@@ -86,9 +86,9 @@
 					title: "Are you sure?",
 					text: "You won't be able to revert this.",
 					type: "warning",
-					showCancelButton: true,
+					showCancelButton: false,
 					confirmButtonColor: "#434190",
-					cancelButtonColor: "#db3236",
+					cancelButtonColor: "#a0aec0",
 					confirmButtonText: "Yes, delete it."
 				}).then(result => {
 					if (result.value) {

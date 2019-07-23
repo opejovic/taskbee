@@ -11,7 +11,7 @@
 				>
 				</option>
 				<option
-					v-for="taskStatus in statusez"
+					v-for="taskStatus in statuses"
 					:key="taskStatus.id"
 					v-text="taskStatus"
 				>
@@ -39,13 +39,12 @@
 		props: ["task"],
 		data() {
 			return {
-				statuses: ["Planned", "In progress", "Waiting", "Testing", "Done"],
 				currentStatus: this.task.status,
 			};
 		},
 
 		computed: {
-			statusez() {
+			statuses() {
 			var arr = ["Planned", "In progress", "Waiting", "Testing", "Done"];
 
 				for( var i = 0; i < arr.length; i++){ 

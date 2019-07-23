@@ -16,14 +16,14 @@
 		>
 			<div class="px-8 py-8 h-full w-full" role="document">
 				<div class="w-full mx-auto px-3">
-				<div class="text-xs text-indigo-900 text-right align-middle">
+				<div class="text-xs text-gray-700 text-right align-middle">
 						<button type="button" @click="hide" class="close">
 							<span aria-hidden="true" class="text-lg">&times;</span>
 						</button>
 					</div>
 					<div class="text-center mb-5 -mt-5">
 						<div
-							class="text-lg uppercase tracking-tight text-indigo-900"
+							class="text-lg uppercase tracking-tight text-gray-700"
 							id="addTaskModalLabel"
 						>
 							Add new task
@@ -34,13 +34,13 @@
 							<div class=" -mx-3 mb-3">
 								<div class="w-full md:w-3/3 px-3">
 									<p
-										class="text-xs tracking-tight text-indigo-900"
+										class="text-xs tracking-tight text-gray-700"
 									>
 										What is the task?
 									</p>
 									<input
 										type="text"
-										class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:border-indigo-600 focus:bg-white"
+										class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
 										:class="
 											form.errors.has('name')
 												? ' border-red-700 '
@@ -64,7 +64,7 @@
 							<div class=" -mx-3 mb-3">
 								<div class="w-full md:w-3/3 px-3">
 									<p
-										class="text-xs tracking-tight text-indigo-900"
+										class="text-xs tracking-tight text-gray-700"
 										for="start_date"
 									>
 										Who has to complete this task?
@@ -77,7 +77,7 @@
 													'user_responsible'
 												)
 											"
-											class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600"
+											class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white"
 											:class="
 												form.errors.has(
 													'user_responsible'
@@ -124,12 +124,12 @@
 							<div class="flex w-full mb-3">
 								<div class="flex-1 mr-1">
 									<p
-										class="text-xs tracking-tight text-indigo-900"
+										class="text-xs tracking-tight text-gray-700"
 									>
 										When is the start date of the task?
 									</p>
 									<input
-										class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600"
+										class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white"
 										type="date"
 										name="start_date"
 										:class="
@@ -159,12 +159,12 @@
 
 								<div class="flex-1 ml-1">
 									<p
-										class="text-xs tracking-tight text-indigo-900"
+										class="text-xs tracking-tight text-gray-700"
 									>
 										When should it be done?
 									</p>
 									<input
-										class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600"
+										class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white"
 										type="date"
 										name="finish_date"
 										:class="
@@ -198,7 +198,7 @@
 							<div class=" -mx-3 mb-3">
 								<div class="w-full md:w-3/3 px-3">
 									<p
-										class="text-xs tracking-tight text-indigo-900"
+										class="text-xs tracking-tight text-gray-700"
 									>
 										What is the status of the task?
 									</p>
@@ -208,7 +208,7 @@
 											name="status"
 											v-model="form.status"
 											@click="form.errors.clear('status')"
-											class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-indigo-600"
+											class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white"
 											:class="
 												form.errors.has('status')
 													? 'border-red-700'
@@ -253,7 +253,7 @@
 
 							<div class="py-4">
 								<p
-									class="text-xs tracking-tight text-indigo-900"
+									class="text-xs tracking-tight text-gray-700"
 								>
 									Member responsible will be notified via
 									email.

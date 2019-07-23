@@ -17,7 +17,7 @@
 				@if (auth()->user()->workspace_id !== null)
 				<task-filter-dropdown class=""></task-filter-dropdown>
 
-				<new-task-modal class="ml-auto mr-auto" :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
+				<new-task-modal class="ml-auto" :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
 				@endif
 			@endauth
 
@@ -45,13 +45,13 @@
 		</div>
 	</div>
 	@else
-	<user-notifications class="-mb-2" :user="{{ Auth::user() }}"></user-notifications>
+	<user-notifications class="-mb-2 ml-auto" :user="{{ Auth::user() }}"></user-notifications>
 		<div class="flex items-center">
 			<img
-			class="object-contain -mr-12"
+			class="object-contain -mr-12 -mb-2 -mt-2"
 			src="{{ Auth::user()->avatar_path }}"
-			width="30px"
-			height="30px"
+			width="35px"
+			height="35px"
 			alt="avatar"
 			style="border-radius: 50%;"
 			/>

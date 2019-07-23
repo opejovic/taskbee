@@ -7,7 +7,7 @@
 					><i
 					v-html="hasNotifications"
 					class="material-icons"
-					style="font-size: 1em;"
+					style="font-size: 1.3em;"
 				></i></span
 				>
 			</span>

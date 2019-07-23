@@ -1,37 +1,30 @@
-@extends('layouts.app')
+@extends('layouts.app') @section('content')
+    <div class=" -mx-3 mb-3">
+        <div class="w-full md:w-3/3 px-3">
+            <p class="text-xs tracking-tight text-indigo-900">
+                What is the task?
+            </p>
+            <input
+                type="text"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:border-indigo-600 focus:bg-white"
+                name="name"
+                id="name"
+                required
+            />
+        </div>
+    </div>
 
-@section('content')
-<table class="container w-full items-center mx-auto text-left">
-    <thead class="border-b-2 border-gray-300">
-        <tr class="text-gray-600 text-xs uppercase">
-            <th class="py-4 font-normal">Task</th>
-            <th class="py-4 font-normal">Creator</th>
-            <th class="py-4 font-normal">Person responsible</th>
-            <th class="py-4 font-normal">Status</th>
-            <th class="py-4 font-normal">Start</th>
-            <th class="py-4 font-normal">End</th>
-            <th class="font-normal"></th>
-		</tr>
-	</thead>
-    <tbody class="text-left">
-        <!-- <tr v-for="task in tasks" :key="task.id"> -->
-        <tr class="text-xs uppercase border-b">
-            <td class="py-4 font-normal text-gray-700">Task name</td>
-            <td class="py-4 font-normal text-gray-700">task.creator.full_name</td>
-            <td class="py-4 font-normal text-gray-700">task.assignee.full_name</td>
-            <td class="py-4 font-normal text-gray-700">task status vue comp</td>
-            <!-- <task-status :task="task" @task-updated="refresh"></task-status> -->
-            <td class="py-4 font-normal text-gray-700">task.start_date</td>
-            <td class="py-4 font-normal text-gray-700">task.finish_date</td>
-            <td
-                style="cursor: pointer"
-                @click="deleteTask(task)"
-                data-toggle="tooltip"
-                data-placement="right"
+    <div class="py-4">
+        <p class="text-xs tracking-tight text-indigo-900">
+            Member responsible will be notified via email.
+        </p>
+        <div class="flex w-full text-right">
+            <button
+                type="submit"
+                class="flex-1 block uppercase mx-auto shadow  bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
             >
-                <i class="material-icons icon">delete</i>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                Submit
+            </button>
+        </div>
+    </div>
 @endsection
