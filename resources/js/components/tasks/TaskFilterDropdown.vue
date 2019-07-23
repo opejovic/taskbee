@@ -1,5 +1,5 @@
 <template>
-    <span class="dropdown mt-1">
+    <span class="dropdown ml-6 -mr-6">
         <span
             class="dropdown__header"
             @click="toggleDropdown($event)"
@@ -76,7 +76,6 @@
         &__header {
             cursor: pointer;
             padding-left: 10px;
-            padding-right: 50px;
             position: relative;
             text-overflow: ellipsis;
             i.fa {

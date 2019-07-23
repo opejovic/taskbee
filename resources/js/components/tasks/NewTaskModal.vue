@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<button
-			class="block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 -mt-2 -mb-2 px-10 rounded"
+			class="flex items-center justify-center block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 -mt-2 -mb-2 px-20 rounded"
 			@click="showModal"
 		>
-			<i class="material-icons add align-self-center">add</i>
-			Add task
+			<i class="material-icons add">add</i>
+			<p>Add task</p>
 		</button>
 
 		<modal
@@ -15,7 +15,6 @@
 			id="addTaskModal"
 		>
 			<div class="px-8 py-8 h-full w-full" role="document">
-					
 				<div class="w-full mx-auto px-3">
 				<div class="text-xs text-indigo-900 text-right align-middle">
 						<button type="button" @click="hide" class="close">
@@ -51,6 +50,7 @@
 										id="name"
 										v-model="form.name"
 										@keydown="form.errors.clear('name')"
+										required
 									/>
 
 									<p
@@ -306,7 +306,8 @@
 						// Passing a task to the emited event.
 						this.form.reset();
 						window.events.$emit("task-added", response);
-						$("#addTaskModal").modal("hide");
+						// Hide the 
+						this.$modal.hide("new-task-modal");
 
 						// flash a message to the user
 						this.$toasted.show("Task created!");
@@ -328,7 +329,7 @@
 <style>
 	.add {
 		vertical-align: middle;
-		font-size: 20px;
+		font-size: 1em;
 	}
 
 	.big-task {

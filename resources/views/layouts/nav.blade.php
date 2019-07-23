@@ -1,5 +1,5 @@
 <nav class="flex items-center justify-between shadow flex-wrap bg-gray-100 p-5">
-	<div class="flex items-center flex-shrink-0 text-indigo-900 mr-6 ml-4">
+	<div class="flex items-center flex-shrink-0 text-indigo-900 ml-4">
 		<span class="font-semibold text-xl tracking-tight"><a
 				href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a></span>
 	</div>
@@ -12,12 +12,10 @@
 			</svg>
 		</button>
 	</div>
-	<div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-
-		<div class="text-sm flex lg:flex-grow">
+	<div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto items-center justify-center text-sm">
 			@auth
 				@if (auth()->user()->workspace_id !== null)
-				<task-filter-dropdown></task-filter-dropdown>
+				<task-filter-dropdown class=""></task-filter-dropdown>
 
 				<new-task-modal class="ml-auto mr-auto" :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
 				@endif
@@ -34,7 +32,6 @@
 			</a>
 			@endguest
 
-		</div>
 		@guest
 		<div>
 			<a href="{{ route('login') }}"

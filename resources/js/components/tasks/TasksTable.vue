@@ -1,38 +1,36 @@
 <template>
 	<div>
-		<h3 v-if="items.length == 0">No tasks created yet.</h3>
+		<div v-if="items.length == 0" class="w-full mx-auto h-full items-center block text-center mt-64 py-16 text-gray-600 text-normal font-semibold uppercase">You have not assigned any tasks yet.</div>
 
 		<div v-for="(tasks, status) in items" :key="tasks.id">
-			<h4 class="text-center">
+			<h4 class="text-center text-gray-700 text-sm border-b mb-5 mt-5 uppercase">
 				<strong>{{ status }}</strong>
 			</h4>
-			<table class="table col-md-16 mb-5 table-responsive-md">
-				<thead>
-					<tr>
-						<th scope="col text-left" style="width: 30%">Task</th>
-						<th scope="col text-center" style="width: 15%">Creator</th>
-						<th scope="col text-center" style="width: 15%">Person responsible</th>
-						<th scope="col text-center" style="width: 10%">Status</th>
-						<th scope="col text-center">Start date</th>
-						<th scope="col text-center">Finish date</th>
-						<th scope="col text-center" style="width: 1%"></th>
+			<table class="container w-full items-center mx-auto text-center mb-20">
+				<thead class="border-b-2 border-gray-300">
+					<tr class="text-gray-600 text-xs uppercase">
+						<th class="py-4 font-normal text-left" style="width: 30%">Task</th>
+						<th class="py-4 font-normal" style="width: 15%">Creator</th>
+						<th class="py-4 font-normal" style="width: 15%">Person responsible</th>
+						<th class="py-4 font-normal" style="width: 10%">Status</th>
+						<th class="py-4 font-normal">Start date</th>
+						<th class="py-4 font-normal">Finish date</th>
+						<th class="py-4 font-normal" style="width: 1%"></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="task in tasks" :key="task.id">
-						<td v-text="task.name"></td>
-						<td v-text="task.creator.full_name"></td>
-						<td v-text="task.assignee.full_name"></td>
-						<task-status :task="task" @task-updated="refresh"></task-status>
-						<td v-text="formattedDate(task.start_date)"></td>
-						<td v-text="formattedDate(task.finish_date)"></td>
-						<td
+					<tr class="text-xs border-b" v-for="task in tasks" :key="task.id">
+						<td  class="text-gray-700 py-4 text-left" v-text="task.name"></td>
+						<td  class="text-gray-700 py-4 text-center" v-text="task.creator.full_name"></td>
+						<td  class="text-gray-700 py-4 text-center" v-text="task.assignee.full_name"></td>
+						<task-status class="text-gray-700 text-center"  :task="task" @task-updated="refresh"></task-status>
+						<td  class="text-gray-700 py-4 text-center" v-text="formattedDate(task.start_date)"></td>
+						<td  class="text-gray-700 py-4 text-center" v-text="formattedDate(task.finish_date)"></td>
+						<td class="text-gray-700 py-4 text-center" 
 							id="delete"
 							style="cursor: pointer"
 							@click="deleteTask(task)"
-							data-toggle="tooltip"
-							data-placement="right"
-							title="Delete the task"
+							title="Delete"
 						>
 							<i class="material-icons icon">delete</i>
 						</td>
@@ -47,7 +45,6 @@
 	import moment from "moment";
 	import TaskStatus from "./TaskStatus.vue";
 	import Swal from "sweetalert2";
-	import VTooltip from "v-tooltip";
 
 	export default {
 		props: ["workspace", "tasks", "filters"],
@@ -115,10 +112,6 @@
 				this.refresh();
 			});
 		},
-
-		mounted() {
-			$("#delete").tooltip("enable");
-		}
 	};
 </script>
 

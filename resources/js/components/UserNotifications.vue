@@ -3,7 +3,7 @@
 		<div class="dropdown">
 			<span class="dropdown__header" @click="toggleDropdown($event)">
 				<span
-					class="mt-4 text-indigo-800 hover:text-indigo-500 -mr-8"
+					class="mt-4 text-indigo-800 hover:text-indigo-500"
 					><i
 					v-html="hasNotifications"
 					class="material-icons"
@@ -12,7 +12,7 @@
 				>
 			</span>
 
-			<div class="dropdown__content bg-gray-200 rounded shadow border fixed mr-32 -ml-64 text-xs w-auto h-auto">
+			<div class="dropdown__content bg-gray-200 rounded shadow border fixed text-xs w-auto h-auto -ml-40 mr-16">
 				<ul>
 					<div v-if="notifications.length">
 						<li class="text-left border-b-2 border-blue-900">
@@ -137,8 +137,8 @@
 	.dropdown {
 		&__header {
 			cursor: pointer;
-			padding-left: 10px;
-			padding-right: 50px;
+			padding-left: 20px;
+			padding-right: 20px;
 			position: relative;
 			text-overflow: ellipsis;
 			&.is-active {
