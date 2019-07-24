@@ -104,7 +104,6 @@
 					<div class="w-full mx-auto px-3">
 						<form
 							@submit.prevent="register"
-							@keydown="form.errors.clear($event.target.name)"
 						>
 							<div class=" -mx-3 mb-1">
 								<div class="w-full md:w-3/3 px-3">
@@ -113,7 +112,7 @@
 										class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 										:class="
 											form.errors.has('first_name')
-												? ' border-red-700'
+												? ' border-red-400'
 												: ''
 										"
 										name="first_name"
@@ -121,10 +120,11 @@
 										placeholder="First name"
 										v-model="form.first_name"
 										:disabled="processing"
+										@keydown="form.errors.clear('first_name')"
 									/>
 
 									<p
-										class="text-red-600 text-xs"
+										class="text-red-600 text-xs -mt-2"
 										v-if="form.errors.has('first_name')"
 										v-text="form.errors.get('first_name')"
 									></p>
@@ -137,7 +137,7 @@
 										class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 										:class="
 											form.errors.has('last_name')
-												? ' border-red-700'
+												? ' border-red-400'
 												: ''
 										"
 										name="last_name"
@@ -145,10 +145,11 @@
 										placeholder="Last name"
 										v-model="form.last_name"
 										:disabled="processing"
+										@keydown="form.errors.clear('last_name')"
 									/>
 
 									<p
-										class="text-red-600 text-xs"
+										class="text-red-600 text-xs -mt-2"
 										v-if="form.errors.has('last_name')"
 										v-text="form.errors.get('last_name')"
 									></p>
@@ -161,7 +162,7 @@
 										class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 										:class="
 											form.errors.has('email')
-												? ' border-red-700'
+												? ' border-red-400'
 												: ''
 										"
 										name="email"
@@ -169,10 +170,11 @@
 										placeholder="Email"
 										v-model="form.email"
 										:disabled="processing"
+										@keydown="form.errors.clear('email')"
 									/>
 
 									<p
-										class="text-red-600 text-xs"
+										class="text-red-600 text-xs -mt-2"
 										v-if="form.errors.has('email')"
 										v-text="form.errors.get('email')"
 									></p>
@@ -183,33 +185,13 @@
 									<input
 										type="email"
 										class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-										:class="
-											form.errors.has(
-												'email_confirmation'
-											)
-												? ' border-red-700'
-												: ''
-										"
 										name="email_confirmation"
 										id="email_confirmation"
 										placeholder="Confirm Email"
 										v-model="form.email_confirmation"
 										:disabled="processing"
+										@keydown="form.errors.clear('email')"
 									/>
-
-									<p
-										class="text-red-600 text-xs"
-										v-if="
-											form.errors.has(
-												'email_confirmation'
-											)
-										"
-										v-text="
-											form.errors.get(
-												'email_confirmation'
-											)
-										"
-									></p>
 								</div>
 							</div>
 							<div class=" -mx-3 mb-1">
@@ -219,7 +201,7 @@
 										class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 										:class="
 											form.errors.has('password')
-												? ' border-red-700'
+												? ' border-red-400'
 												: ''
 										"
 										name="password"
@@ -227,10 +209,11 @@
 										placeholder="Password"
 										v-model="form.password"
 										:disabled="processing"
+										@keydown="form.errors.clear('password')"
 									/>
 
 									<p
-										class="text-red-600 text-xs"
+										class="text-red-600 text-xs -mt-2"
 										v-if="form.errors.has('password')"
 										v-text="form.errors.get('password')"
 									></p>
@@ -245,7 +228,7 @@
 											form.errors.has(
 												'password_confirmation'
 											)
-												? ' border-red-700'
+												? ' border-red-400'
 												: ''
 										"
 										name="password_confirmation"
@@ -253,6 +236,7 @@
 										placeholder="Confirm password"
 										v-model="form.password_confirmation"
 										:disabled="processing"
+										@keydown="form.errors.clear('password')"
 									/>
 
 									<p

@@ -1,7 +1,7 @@
 @extends('layouts.app') @section('content')
 <div class="max-w-full">
-                   
     <div class="mt-8 -mb-16 text-right mr-32">
+		
          <a href="/signup" class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 			Sign up
 		</a>
@@ -82,6 +82,6 @@
                 </div>
             </form>
         </div>
-    </div>
+	</div>
 </div>
 @endsection

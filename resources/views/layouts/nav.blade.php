@@ -12,28 +12,35 @@
 			</svg>
 		</button>
 	</div>
+	@auth
 	<div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto items-center justify-center text-sm">
-			@auth
-				@if (auth()->user()->workspace_id !== null)
-				<task-filter-dropdown class=""></task-filter-dropdown>
+		@if (auth()->user()->workspace_id !== null)
+		<task-filter-dropdown class=""></task-filter-dropdown>
 
-				<new-task-modal class="ml-auto" :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
-				@endif
-			@endauth
+		<new-task-modal class="ml-auto" :workspace="{{ auth()->user()->workspace }}"></new-task-modal>
+		@endif
+		<user-notifications class="-mb-2 ml-auto" :user="{{ Auth::user() }}"></user-notifications>
+		<div class="flex items-center">
+			<img class="object-contain -mr-12 -mb-2 -mt-2" src="{{ Auth::user()->avatar_path }}" width="35px"
+				height="35px" alt="avatar" style="border-radius: 50%;" />
+			<user-menu-dropdown class="text-right"></user-menu-dropdown>
+		</div>
+	</div>
+	@endauth
 
-			@guest
+	@guest
+	<div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+		<div class="text-sm lg:flex-grow">
 			<a href="#responsive-header"
-				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
+				class="block ml-6 mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 				Features
 			</a>
 			<a href="#responsive-header"
-				class="block mt-4 lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
+				class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 				Pricing
 			</a>
-			@endguest
-
-		@guest
-		<div>
+		</div>
+		<div class="text-sm mr-6">
 			<a href="{{ route('login') }}"
 				class="block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4">
 				{{ __('Sign in') }}
@@ -44,19 +51,5 @@
 			</a>
 		</div>
 	</div>
-	@else
-	<user-notifications class="-mb-2 ml-auto" :user="{{ Auth::user() }}"></user-notifications>
-		<div class="flex items-center">
-			<img
-			class="object-contain -mr-12 -mb-2 -mt-2"
-			src="{{ Auth::user()->avatar_path }}"
-			width="35px"
-			height="35px"
-			alt="avatar"
-			style="border-radius: 50%;"
-			/>
-			<user-menu-dropdown class="text-right"></user-menu-dropdown>
-		</div>
 	@endguest
-	</ul>
 </nav>
