@@ -22,7 +22,8 @@ class ViewWorkspaceMembersTest extends TestCase
         $memberB = factory(User::class)->create();
         $otherWorkspaceMember = factory(User::class)->create();
         $workspace->addMember($memberA);
-        $workspace->addMember($memberB);
+		$workspace->addMember($memberB);
+        $workspace->addMember($user);
 
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}/members");
 
