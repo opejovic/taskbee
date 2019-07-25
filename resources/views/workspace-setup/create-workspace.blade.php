@@ -1,15 +1,17 @@
-@extends('layouts.app') @section('content')
+@extends('layouts.app') 
+
+@section('content')
 <div
     class="flex items-center justify-center text-center mx-auto mt-5 border max-w-lg px-10 py-10 w-full shadow rounded-sm"
 >
     <div class="w-full">
-        <div class="col-md-8">
-            <div class="card">
+        <div>
+            <div>
                 <div class="text-xl text-gray-800">
                     Create your workspace, {{ auth()->user()->first_name }}.
                 </div>
 
-                <div class="card-body">
+                <div>
                     <form method="POST" action="{{ route('store-workspace') }}">
                         @csrf
                         <input
@@ -21,7 +23,7 @@
                         <div class="form-group">
                             <input
                                 type="text"
-                                class="mt-10 appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                class="mt-10 appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-4 px-10 mb-3 leading-tight focus:outline-none focus:bg-white"
                                 name="name"
                                 id="name"
                                 placeholder="Choose your workspace name"
