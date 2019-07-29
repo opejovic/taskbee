@@ -2487,46 +2487,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["plans"],
   data: function data() {
@@ -60653,145 +60613,136 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass:
-        "flex h-screen w-full mx-auto h-full items-center flex-wrap block max-w-6xl"
-    },
-    [
-      _c("div", { staticClass: "mx-auto w-full" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex w-full mx-auto flex-row" }, [
-          _c(
-            "div",
-            { staticClass: "w-full mx-auto px-3" },
-            [
-              _vm._m(2),
-              _vm._v(" "),
-              _vm._l(_vm.plans, function(plan) {
-                return _c(
-                  "div",
-                  { key: plan.id, staticStyle: { cursor: "pointer" } },
-                  [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "h-full",
-                        class: { unclickable: _vm.processing }
-                      },
-                      [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "text-sm tracking-tight text-indigo-900 mb-2 border-2 border-gray-400 px-6 py-4 rounded",
-                            class: { "indie-border": _vm.clicked(plan.id) },
-                            on: {
-                              click: function($event) {
-                                return _vm.choose(plan)
-                              }
+  return _c("div", { staticClass: "flex w-full mx-auto items-center" }, [
+    _c("div", { staticClass: "mx-auto w-full" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex flex-wrap mx-auto" }, [
+        _c(
+          "div",
+          { staticClass: "xl:w-1/2 lg:w-1/2 md:w-1/2 sm:w-full mx-auto px-3" },
+          [
+            _vm._m(2),
+            _vm._v(" "),
+            _vm._l(_vm.plans, function(plan) {
+              return _c(
+                "div",
+                { key: plan.id, staticStyle: { cursor: "pointer" } },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "h-full",
+                      class: { unclickable: _vm.processing }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-sm tracking-tight text-indigo-900 mb-2 border-2 border-gray-400 px-6 py-4 rounded",
+                          class: { "indie-border": _vm.clicked(plan.id) },
+                          on: {
+                            click: function($event) {
+                              return _vm.choose(plan)
                             }
-                          },
-                          [
-                            _c("div", { staticClass: "mb-1" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-lg font-light flex items-center"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n\t\t\t\t\t\t\t\t\t" +
-                                      _vm._s(plan.name) +
-                                      "\n\t\t\t\t\t\t\t\t\t"
-                                  ),
-                                  _vm.clicked(plan.id)
-                                    ? _c(
-                                        "i",
-                                        {
-                                          staticClass:
-                                            "material-icons indie-text ml-auto"
-                                        },
-                                        [_vm._v("check_circle_outline")]
-                                      )
-                                    : _vm._e()
-                                ]
-                              )
-                            ]),
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "text-lg font-light flex items-center"
+                              },
+                              [
+                                _vm._v(
+                                  "\n                  " +
+                                    _vm._s(plan.name) +
+                                    "\n                  "
+                                ),
+                                _vm.clicked(plan.id)
+                                  ? _c(
+                                      "i",
+                                      {
+                                        staticClass:
+                                          "material-icons indie-text ml-auto"
+                                      },
+                                      [_vm._v("check_circle_outline")]
+                                    )
+                                  : _vm._e()
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "flex items-center" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "text-gray-700 mr-auto tracking-tighter"
+                              },
+                              [
+                                _c(
+                                  "span",
+                                  { staticClass: "font-semibold text-2xl" },
+                                  [
+                                    _vm._v(
+                                      "\n                    €\n                    " +
+                                        _vm._s(
+                                          (plan.amount * plan.members_limit) /
+                                            100
+                                        )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "span",
+                                  { staticClass: "text-xl font-light" },
+                                  [
+                                    _vm._v(
+                                      "\n                    / month\n                  "
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
                             _vm._v(" "),
-                            _c("div", { staticClass: "flex items-center" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "text-gray-700 mr-auto tracking-tighter"
-                                },
-                                [
-                                  _c(
-                                    "span",
-                                    { staticClass: "font-semibold text-2xl" },
-                                    [
-                                      _vm._v(
-                                        "\n\t\t\t\t\t\t\t\t\t\t€\n\t\t\t\t\t\t\t\t\t\t" +
-                                          _vm._s(
-                                            (plan.amount * plan.members_limit) /
-                                              100
-                                          )
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    { staticClass: "text-xl font-light" },
-                                    [
-                                      _vm._v(
-                                        "\n\t\t\t\t\t\t\t\t\t\t/ month\n\t\t\t\t\t\t\t\t\t"
-                                      )
-                                    ]
+                            _c(
+                              "div",
+                              { staticClass: "text-gray-700 text-left w-1/3" },
+                              [
+                                _c("span", { staticClass: "text-sm" }, [
+                                  _vm._v(
+                                    _vm._s(plan.members_limit) +
+                                      " member slots. Unlimited storage,\n                    and more..."
                                   )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass: "text-gray-700 text-left w-1/3"
-                                },
-                                [
-                                  _c(
-                                    "span",
-                                    { staticClass: "text-sm font-light" },
-                                    [
-                                      _vm._v(
-                                        _vm._s(plan.members_limit) +
-                                          " member\n\t\t\t\t\t\t\t\t\t\tslots. Unlimited storage, and\n\t\t\t\t\t\t\t\t\t\tmore..."
-                                      )
-                                    ]
-                                  )
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ]
-                )
-              })
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "w-full mx-auto px-3 h-full" }, [
+                                ])
+                              ]
+                            )
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
+            })
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "xl:w-1/2 lg:w-1/2 md:w-1/2 sm:w-full mx-auto px-3" },
+          [
             _vm._m(3),
             _vm._v(" "),
-            _c("div", { staticClass: "w-full mx-auto px-3" }, [
+            _c("div", { staticClass: "w-full" }, [
               _c(
                 "form",
                 {
@@ -60803,62 +60754,56 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: " -mx-3 mb-1" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.form.first_name,
-                            expression: "form.first_name"
-                          }
-                        ],
-                        staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
-                        class: _vm.form.errors.has("first_name")
-                          ? " border-red-400"
-                          : "",
-                        attrs: {
-                          type: "text",
-                          name: "first_name",
-                          id: "first_name",
-                          placeholder: "First name",
-                          disabled: _vm.processing
+                  _c("div", { staticClass: "w-full" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.first_name,
+                          expression: "form.first_name"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                      class: _vm.form.errors.has("first_name")
+                        ? " border-red-300"
+                        : "border-transparent",
+                      attrs: {
+                        type: "text",
+                        name: "first_name",
+                        id: "first_name",
+                        placeholder: "First name",
+                        disabled: _vm.processing
+                      },
+                      domProps: { value: _vm.form.first_name },
+                      on: {
+                        keydown: function($event) {
+                          return _vm.form.errors.clear("first_name")
                         },
-                        domProps: { value: _vm.form.first_name },
-                        on: {
-                          keydown: function($event) {
-                            return _vm.form.errors.clear("first_name")
-                          },
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.form,
-                              "first_name",
-                              $event.target.value
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "first_name", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.form.errors.has("first_name")
+                      ? _c("p", {
+                          staticClass: "text-red-500 text-xs -mt-2",
+                          domProps: {
+                            textContent: _vm._s(
+                              _vm.form.errors.get("first_name")
                             )
                           }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.form.errors.has("first_name")
-                        ? _c("p", {
-                            staticClass: "text-red-600 text-xs -mt-2",
-                            domProps: {
-                              textContent: _vm._s(
-                                _vm.form.errors.get("first_name")
-                              )
-                            }
-                          })
-                        : _vm._e()
-                    ])
+                        })
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: " -mx-3 mb-1" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+                  _c("div", { staticClass: " mb-1" }, [
+                    _c("div", { staticClass: "w-full" }, [
                       _c("input", {
                         directives: [
                           {
@@ -60869,10 +60814,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
+                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("last_name")
-                          ? " border-red-400"
-                          : "",
+                          ? " border-red-300"
+                          : "border-transparent",
                         attrs: {
                           type: "text",
                           name: "last_name",
@@ -60896,7 +60841,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("last_name")
                         ? _c("p", {
-                            staticClass: "text-red-600 text-xs -mt-2",
+                            staticClass: "text-red-500 text-xs -mt-2",
                             domProps: {
                               textContent: _vm._s(
                                 _vm.form.errors.get("last_name")
@@ -60907,8 +60852,8 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: " -mx-3 mb-1" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+                  _c("div", { staticClass: " mb-1" }, [
+                    _c("div", { staticClass: "w-full" }, [
                       _c("input", {
                         directives: [
                           {
@@ -60919,10 +60864,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
+                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("email")
-                          ? " border-red-400"
-                          : "",
+                          ? " border-red-300"
+                          : "border-transparent",
                         attrs: {
                           type: "email",
                           name: "email",
@@ -60946,7 +60891,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("email")
                         ? _c("p", {
-                            staticClass: "text-red-600 text-xs -mt-2",
+                            staticClass: "text-red-500 text-xs -mt-2",
                             domProps: {
                               textContent: _vm._s(_vm.form.errors.get("email"))
                             }
@@ -60955,8 +60900,8 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: " -mx-3 mb-1" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+                  _c("div", { staticClass: " mb-1" }, [
+                    _c("div", { staticClass: "w-full" }, [
                       _c("input", {
                         directives: [
                           {
@@ -60967,7 +60912,7 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
+                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         attrs: {
                           type: "email",
                           name: "email_confirmation",
@@ -60995,8 +60940,8 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: " -mx-3 mb-1" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+                  _c("div", { staticClass: " mb-1" }, [
+                    _c("div", { staticClass: "w-full" }, [
                       _c("input", {
                         directives: [
                           {
@@ -61007,10 +60952,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
+                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("password")
-                          ? " border-red-400"
-                          : "",
+                          ? " border-red-300"
+                          : "border-transparent",
                         attrs: {
                           type: "password",
                           name: "password",
@@ -61034,7 +60979,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("password")
                         ? _c("p", {
-                            staticClass: "text-red-600 text-xs -mt-2",
+                            staticClass: "text-red-500 text-xs -mt-2",
                             domProps: {
                               textContent: _vm._s(
                                 _vm.form.errors.get("password")
@@ -61045,8 +60990,8 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: " -mx-3 mb-1" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+                  _c("div", { staticClass: " mb-1" }, [
+                    _c("div", { staticClass: "w-full" }, [
                       _c("input", {
                         directives: [
                           {
@@ -61057,10 +61002,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white",
+                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("password_confirmation")
-                          ? " border-red-400"
-                          : "",
+                          ? "border-red-300"
+                          : "border-transparent",
                         attrs: {
                           type: "password",
                           name: "password_confirmation",
@@ -61088,7 +61033,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("password_confirmation")
                         ? _c("p", {
-                            staticClass: "text-red-600 text-xs",
+                            staticClass: "text-red-500 text-xs",
                             domProps: {
                               textContent: _vm._s(
                                 _vm.form.errors.get("password_confirmation")
@@ -61099,13 +61044,13 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: " -mx-3" }, [
-                    _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+                  _c("div", {}, [
+                    _c("div", { staticClass: "w-full" }, [
                       _c(
                         "button",
                         {
                           staticClass:
-                            "block w-full uppercase mx-auto shadow  bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded",
+                            "block w-full uppercase mx-auto shadow border-b-4 border-gray-600 bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded",
                           class: { loader: _vm.processing },
                           attrs: { type: "submit", disabled: _vm.processing }
                         },
@@ -61120,36 +61065,43 @@ var render = function() {
                 ]
               )
             ])
-          ])
-        ])
+          ]
+        )
       ])
-    ]
-  )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-12 -mt-12 px-3" }, [
-      _c("div", { staticClass: "w-full md:w-3/3 flex align" }, [
-        _c(
-          "span",
-          {
-            staticClass:
-              "font-semibold text-xl flex-1 tracking-tight text-indigo-900"
-          },
-          [_c("a", { attrs: { href: "/home" } }, [_vm._v("taskbee.")])]
-        ),
+    return _c("div", { staticClass: "px-3" }, [
+      _c("header", { staticClass: "flex justify-between items-center py-8" }, [
+        _c("a", { staticClass: "flex items-center", attrs: { href: "#" } }, [
+          _c("img", {
+            staticClass: "w-12",
+            attrs: { src: "/img/logo.svg", alt: "Imaginary" }
+          }),
+          _vm._v(" "),
+          _c(
+            "p",
+            {
+              staticClass:
+                "pl-1 font-bold text-xl tracking-tighter text-indigo-900"
+            },
+            [_vm._v("\n            taskbee.\n          ")]
+          )
+        ]),
         _vm._v(" "),
         _c(
           "a",
           {
             staticClass:
-              "block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 mr-4",
+              "block mt-4 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 border-b-2 border-transparent hover:border-indigo-500",
             attrs: { href: "/login" }
           },
-          [_vm._v("\n\t\t\t\t\tSign in\n\t\t\t\t")]
+          [_vm._v("\n          Sign in\n        ")]
         )
       ])
     ])
@@ -61158,14 +61110,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "px-3 mb-12 -mt-8 text-center" }, [
-      _c("div", { staticClass: "w-full md:w-3/3" }, [
+    return _c("div", { staticClass: "px-3 pb-10 text-center" }, [
+      _c("div", { staticClass: "w-full" }, [
         _c(
           "span",
           { staticClass: "font-light text-xl flex-1 text-indigo-900" },
           [
             _vm._v(
-              "Create a workspace for your team, and start assigning\n\t\t\t\t\ttasks today."
+              "Create a workspace for your team, and start assigning tasks\n          today."
             )
           ]
         )
@@ -61176,8 +61128,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: " -mx-3 mb-3 text-center" }, [
-      _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+    return _c("div", { staticClass: "mb-3 text-center" }, [
+      _c("div", { staticClass: "w-full px-3" }, [
         _c(
           "span",
           { staticClass: "text-sm uppercase tracking-tight text-indigo-900" },
@@ -61190,8 +61142,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: " -mx-3 mb-3 text-center" }, [
-      _c("div", { staticClass: "w-full md:w-3/3 px-3" }, [
+    return _c("div", { staticClass: "mb-3 text-center" }, [
+      _c("div", { staticClass: "w-full" }, [
         _c(
           "span",
           { staticClass: "text-sm uppercase tracking-tight text-indigo-900" },

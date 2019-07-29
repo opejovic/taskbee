@@ -24,15 +24,28 @@
 		<!-- Styles -->
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style>
+			.bg-curve {
+				background-image: url("img/bgcurve.svg");
+				background-position-x: center;
+				background-position-y: bottom;
+				background-size: 5153px 200px;
+				background-repeat-x: no-repeat;
+				background-repeat-y: no-repeat;
+				background-attachment: fixed;
+				background-origin: initial;
+				background-clip: initial;
+			}
+		</style>
 	</head>
 
 	<body>
-		<div id="app">
-			@if (! request()->routeIs(['login', 'signup', 'testnav']))
+		<div id="app" class="min-h-screen bg-curve">
+			@if (! request()->routeIs(['login', 'signup']))
 				@include('layouts.nav')
 			@endif
 
-			<main>
+			<main class="container mx-auto px-6">
 				@yield('content')
 			</main>
 		</div>
