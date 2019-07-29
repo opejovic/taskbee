@@ -38,6 +38,8 @@ Artisan::command('generate-plans', function () {
 
 Artisan::command('stripe-webhook', function () {
     
+    $this->info("Generating stripe webhook.. please wait.");
+    
     \Stripe\WebhookEndpoint::create([
         "url" => config('services.ngrok.url') . "/stripe-webhook",
         "enabled_events" => [
@@ -48,6 +50,8 @@ Artisan::command('stripe-webhook', function () {
             "checkout.session.completed",
         ]
     ], ['api_key' => config('services.stripe.secret')]);
+    
+    $this->info("Done!");
 
 })->describe('Generate a stripe webhook.');
 
