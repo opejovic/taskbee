@@ -31,6 +31,6 @@ class SubscriptionPurchasedEmail extends Mailable
     public function build()
     {
         return $this->markdown('emails.subscription-purchased')
-            ->subject("Successful subscription at TaskMonkey!");
+            ->subject("Successful subscription at TaskBee!");
     }
 }

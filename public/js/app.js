@@ -60792,7 +60792,7 @@ var render = function() {
                     _vm._v(" "),
                     _vm.form.errors.has("first_name")
                       ? _c("p", {
-                          staticClass: "text-red-500 text-xs -mt-2",
+                          staticClass: "text-red-500 text-xs -mt-2 text-center",
                           domProps: {
                             textContent: _vm._s(
                               _vm.form.errors.get("first_name")
@@ -60841,7 +60841,8 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("last_name")
                         ? _c("p", {
-                            staticClass: "text-red-500 text-xs -mt-2",
+                            staticClass:
+                              "text-red-500 text-xs -mt-2 text-center",
                             domProps: {
                               textContent: _vm._s(
                                 _vm.form.errors.get("last_name")
@@ -60891,7 +60892,8 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("email")
                         ? _c("p", {
-                            staticClass: "text-red-500 text-xs -mt-2",
+                            staticClass:
+                              "text-red-500 text-xs -mt-2 text-center",
                             domProps: {
                               textContent: _vm._s(_vm.form.errors.get("email"))
                             }
@@ -60912,7 +60914,7 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         attrs: {
                           type: "email",
                           name: "email_confirmation",
@@ -60979,7 +60981,8 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.errors.has("password")
                         ? _c("p", {
-                            staticClass: "text-red-500 text-xs -mt-2",
+                            staticClass:
+                              "text-red-500 text-xs -mt-2 text-center",
                             domProps: {
                               textContent: _vm._s(
                                 _vm.form.errors.get("password")

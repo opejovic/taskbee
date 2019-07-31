@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\WorkspaceSetupAuthorization;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // If authenticated user has subscribed, but has not yet created a workspace, he is redirected to workspace creation page.
+        if ($authorization = WorkspaceSetupAuthorization::whereNull('admin_id')->whereEmail(Auth::user()->email)->first()) {
+            return view('workspace-setup.create-workspace', ['authorization' => $authorization]);
+        };
+
         return view('home');
     }
 }

@@ -31,6 +31,6 @@ class SubscriptionExpiredEmail extends Mailable
     public function build()
     {
         return $this->markdown('emails.subscription-expired')
-            ->subject('Your subscription at TaskMonkey is expired.');
+            ->subject('Your subscription at TaskBee has expired.');
     }
 }

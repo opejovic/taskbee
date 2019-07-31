@@ -103,7 +103,7 @@
                 />
 
                 <p
-                  class="text-red-500 text-xs -mt-2"
+                  class="text-red-500 text-xs -mt-2 text-center"
                   v-if="form.errors.has('first_name')"
                   v-text="form.errors.get('first_name')"
                 ></p>
@@ -125,7 +125,7 @@
                   />
 
                   <p
-                    class="text-red-500 text-xs -mt-2"
+                    class="text-red-500 text-xs -mt-2 text-center"
                     v-if="form.errors.has('last_name')"
                     v-text="form.errors.get('last_name')"
                   ></p>
@@ -146,7 +146,7 @@
                   />
 
                   <p
-                    class="text-red-500 text-xs -mt-2"
+                    class="text-red-500 text-xs -mt-2 text-center"
                     v-if="form.errors.has('email')"
                     v-text="form.errors.get('email')"
                   ></p>
@@ -156,7 +156,7 @@
                 <div class="w-full">
                   <input
                     type="email"
-                    class="shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                    class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                     name="email_confirmation"
                     id="email_confirmation"
                     placeholder="Confirm Email"
@@ -183,7 +183,7 @@
                   />
 
                   <p
-                    class="text-red-500 text-xs -mt-2"
+                    class="text-red-500 text-xs -mt-2 text-center"
                     v-if="form.errors.has('password')"
                     v-text="form.errors.get('password')"
                   ></p>

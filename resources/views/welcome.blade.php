@@ -1,99 +1,35 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-    <title>Laravel</title>
+@section('content')
+<div class="lg:flex flex-wrap md:pb-10 items-center justify-center pt-20 px-10">
+    {{-- left section --}}
+    <div class="xl:w-1/2 lg:w-1/2 md:w-full sm:w-full px-4 mr-5 -ml-5 xl:pt-20 lg:pt-10">
+        <img src="img/team.svg" alt="Team">
+    </div>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-    <!-- Styles -->
-    <style>
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 200;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .full-height {
-            height: 100vh;
-        }
-
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-
-        .position-ref {
-            position: relative;
-        }
-
-        .top-right {
-            position: absolute;
-            right: 10px;
-            top: 18px;
-        }
-
-        .content {
-            text-align: center;
-        }
-
-        .title {
-            font-size: 84px;
-        }
-
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-
-        .m-b-md {
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
-<div class="flex-center position-ref full-height">
-    @if (Route::has('login'))
-        <div class="top-right links">
-            @auth
-                <a href="{{ url('/home') }}">Home</a>
-            @else
-                <a href="{{ route('login') }}">Login</a>
-
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}">Register</a>
-                @endif
-            @endauth
+    {{-- right section --}}
+    <div class="flex-row xl:w-1/2 lg:w-1/2 md:w-full sm:w-full md:mt-10 rounded-lg overflow-hidden shadow bg-purple-800">
+        <div class="border-b border-white pb-5 pt-5 px-4 text-4xl text-white tracking-tight font-semibold text-center">
+            taskbee.
         </div>
-    @endif
-
-    <div class="content">
-        <div class="title m-b-md">
-            Laravel
+        <div class="px-10 pt-5 pb-5 bg-purple-800">
+            <p class="text-white tracking-tight text-4xl font-semibold text-center">
+                Create a workspace for your team, and start assigning tasks today.
+            </p>
+            <p class="text-white tracking-tight text-2xl font-light text-center pt-5">
+                How do you keep track of 30, 40 or 100 team-tasks? It's simple.
+            </p>
         </div>
-
-        <div class="links">
-            <a href="https://laravel.com/docs">Docs</a>
-            <a href="https://laracasts.com">Laracasts</a>
-            <a href="https://laravel-news.com">News</a>
-            <a href="https://blog.laravel.com">Blog</a>
-            <a href="https://nova.laravel.com">Nova</a>
-            <a href="https://forge.laravel.com">Forge</a>
-            <a href="https://github.com/laravel/laravel">GitHub</a>
+        <div class="pb-5 pt-5 flex items-center justify-center border-t border-white bg-gray-300">
+            <a href="{{ route('login') }}"
+                class="px-12 py-3 mx-1 text-purple-800  uppercase rounded border border-purple-800 hover:bg-purple-800 hover:text-white">
+                Sign In
+            </a>
+            <a href="{{ route('signup') }}"
+                class="bg-purple-800 px-12 py-3 text-gray-300 mx-1 text-white border border-purple-800 uppercase rounded hover:bg-purple-900">
+                Sign Up
+            </a>
         </div>
     </div>
 </div>
-</body>
-</html>
+@endsection

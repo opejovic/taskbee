@@ -26,7 +26,7 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<style>
 			.bg-curve {
-				background-image: url("img/bgcurve.svg");
+				background-image: url("img/curve-yellow.svg");
 				background-position-x: center;
 				background-position-y: bottom;
 				background-size: 5153px 200px;
@@ -41,7 +41,7 @@
 
 	<body>
 		<div id="app" class="min-h-screen bg-curve">
-			@if (! request()->routeIs(['login', 'signup']))
+			@if (! request()->routeIs(['login', 'signup', 'welcome']))
 				@include('layouts.nav')
 			@endif
 
