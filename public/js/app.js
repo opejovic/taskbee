@@ -61081,7 +61081,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "px-3" }, [
       _c("header", { staticClass: "flex justify-between items-center py-8" }, [
-        _c("a", { staticClass: "flex items-center", attrs: { href: "#" } }, [
+        _c("a", { staticClass: "flex items-center", attrs: { href: "/" } }, [
           _c("img", {
             staticClass: "w-12",
             attrs: { src: "/img/logo.svg", alt: "Imaginary" }

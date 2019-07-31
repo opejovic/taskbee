@@ -6,7 +6,7 @@
     <div class="mx-auto w-full">
       <div class="px-3">
         <header class="flex justify-between items-center py-8">
-          <a href="#" class="flex items-center">
+          <a href="/" class="flex items-center">
             <img class="w-12" src="/img/logo.svg" alt="Imaginary" />
             <p class="pl-1 font-bold text-xl tracking-tighter text-indigo-900">
               taskbee.

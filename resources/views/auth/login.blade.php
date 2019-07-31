@@ -1,13 +1,18 @@
 @extends('layouts.app') @section('content')
 <div class="px-4">
-    <header class="flex justify-between items-center pt-5">
+    <header class="flex justify-between items-top py-8">
         <div>
-            <a href="{{ route('welcome') }}"><img class="block w-40" src="./img/logo.svg" alt="taskbee"></a>
+            <a href="{{ route('welcome') }}">
+                <img class="block w-40" src="./img/logo.svg" alt="taskbee">
+            </a>
         </div>
 
-        <a href="/signup" class="text-sm lg:inline-block text-indigo-800 border-b-2 border-transparent hover:border-indigo-500 hover:text-indigo-500">
-            Sign up
-        </a>
+        <div>
+            <a href="/signup"
+            class="block text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 border-b-2 border-transparent hover:border-indigo-500">
+                Sign Up
+            </a>
+        </div>
     </header>
     <div class="flex pt-16 items-center w-full">
         <div class="w-full max-w-lg mx-auto">
