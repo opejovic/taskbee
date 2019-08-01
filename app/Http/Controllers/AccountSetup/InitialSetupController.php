@@ -19,19 +19,18 @@ class InitialSetupController extends Controller
     {
         abort_if($authorization->hasBeenUsed(), 404);
 
-
-        if (!$authorization->hasBeenUsedForWorkspace()) {
+        if (! $authorization->hasBeenUsedForWorkspace()) {
             return view('workspace-setup.create-workspace', [
                 'authorization' => $authorization
             ]);
         }
 
-        if ($authorization->hasBeenUsedForWorkspace() && !$authorization->hasBeenUsedForMemberInvites()) {
+        if ($authorization->hasBeenUsedForWorkspace() && ! $authorization->hasBeenUsedForMemberInvites()) {
             return view('workspace-setup.invite-members', [
                 'authorization' => $authorization
             ]);
         }
 
-        return view('workspace-setup.show');
+        return view('home');
     }
 }

@@ -21,6 +21,10 @@ class WorkspacesController extends Controller
 
         abort_if($authorization->hasBeenUsedForWorkspace(), 403);
 
+        request()->validate([
+            'name' => ['required', 'min:3', 'unique:workspaces,name']
+        ]);
+
         $workspace = Workspace::create([
             'name'            => request('name'),
             'created_by'      => Auth::user()->id,

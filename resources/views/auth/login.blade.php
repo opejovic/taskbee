@@ -3,7 +3,7 @@
     <header class="flex justify-between items-top py-8">
         <div>
             <a href="{{ route('welcome') }}">
-                <img class="block w-40" src="./img/logo.svg" alt="taskbee">
+                <img class="block w-40" src="/img/logo.svg" alt="taskbee">
             </a>
         </div>
 
@@ -28,7 +28,7 @@
                 <div class="flex flex-wrap -mx-3 mb-1">
                     <div class="w-full md:w-3/3 px-3">
                         <input
-                            class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 @error('email')border border-red-300 @enderror rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                            class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 @error('email') border-b border-red-500 @enderror rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                             id="email" type="email" name="email" placeholder="Email" value="{{ old('email') }}" />
 
                         @error('email')
@@ -39,7 +39,7 @@
                 <div class="flex flex-wrap -mx-3 mb-1">
                     <div class="w-full md:w-3/3 px-3">
                         <input
-                            class="shadow appearance-none block w-full text-center bg-gray-200 text-gray-700 @error('password') border border-red-300 @enderror rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                            class="shadow appearance-none block w-full text-center bg-gray-200 text-gray-700 @error('password') border-b border-red-500 @enderror rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                             id="password" type="password" name="password" placeholder="Password" />
 
                         @error('password')

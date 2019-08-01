@@ -27,6 +27,16 @@ class Subscription extends Model
     protected $guarded = [];
 
     /**
+     * @param $subscription
+     *
+     * @return mixed
+     */
+    private static function findByStripeId($subscription)
+    {
+        return self::where('stripe_id', $subscription['id'])->first();
+    }
+
+    /**
      * Subscription has an owner.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -89,7 +99,7 @@ class Subscription extends Model
      */
     public static function expire($subscription)
     {
-        $sub = self::where('stripe_id', $subscription['id'])->first();
+        $sub = self::findByStripeId($subscription);
         $sub->update(['status' => $subscription->status]);
         Mail::to($sub->email)->queue(new SubscriptionExpiredEmail($sub));
     }
@@ -103,7 +113,7 @@ class Subscription extends Model
      */
     public static function renew($subscription)
     {
-        $sub = self::where('stripe_id', $subscription['id'])->first();
+        $sub = self::findByStripeId($subscription);
         $sub->update(['status' => $subscription->status]);
     }
 

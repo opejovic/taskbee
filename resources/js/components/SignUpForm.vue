@@ -90,9 +90,9 @@
               <div class="w-full">
                 <input
                   type="text"
-                  class="shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                  class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                   :class="
-                    form.errors.has('first_name') ? ' border-red-300' : 'border-transparent'
+                    form.errors.has('first_name') ? 'border-b border-red-500' : ''
                   "
                   name="first_name"
                   id="first_name"
@@ -112,9 +112,9 @@
                 <div class="w-full">
                   <input
                     type="text"
-                    class="shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                    class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                     :class="
-                      form.errors.has('last_name') ? ' border-red-300' : 'border-transparent'
+                      form.errors.has('last_name') ? 'border-b border-red-500' : ''
                     "
                     name="last_name"
                     id="last_name"
@@ -135,8 +135,8 @@
                 <div class="w-full">
                   <input
                     type="email"
-                    class="shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
-                    :class="form.errors.has('email') ? ' border-red-300' : 'border-transparent'"
+                    class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                    :class="form.errors.has('email') ? 'border-b border-red-500' : '' "
                     name="email"
                     id="email"
                     placeholder="Email"
@@ -170,9 +170,9 @@
                 <div class="w-full">
                   <input
                     type="password"
-                    class="shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                    class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                     :class="
-                      form.errors.has('password') ? ' border-red-300' : 'border-transparent'
+                      form.errors.has('password') ? 'border-b border-red-500' : ''
                     "
                     name="password"
                     id="password"
@@ -193,11 +193,11 @@
                 <div class="w-full">
                   <input
                     type="password"
-                    class="shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
+                    class="shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400"
                     :class="
                       form.errors.has('password_confirmation')
-                        ? 'border-red-300'
-                        : 'border-transparent'
+                        ? 'border-b border-red-500'
+                        : ''
                     "
                     name="password_confirmation"
                     id="password_confirmation"
@@ -217,7 +217,7 @@
               <div class="">
                 <div class="w-full">
                   <button
-                    class="block w-full uppercase mx-auto shadow border-b-4 border-gray-600 bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+                    class="block w-full uppercase mx-auto shadow border-b-4 border-purple-700 bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
                     type="submit"
                     :class="{ loader: processing }"
                     :disabled="processing"

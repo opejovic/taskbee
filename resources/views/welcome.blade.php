@@ -59,7 +59,7 @@
                 </div>
                 <div class="py-8 text-center justify-center border-t border-white bg-purple-800">
                     <a href="{{ route('signup') }}"
-                        class="bg-green-400 px-12 py-3 text-gray-800 mx-1 text-white border border-purple-800 rounded hover:bg-green-300">
+                        class="bg-green-400 px-12 py-3 mx-1 text-white border border-purple-800 rounded hover:bg-green-500">
                         Subscribe
                     </a>
                 </div>

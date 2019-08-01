@@ -27,12 +27,11 @@ class Plan extends Model
 	protected $guarded = [];
 
 	/**
-	 * Saves given plans from the array to db.
+	 * Map over each plan passed from the $data  collection to a proper format and persist it to db.
 	 *
-	 * @param array $data
+	 * @param collection $data
 	 *
 	 * @return void
-	 * @author
 	 */
 	public static function assemble($data)
 	{

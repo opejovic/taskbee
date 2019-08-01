@@ -3033,71 +3033,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["workspace"],
   data: function data() {
@@ -3123,7 +3058,7 @@ __webpack_require__.r(__webpack_exports__);
         // Passing a task to the emited event.
         _this.form.reset();
 
-        window.events.$emit("task-added", response); // Hide the 
+        window.events.$emit("task-added", response); // Hide the
 
         _this.$modal.hide("new-task-modal"); // flash a message to the user
 
@@ -3226,10 +3161,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
 //
 //
 //
@@ -60765,10 +60696,10 @@ var render = function() {
                         }
                       ],
                       staticClass:
-                        "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                        "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                       class: _vm.form.errors.has("first_name")
-                        ? " border-red-300"
-                        : "border-transparent",
+                        ? "border-b border-red-500"
+                        : "",
                       attrs: {
                         type: "text",
                         name: "first_name",
@@ -60814,10 +60745,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("last_name")
-                          ? " border-red-300"
-                          : "border-transparent",
+                          ? "border-b border-red-500"
+                          : "",
                         attrs: {
                           type: "text",
                           name: "last_name",
@@ -60865,10 +60796,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("email")
-                          ? " border-red-300"
-                          : "border-transparent",
+                          ? "border-b border-red-500"
+                          : "",
                         attrs: {
                           type: "email",
                           name: "email",
@@ -60954,10 +60885,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("password")
-                          ? " border-red-300"
-                          : "border-transparent",
+                          ? "border-b border-red-500"
+                          : "",
                         attrs: {
                           type: "password",
                           name: "password",
@@ -61005,10 +60936,10 @@ var render = function() {
                           }
                         ],
                         staticClass:
-                          "shadow appearance-none block w-full bg-gray-200 border text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
+                          "shadow appearance-none block w-full bg-gray-200 text-center text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-400",
                         class: _vm.form.errors.has("password_confirmation")
-                          ? "border-red-300"
-                          : "border-transparent",
+                          ? "border-b border-red-500"
+                          : "",
                         attrs: {
                           type: "password",
                           name: "password_confirmation",
@@ -61053,7 +60984,7 @@ var render = function() {
                         "button",
                         {
                           staticClass:
-                            "block w-full uppercase mx-auto shadow border-b-4 border-gray-600 bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded",
+                            "block w-full uppercase mx-auto shadow border-b-4 border-purple-700 bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded",
                           class: { loader: _vm.processing },
                           attrs: { type: "submit", disabled: _vm.processing }
                         },
@@ -61514,42 +61445,37 @@ var render = function() {
             },
             [
               _c("div", { staticClass: "w-full mx-auto px-3" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "text-xs text-gray-700 text-right align-middle"
-                  },
-                  [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "close",
-                        attrs: { type: "button" },
-                        on: { click: _vm.hide }
-                      },
-                      [
-                        _c(
-                          "span",
-                          {
-                            staticClass: "text-lg",
-                            attrs: { "aria-hidden": "true" }
-                          },
-                          [_vm._v("×")]
-                        )
-                      ]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "text-center mb-5 -mt-5" }, [
+                _c("div", { staticClass: "text-xs text-gray-700 text-right" }, [
                   _c(
-                    "div",
+                    "button",
                     {
-                      staticClass:
-                        "text-lg uppercase tracking-tight text-gray-700",
-                      attrs: { id: "addTaskModalLabel" }
+                      staticClass: "close",
+                      attrs: { type: "button" },
+                      on: { click: _vm.hide }
                     },
-                    [_vm._v("\n\t\t\t\t\t\tAdd new task\n\t\t\t\t\t")]
+                    [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "text-lg",
+                          attrs: { "aria-hidden": "true" }
+                        },
+                        [_vm._v("×")]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "justify-center" }, [
+                  _c("img", {
+                    staticClass: "mx-auto w-32",
+                    attrs: { src: "/img/new-task.svg", alt: "" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "p",
+                    { staticClass: "text-xl text-gray-700 text-center" },
+                    [_vm._v("\n            Task details\n          ")]
                   )
                 ]),
                 _vm._v(" "),
@@ -61575,7 +61501,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tWhat is the task?\n\t\t\t\t\t\t\t\t"
+                                "\n                  What is the task?\n                "
                               )
                             ]
                           ),
@@ -61592,14 +61518,9 @@ var render = function() {
                             staticClass:
                               "appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white",
                             class: _vm.form.errors.has("name")
-                              ? " border-red-700 "
+                              ? " border-red-400 "
                               : "",
-                            attrs: {
-                              type: "text",
-                              name: "name",
-                              id: "name",
-                              required: ""
-                            },
+                            attrs: { type: "text", name: "name", id: "name" },
                             domProps: { value: _vm.form.name },
                             on: {
                               keydown: function($event) {
@@ -61638,7 +61559,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tWho has to complete this task?\n\t\t\t\t\t\t\t\t"
+                                "\n                  Who has to complete this task?\n                "
                               )
                             ]
                           ),
@@ -61658,7 +61579,7 @@ var render = function() {
                                 staticClass:
                                   "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                                 class: _vm.form.errors.has("user_responsible")
-                                  ? "border-red-700"
+                                  ? "border-red-400"
                                   : "",
                                 on: {
                                   click: function($event) {
@@ -61695,11 +61616,11 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                      "\n                      " +
                                         _vm._s(member.first_name) +
-                                        "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                        "\n                      " +
                                         _vm._s(member.last_name) +
-                                        "\n\t\t\t\t\t\t\t\t\t\t"
+                                        "\n                    "
                                     )
                                   ]
                                 )
@@ -61759,7 +61680,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tWhen is the start date of the task?\n\t\t\t\t\t\t\t\t"
+                                "\n                  When is the start date of the task?\n                "
                               )
                             ]
                           ),
@@ -61776,14 +61697,13 @@ var render = function() {
                             staticClass:
                               "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                             class: _vm.form.errors.has("start_date")
-                              ? " is-invalid"
+                              ? "border-red-400"
                               : "",
                             attrs: {
                               type: "date",
                               name: "start_date",
                               id: "start_date",
-                              placeholder: "Start date",
-                              required: ""
+                              placeholder: "Start date"
                             },
                             domProps: { value: _vm.form.start_date },
                             on: {
@@ -61804,22 +61724,14 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _vm.form.errors.has("start_date")
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass: "invalid-feedback",
-                                  attrs: { role: "alert" }
-                                },
-                                [
-                                  _c("strong", {
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        _vm.form.errors.get("start_date")
-                                      )
-                                    }
-                                  })
-                                ]
-                              )
+                            ? _c("p", {
+                                staticClass: "text-red-600 text-xs",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.form.errors.get("start_date")
+                                  )
+                                }
+                              })
                             : _vm._e()
                         ]),
                         _vm._v(" "),
@@ -61832,7 +61744,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tWhen should it be done?\n\t\t\t\t\t\t\t\t"
+                                "\n                  When should it be done?\n                "
                               )
                             ]
                           ),
@@ -61849,14 +61761,13 @@ var render = function() {
                             staticClass:
                               "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                             class: _vm.form.errors.has("finish_date")
-                              ? " is-invalid"
+                              ? "border-red-400"
                               : "",
                             attrs: {
                               type: "date",
                               name: "finish_date",
                               id: "finish_date",
-                              placeholder: "Finish date",
-                              required: ""
+                              placeholder: "Finish date"
                             },
                             domProps: { value: _vm.form.finish_date },
                             on: {
@@ -61877,22 +61788,14 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _vm.form.errors.has("finish_date")
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass: "invalid-feedback",
-                                  attrs: { role: "alert" }
-                                },
-                                [
-                                  _c("strong", {
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        _vm.form.errors.get("finish_date")
-                                      )
-                                    }
-                                  })
-                                ]
-                              )
+                            ? _c("p", {
+                                staticClass: "text-red-600 text-xs",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.form.errors.get("finish_date")
+                                  )
+                                }
+                              })
                             : _vm._e()
                         ])
                       ]),
@@ -61907,7 +61810,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tWhat is the status of the task?\n\t\t\t\t\t\t\t\t"
+                                "\n                  What is the status of the task?\n                "
                               )
                             ]
                           ),
@@ -61927,7 +61830,7 @@ var render = function() {
                                 staticClass:
                                   "block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white",
                                 class: _vm.form.errors.has("status")
-                                  ? "border-red-700"
+                                  ? "border-red-400"
                                   : "",
                                 attrs: { id: "status", name: "status" },
                                 on: {
@@ -62029,7 +61932,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n\t\t\t\t\t\t\t\tMember responsible will be notified via\n\t\t\t\t\t\t\t\temail.\n\t\t\t\t\t\t\t"
+                              "\n                Member responsible will be notified via email.\n              "
                             )
                           ]
                         ),
@@ -62047,7 +61950,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n\t\t\t\t\t\t\t\t\tSubmit\n\t\t\t\t\t\t\t\t"
+                                "\n                  Add new task\n                "
                               )
                             ]
                           )

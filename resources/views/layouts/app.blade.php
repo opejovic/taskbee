@@ -26,7 +26,7 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<style>
 			.bg-curve {
-				background-image: url("img/curve-desc.svg");
+				background-image: url("/img/curve-desc.svg");
 				background-position-x: center;
 				background-position-y: bottom;
 				background-size: 5153px 200px;

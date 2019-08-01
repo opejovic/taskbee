@@ -34,7 +34,7 @@ class InviteMembersController extends Controller
                 'email',
                 // Same user cant be invited to the workspace twice
                 Rule::unique('invitations')->where(function ($query) use ($workspace) {
-                    return !$query->where('workspace_id', $workspace->id);
+                    return ! $query->where('workspace_id', $workspace->id);
                 })
             ],
         ]);

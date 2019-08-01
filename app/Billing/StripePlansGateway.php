@@ -8,6 +8,11 @@ class StripePlansGateway
 {
     private $apiKey;
 
+    /**
+     * StripePlansGateway constructor.
+     *
+     * @param $apiKey
+     */
     public function __construct($apiKey)
     {
         $this->apiKey = $apiKey;

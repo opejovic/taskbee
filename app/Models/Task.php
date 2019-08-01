@@ -69,9 +69,17 @@ class Task extends Model
     {
         $this->update(['status' => $status]);
 
-        $this->workspace->members->each(function ($member) {
-            $member->notify(new TaskUpdated($this, auth()->user()));
-        });
+        $this->notifyMembers();
+    }
+
+    /**
+     * Notify the task workspace members that the task status has been changed.
+     *
+     * @return void
+     **/
+    public function notifyMembers()
+    {
+        $this->workspace->members->each->notify(new TaskUpdated($this, auth()->user()));
     }
 
     /**

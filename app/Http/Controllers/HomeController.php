@@ -27,7 +27,7 @@ class HomeController extends Controller
     {
         // If authenticated user has subscribed, but has not yet created a workspace, he is redirected to workspace creation page.
         if ($authorization = WorkspaceSetupAuthorization::whereNull('admin_id')->whereEmail(Auth::user()->email)->first()) {
-            return view('workspace-setup.create-workspace', ['authorization' => $authorization]);
+            return redirect(route('workspace-setup.show', $authorization));
         };
 
         return view('home');
