@@ -30,13 +30,11 @@ class RenewSubscriptionsController extends Controller
      */
     public function store(Workspace $workspace)
     {
-        $subscription = $workspace->subscription;
-
-         // retrieve subscription
     	\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         
+        // retrieve subscription from stripe
         $stripeSub = \Stripe\Subscription::retrieve([
-        	"id" => $subscription->stripe_id,
+        	"id" => $workspace->subscription->stripe_id,
         ]);
 
         $invoice = \Stripe\Invoice::create([
@@ -46,6 +44,7 @@ class RenewSubscriptionsController extends Controller
         ]);
 
         $finalizedInvoice = $invoice->finalizeInvoice();
+        
         return response($finalizedInvoice, 200);
     }
 }

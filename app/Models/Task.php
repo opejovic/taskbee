@@ -61,6 +61,19 @@ class Task extends Model
     }
 
     /**
+     * Query scope, uses ThreadFilter $filters, if provided.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param \App\Filters\TaskFilters $filters
+     *
+     * @return void
+     */
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
+
+    /**
      * Update the tasks status and notify the users.
      *
      * @param $status
@@ -90,19 +103,6 @@ class Task extends Model
     public function wasUpdatedRecently()
     {
         return $this->updated_at->gt(now()->subMinute());
-    }
-
-    /**
-     * Query scope, uses ThreadFilter $filters, if provided.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param \App\Filters\TaskFilters $filters
-     *
-     * @return void
-     */
-    public function scopeFilter($query, $filters)
-    {
-        return $filters->apply($query);
     }
 
     /**

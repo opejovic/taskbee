@@ -1,7 +1,11 @@
 <nav class="flex items-center justify-between shadow flex-wrap bg-gray-100 p-5">
 	<div class="flex items-center flex-shrink-0 text-indigo-900 ml-4">
-		<span class="font-semibold text-xl tracking-tight"><a
-				href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a></span>
+		<a href="{{ route('welcome') }}" class="flex items-center">
+			<img class="w-12" src="/img/logo.svg" alt="Imaginary" />
+			<p class="pl-1 font-bold text-xl tracking-tighter text-indigo-900">
+				{{ config('app.name', 'Laravel') }}
+			</p>
+		</a>
 	</div>
 	<div class="block lg:hidden">
 		<button

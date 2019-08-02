@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use App\Exceptions\SubscriptionExpiredException;
-use App\Mail\SubscriptionExpiredEmail;
-use App\Models\WorkspaceSetupAuthorization;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\SubscriptionExpiredEmail;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\WorkspaceSetupAuthorization;
 
 class Subscription extends Model
 {
     /**
      * Class constants.
-     *
      */
     const ACTIVE   = 'active';
     const UNPAID   = 'unpaid';
@@ -27,8 +25,9 @@ class Subscription extends Model
     protected $guarded = [];
 
     /**
+     * Retrieve the subscription by its stripe id.
+     *  
      * @param $subscription
-     *
      * @return mixed
      */
     private static function findByStripeId($subscription)
@@ -55,10 +54,19 @@ class Subscription extends Model
     }
 
     /**
+     * Subscription belongs to a Plan
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'plan_id', 'stripe_id');
+    }
+
+    /**
      * Create a subscription from StripeSubscription.
      *
      * @param \Stripe\Subscription $subscription
-     *
      * @param $email
      *
      * @return void
@@ -113,18 +121,7 @@ class Subscription extends Model
      */
     public static function renew($subscription)
     {
-        $sub = self::findByStripeId($subscription);
-        $sub->update(['status' => $subscription->status]);
-    }
-
-    /**
-     * Subscription belongs to a Plan
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function plan()
-    {
-        return $this->belongsTo(Plan::class, 'plan_id', 'stripe_id');
+        self::findByStripeId($subscription)->update(['status' => $subscription->status]);
     }
 
     /**

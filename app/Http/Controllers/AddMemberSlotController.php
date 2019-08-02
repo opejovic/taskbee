@@ -16,11 +16,9 @@ class AddMemberSlotController extends Controller
      */
     public function store(Workspace $workspace)
     {
-    	$subscription = $workspace->subscription;
-
         // retrieve subscription
     	\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $stripeSub = \Stripe\Subscription::retrieve($subscription->stripe_id);
+        $stripeSub = \Stripe\Subscription::retrieve($workspace->subscription->stripe_id);
 
         // increment current stripe subscription item (current subscription plan) quantity.
         \Stripe\Subscription::update($stripeSub['id'], [

@@ -177,10 +177,8 @@ class WorkspaceTasksController extends Controller
      *
      * @return void
      **/
-    public function notifyUsers($task, $class)
+    private function notifyUsers($task, $class)
     {
-        $task->workspace->members->each(function ($member) use ($task, $class) {
-            $member->notify(new $class($task, auth()->user()));
-        });
+        $task->workspace->members->each->notify(new $class($task, auth()->user()));
     }
 }

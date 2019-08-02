@@ -8,23 +8,33 @@ class Plan extends Model
 {
 	/**
 	 * Class constants.
-	 *
 	 */
 	const BASIC               	 = 'Basic Monthly';
-	const STANDARD               = 'Standard Monthly';
-	const PREMIUM                = 'Premium Monthly';
 	const BASIC_PRICE         	 = 580; // per user
-	const STANDARD_PRICE         = 390;
-	const PREMIUM_PRICE          = 295;
 	const BASIC_MEMBERS_LIMIT 	 = 5;
+	const STANDARD               = 'Standard Monthly';
+	const STANDARD_PRICE         = 390;
 	const STANDARD_MEMBERS_LIMIT = 10;
+	const PREMIUM                = 'Premium Monthly';
+	const PREMIUM_PRICE          = 295;
 	const PREMIUM_MEMBERS_LIMIT  = 20;
 
 	/**
 	 * Attributes that are not mass-assignable.
 	 *
+	 * @var array
 	 */
 	protected $guarded = [];
+
+	/**
+	 * Plan has many subscriptions
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function subscriptions()
+	{
+		return $this->hasMany(Subscription::class, 'plan_id', 'stripe_id');
+	}
 
 	/**
 	 * Map over each plan passed from the $data  collection to a proper format and persist it to db.
@@ -47,16 +57,6 @@ class Plan extends Model
 		})->each(function ($plan) {
 			self::create($plan);
 		});
-	}
-
-	/**
-	 * Plan has many subscriptions
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function subscriptions()
-	{
-		return $this->hasMany(Subscription::class, 'plan_id', 'stripe_id');
 	}
 
 	/**

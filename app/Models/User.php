@@ -16,7 +16,6 @@ class User extends Authenticatable
     const ADMIN  = 'Admin';
     const MEMBER = 'Member';
 
-
     /**
      * The attributes that are not mass assignable.
      *
@@ -45,9 +44,12 @@ class User extends Authenticatable
     /**
      * Attributes to include in every query.
      *
+     * @var array
+     * 
      */
-    protected $appends = ['full_name'];
-
+    protected $appends = [
+        'full_name'
+    ];
 
     /**
      * User can own many workspaces.
@@ -72,7 +74,7 @@ class User extends Authenticatable
     }
 
     /**
-     * User has many tasks assigned to him.
+     * Users have many tasks assigned to them.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -92,7 +94,7 @@ class User extends Authenticatable
     }
 
     /**
-     * User belongs to Workspace
+     * User belongs to a Workspace.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -123,7 +125,7 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
-	}
+    }
 
     /**
      * Get the avatar path attribute, if there is one. Otherwise, return the default avatar path.
@@ -133,7 +135,5 @@ class User extends Authenticatable
     public function getAvatarPathAttribute($avatar)
     {
         return $avatar ? asset("storage/{$avatar}") : asset('storage/avatars/default.png');
-	}
-	
-	
+    }
 }

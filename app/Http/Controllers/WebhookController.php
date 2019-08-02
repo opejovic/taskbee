@@ -8,7 +8,6 @@ class WebhookController extends Controller
 {
     /**
      * Handles the stripe web hooks.
-     *
      */
     public function handle()
     {

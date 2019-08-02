@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use App\Facades\AuthorizationCode;
-use App\Mail\SubscriptionPurchasedEmail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Model;
+use App\Mail\SubscriptionPurchasedEmail;
 
 class WorkspaceSetupAuthorization extends Model
 {
+    /**
+     * Class constants.
+     */
+    const INITIAL_MEMBER_COUNT = 1;
+
     /**
      * Get the route key for the model.
      *
@@ -49,7 +54,7 @@ class WorkspaceSetupAuthorization extends Model
         self::create([
             'email'           => $subscription->email,
             'customer'        => $subscription->customer,
-            'members_invited' => 1,
+            'members_invited' => self::INITIAL_MEMBER_COUNT,
             'code'            => AuthorizationCode::generate(),
             'subscription_id' => $subscription->stripe_id,
             'plan_id'         => $subscription->plan_id,
@@ -59,7 +64,6 @@ class WorkspaceSetupAuthorization extends Model
 
     /**
      * Sends an email to the customer that purchased a subscription.
-     *
      */
     public function send()
     {
@@ -123,8 +127,7 @@ class WorkspaceSetupAuthorization extends Model
     /**
      * How many invites remain for this authorization.
      *
-     * @return void
-     * @author
+     * @return integer
      */
     public function getInvitesRemainingAttribute()
     {

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Mail\SlotPurchasedEmail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Model;
 
 class Workspace extends Model
 {
@@ -56,7 +56,7 @@ class Workspace extends Model
     }
 
     /**
-     * Workspace belongs to WorkspaceSetupAuthorization
+     * Workspace has one WorkspaceSetupAuthorization.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -86,11 +86,22 @@ class Workspace extends Model
     {
         $workspace = self::where('subscription_id', $subscription)->first();
         $workspace->increment('members_limit');
-
+        
         // Is this really needed? Perhaps, after adding slot, we fire an event -> and notify the user he can now invite additional team member.
         $authorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription)->first();
         $authorization->increment('members_limit');
+        
+        $this->notifyOwner($workspace, $authorization);
+    }
 
+    /**
+     * Notify the workspace owner about the newly added member slot.
+     *
+     * @param $workspace
+     * @return void
+     **/
+    public function notifyOwner($workspace, $authorization)
+    {
         Mail::to($workspace->creator->email)->queue(new SlotPurchasedEmail($workspace, $authorization));
     }
 

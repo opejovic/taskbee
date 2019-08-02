@@ -10,7 +10,7 @@ You can setup your account by visiting the link below.
 @endcomponent
 
 @component('mail::panel', ['url' => ''])
-    In order to use the application, you need to register an account. This link will be valid for only one time. After registration, in case you forget your password, you will have to request a new one.
+    In order to use the application, you need to create a workspace and invite team members.
 @endcomponent
 
 Thanks,

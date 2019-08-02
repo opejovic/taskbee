@@ -16,19 +16,14 @@ class AcceptInvitationsController extends Controller
     public function store()
     {
         $invitation = Invitation::findByCode(request('invitation_code'));
-
         abort_if($invitation->hasBeenUsed(), 403);
         
         $user = User::where('email', $invitation->email)->first();
-
-        if (auth()->user()->email !== $user->email) {
-			abort(403);        	
-        }
+        abort_if($user->isNot(auth()->user()), 403);
 
     	$invitation->update(['user_id' => $user->id]);
-
-        // add a member to workspace
         $invitation->workspace->addMember($user);
-		return redirect(route('tasks.index', $invitation->workspace->id));
+
+        return redirect(route('tasks.index', $invitation->workspace->id));
     }
 }

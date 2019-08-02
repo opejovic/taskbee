@@ -12,7 +12,6 @@ class SubscriptionsController extends Controller
 	 * Show the form for subscribing.
 	 *
 	 * @return \Illuminate\Http\Response
-	 * @throws conditon
 	 **/
 	public function create()
 	{
