@@ -40,6 +40,7 @@ Vue.use(Toasted,  {
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('subscription-checkout', require('./components/SubscriptionCheckout.vue').default);
 Vue.component('sign-up-form', require('./components/SignUpForm.vue').default);
 Vue.component('member-slot-checkout', require('./components/MemberSlotCheckout.vue').default);

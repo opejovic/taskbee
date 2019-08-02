@@ -1,12 +1,12 @@
 <template>
-	<div>
-		<div v-if="items.length == 0" class="w-full mx-auto h-full items-center block text-center py-16 text-gray-600 text-xl">You have not assigned any tasks yet.</div>
+	<div class="pb-20">
+		<div v-if="items.length == 0" class="w-full mx-auto items-center block text-center text-gray-600 text-xl">You have not assigned any tasks yet.</div>
 
 		<div v-for="(tasks, status) in items" :key="tasks.id">
 			<h4 class="text-center text-gray-700 text-sm border-b mb-5 mt-5 uppercase">
 				<strong>{{ status }}</strong>
 			</h4>
-			<table class="container w-full items-center mx-auto text-center mb-20">
+			<table class="container w-full items-center mx-auto text-center">
 				<thead class="border-b-2 border-gray-300">
 					<tr class="text-gray-600 text-xs uppercase">
 						<th class="py-4 font-normal text-left" style="width: 30%">Task</th>

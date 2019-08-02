@@ -1,7 +1,7 @@
 <template>
   <div>
     <button
-      class="flex items-center justify-center block uppercase mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 -mt-2 -mb-2 px-20 rounded"
+      class="flex items-center justify-center uppercase shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-20 rounded"
       @click="showModal"
     >
       <i class="material-icons add">add</i>

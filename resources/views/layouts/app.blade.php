@@ -41,11 +41,11 @@
 
 	<body>
 		<div id="app" class="min-h-screen bg-curve">
-			@if (! request()->routeIs(['login', 'signup', 'welcome']))
-				@include('layouts.nav')
-			@endif
+			@auth
+				<navbar :workspace="{{ auth()->user()->workspace }}"></navbar>
+			@endauth
 
-			<main class="container mx-auto px-6">
+			<main class="container mx-auto">
 				@yield('content')
 			</main>
 		</div>
