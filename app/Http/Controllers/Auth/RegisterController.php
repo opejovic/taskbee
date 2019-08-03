@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\Invitation;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Models\User;
+use App\Models\Invitation;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -110,7 +108,12 @@ class RegisterController extends Controller
             'email_verified_at' => Carbon::now(),
         ]);
 
-        $invitation->update(['user_id' => $user->id]);
+        $invitation->update([
+            'user_id' => $user->id,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+        ]);
+
         $invitation->workspace->addMember($user);
 
         Auth::login($user);

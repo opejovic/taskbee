@@ -1,6 +1,6 @@
 <template>
 	<div class="pb-20">
-		<div v-if="items.length == 0" class="w-full mx-auto items-center block text-center text-gray-600 text-xl">You have not assigned any tasks yet.</div>
+		<div v-if="items.length == 0" class="w-full mx-auto items-center block text-center text-gray-600 text-xl pt-10">You have not assigned any tasks yet.</div>
 
 		<div v-for="(tasks, status) in items" :key="tasks.id">
 			<h4 class="text-center text-gray-700 text-sm border-b mb-5 mt-5 uppercase">

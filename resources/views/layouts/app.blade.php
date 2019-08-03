@@ -42,7 +42,7 @@
 	<body>
 		<div id="app" class="min-h-screen bg-curve">
 			@auth
-				<navbar :workspace="{{ auth()->user()->workspace }}"></navbar>
+				<navbar :workspace="{{ auth()->user()->workspaceOwned() }}"></navbar>
 			@endauth
 
 			<main class="container mx-auto">

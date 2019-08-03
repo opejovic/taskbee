@@ -1997,17 +1997,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["plan", "workspace"],
   data: function data() {
     return {
-      processing: false,
-      spinning: false
+      processing: false
     };
   },
   computed: {
     state: function state() {
-      return this.processing ? "Processing" : "Buy a member slot";
+      return this.processing ? "Processing..." : "Purchase Slot";
     }
   },
   methods: {
@@ -2103,7 +2103,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["workspace"],
+  props: ['workspace'],
   data: function data() {
     return {
       isOpen: false
@@ -60093,36 +60093,37 @@ var render = function() {
     _c(
       "button",
       {
-        staticClass: "btn btn-primary btn-block",
-        class: { "btn-loading": _vm.processing },
+        staticClass:
+          "mx-auto bg-indigo-800 hover:bg-indigo-600 text-white font-normal text-sm py-3 px-10 rounded flex items-center",
+        class: _vm.processing ? "" : "",
         attrs: { disabled: _vm.processing },
         on: { click: _vm.initStripe }
       },
       [
-        _c(
-          "div",
-          {
-            class: _vm.processing ? "d-flex align-items-center" : "text-center"
-          },
-          [
-            _c("span", { domProps: { textContent: _vm._s(_vm.state) } }, [
-              _vm._v("Loading...")
-            ]),
-            _vm._v(" "),
-            _c("div", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.processing,
-                  expression: "processing"
+        _c("div", { staticClass: "flex items-center px-5" }, [
+          _c(
+            "svg",
+            {
+              staticClass: "fill-current w-4 h-4 mr-2",
+              attrs: {
+                xmlns: "http://www.w3.org/2000/svg",
+                viewBox: "0 0 20 20"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"
                 }
-              ],
-              staticClass: "spinner-border ml-auto spinner-border-sm",
-              attrs: { role: "status" }
-            })
-          ]
-        )
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("span", { domProps: { textContent: _vm._s(_vm.state) } })
+        ]),
+        _vm._v(" "),
+        _vm.processing ? _c("span", { staticClass: "loader" }) : _vm._e()
       ]
     )
   ])
@@ -60204,7 +60205,7 @@ var render = function() {
                   [
                     _vm.auth.workspace_id !== null
                       ? _c("new-task-modal", {
-                          staticClass: "lg:mt-0 mt-4 lg:-mr-8 sm:px-5",
+                          staticClass: "lg:mt-0 mt-4 lg:-mr-8",
                           attrs: { workspace: _vm.workspace }
                         })
                       : _vm._e()
@@ -61144,7 +61145,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "dropdown__content bg-gray-200 rounded border absolute shadow text-sm"
+            "dropdown__content bg-gray-200 rounded border absolute shadow text-sm mr-2"
         },
         [
           _c("ul", [
@@ -61234,6 +61235,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "text-sm" },
     [
       _c(
         "button",
@@ -61997,7 +61999,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "w-full mx-auto items-center block text-center text-gray-600 text-xl"
+                "w-full mx-auto items-center block text-center text-gray-600 text-xl pt-10"
             },
             [_vm._v("You have not assigned any tasks yet.")]
           )

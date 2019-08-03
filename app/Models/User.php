@@ -108,6 +108,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Retrieve auth users owned workspace, if there is one.
+     *
+     * @return \App\Models\Workspace
+     **/
+    public function workspaceOwned()
+    {
+        return $this->workspace()->exists() ? $this->workspace : 'NO_WORKSPACE_CREATED';
+    }
+
+    /**
      * User belongs to many Workspaces.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

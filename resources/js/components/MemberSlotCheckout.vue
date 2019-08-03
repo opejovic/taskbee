@@ -1,55 +1,53 @@
 <template>
-    <div>
-        <button
-            class="btn btn-primary btn-block"
-            @click="initStripe"
-            :class="{ 'btn-loading': processing }"
-            :disabled="processing"
+  <div>
+    <button
+      class="mx-auto bg-indigo-800 hover:bg-indigo-600 text-white font-normal text-sm py-3 px-10 rounded flex items-center"
+      @click="initStripe"
+      :class="processing ? '' : ''"
+      :disabled="processing"
+    >
+      <div class="flex items-center px-5">
+        <svg
+          class="fill-current w-4 h-4 mr-2"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
         >
-            <div
-                :class="
-                    processing ? 'd-flex align-items-center' : 'text-center'
-                "
-            >
-                <span v-text="state">Loading...</span>
-                <div
-                    class="spinner-border ml-auto spinner-border-sm"
-                    role="status"
-                    v-show="processing"
-                ></div>
-            </div>
-        </button>
-    </div>
+          <path
+            d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"
+          />
+        </svg>
+        <span v-text="state"></span>
+      </div>
+      <span v-if="processing" class="loader"></span>
+    </button>
+  </div>
 </template>
 
 <script>
-export default {
+  export default {
     props: ["plan", "workspace"],
     data() {
-        return {
-            processing: false,
-            spinning: false
-        };
+      return {
+        processing: false,
+      };
     },
 
     computed: {
-        state() {
-            return this.processing ? "Processing" : "Buy a member slot";
-        }
+      state() {
+        return this.processing ? "Processing..." : "Purchase Slot";
+      }
     },
 
     methods: {
-        initStripe() {
-            const stripe = Stripe(process.env.MIX_STRIPE_KEY);
-            this.processing = true;
+      initStripe() {
+        const stripe = Stripe(process.env.MIX_STRIPE_KEY);
+        this.processing = true;
 
-            axios
-                .post(`/workspaces/${this.workspace.id}/add-slot`)
-                .then(response => {
-                    // return a link for the hosted invoice instead of redirecting the user.
-                    window.location = response.data.hosted_invoice_url;
-                });
-        }
+        axios.post(`/workspaces/${this.workspace.id}/add-slot`).then(response => {
+          // return a link for the hosted invoice instead of redirecting the user.
+          window.location = response.data.hosted_invoice_url;
+        });
+      }
     }
-};
+  };
 </script>

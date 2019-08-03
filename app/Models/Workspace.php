@@ -91,7 +91,7 @@ class Workspace extends Model
         $authorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription)->first();
         $authorization->increment('members_limit');
         
-        $this->notifyOwner($workspace, $authorization);
+        self::notifyOwner($workspace, $authorization);
     }
 
     /**
@@ -100,7 +100,7 @@ class Workspace extends Model
      * @param $workspace
      * @return void
      **/
-    public function notifyOwner($workspace, $authorization)
+    public static function notifyOwner($workspace, $authorization)
     {
         Mail::to($workspace->creator->email)->queue(new SlotPurchasedEmail($workspace, $authorization));
     }

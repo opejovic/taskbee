@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div
-    class="flex items-center justify-center mx-auto mt-5 border max-w-lg px-10 py-5 w-full shadow rounded-sm bg-white">
+<div class="flex items-center justify-center mx-auto mt-5 border max-w-lg px-10 py-5 w-full shadow rounded-sm bg-white">
     <div class="w-full">
         <img class="w-64 mx-auto" src="/img/invite-members.svg" alt="">
         <div class="w-full text-center pt-10">
@@ -24,39 +23,33 @@
                     <div class="-mx-3 mb-3">
                         <div class="w-full px-3">
                             <input type="text"
-                                class="text-center @error('first_name') border-red-700 @enderror appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                                class="text-center @error('first_name') border-red-500 @enderror appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                                 name="first_name" id="first_name" placeholder="First name" required />
 
                             @error('first_name')
-                            <p class="text-red-600 text-xs">
-                                <strong>{{ $message }}</strong>
-                            </p>
+                                <p class="text-red-500 text-center text-xs">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div class="-mx-3 mb-3">
                         <div class="w-full md:w-3/3 px-3">
                             <input type="text"
-                                class="text-center @error('last_name') border-red-700 @enderror appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                                class="text-center @error('last_name') border-red-500 @enderror appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                                 name="last_name" id="last_name" placeholder="Last name" required />
 
                             @error('last_name')
-                            <p class="text-red-600 text-xs">
-                                <strong>{{ $message }}</strong>
-                            </p>
+                            <p class="text-red-500 text-center text-xs">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div class="-mx-3 mb-3">
                         <div class="w-full md:w-3/3 px-3">
                             <input type="email"
-                                class="text-center @error('email') border-red-700 @enderror appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                                class="text-center @error('email') border-red-500 @enderror appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                                 name="email" id="email" aria-describedby="emailHelp" placeholder="Email" required />
 
                             @error('email')
-                            <p class="text-red-600 text-xs">
-                                <strong>{{ $message }}</strong>
-                            </p>
+                            <p class="text-red-500 text-center text-xs">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>

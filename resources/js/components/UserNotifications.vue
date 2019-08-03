@@ -12,7 +12,7 @@
       </div>
 
       <div
-        class="dropdown__content bg-gray-200 rounded border absolute shadow text-sm"
+        class="dropdown__content bg-gray-200 rounded border absolute shadow text-sm mr-2"
       >
         <ul>
           <div v-if="notifications.length">

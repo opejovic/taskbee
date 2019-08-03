@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-sm">
     <button
       class="flex items-center justify-center uppercase shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-20 rounded"
       @click="showModal"

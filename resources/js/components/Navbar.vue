@@ -32,9 +32,9 @@
       >
         <div class="mx-auto">
           <new-task-modal
-            class="lg:mt-0 mt-4 lg:-mr-8 sm:px-5"
-            :workspace="workspace"
             v-if="auth.workspace_id !== null"
+            class="lg:mt-0 mt-4 lg:-mr-8"
+            :workspace="workspace"
           ></new-task-modal>
         </div>
         <div class="lg:flex items-center">
@@ -69,8 +69,8 @@
 
 <script>
   export default {
-    props: ["workspace"],
-
+    props: ['workspace'],
+    
     data() {
       return {
         isOpen: false,
