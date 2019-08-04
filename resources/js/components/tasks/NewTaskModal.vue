@@ -165,8 +165,6 @@
                       <option value="Planned">Planned</option>
                       <option value="In progress">In Progress</option>
                       <option value="Waiting">Waiting</option>
-                      <option value="Testing">Testing</option>
-                      <option value="Done">Done</option>
                     </select>
                     <div
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"

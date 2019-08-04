@@ -31,12 +31,14 @@ class AddMemberSlotController extends Controller
             ],
         ]);
 
-        // Create and pay an invoice for added member
+        // Create and pay an invoice for added member - make this a first step before editing a subscription
         $invoice = \Stripe\Invoice::create([
             "customer" => $stripeSub['customer'],
             "subscription" => $stripeSub['id'],
             "description" => 'Add additional member slot'
         ]);
+
+        //finalize the invoice, wait for webhook, invoice payment succeeded, then update the stripe subscription quantity
 
         $finalizedInvoice = $invoice->finalizeInvoice();
 

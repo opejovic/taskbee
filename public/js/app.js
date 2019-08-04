@@ -1973,6 +1973,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1998,6 +2000,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["plan", "workspace"],
   data: function data() {
@@ -2011,7 +2014,26 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    confirm: function confirm() {
+      var _this = this;
+
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+        title: "Please confirm your purchase",
+        text: "Invoice payment is required in order to add a member slot.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#434190",
+        cancelButtonColor: "#a0aec0",
+        confirmButtonText: "Yes, proceed."
+      }).then(function (result) {
+        // If the user clicks proceed, he will be invoiced.
+        if (result.value) {
+          _this.initStripe();
+        }
+      });
+    },
     initStripe: function initStripe() {
+      // ask if they are sure, they will be billed on the monthly basis and one time payment for the added member.
       var stripe = Stripe("pk_test_e3gc4LMtmV1bHFjPTfy64Vgt00PxB637qE");
       this.processing = true;
       axios.post("/workspaces/".concat(this.workspace.id, "/add-slot")).then(function (response) {
@@ -2033,6 +2055,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2963,8 +2986,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["workspace"],
   data: function data() {
@@ -3264,6 +3285,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3296,36 +3343,39 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {// handle error
       });
     },
-    deleteTask: function deleteTask(task) {
+    confirmDeletion: function confirmDeletion(task) {
       var _this2 = this;
 
       sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this.",
         type: "warning",
-        showCancelButton: false,
+        showCancelButton: true,
         confirmButtonColor: "#434190",
         cancelButtonColor: "#a0aec0",
         confirmButtonText: "Yes, delete it."
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]("/workspaces/".concat(_this2.workspace.id, "/tasks/").concat(task.id)).then(function (response) {
-            _this2.refresh();
-
-            window.events.$emit("task-deleted");
-
-            _this2.$toasted.show("Task deleted!");
-          });
+          _this2["delete"](task);
         }
+      });
+    },
+    "delete": function _delete(task) {
+      var _this3 = this;
+
+      axios["delete"]("/workspaces/".concat(this.workspace.id, "/tasks/").concat(task.id)).then(function (response) {
+        window.events.$emit("task-deleted");
+
+        _this3.$toasted.show("Task deleted!");
       });
     }
   },
-  created: function created() {
-    var _this3 = this;
+  mounted: function mounted() {
+    var _this4 = this;
 
     this.items = this.tasks;
-    window.events.$on("task-added", function () {
-      _this3.refresh();
+    window.events.$on(["task-added", "task-deleted"], function () {
+      _this4.refresh();
     });
   }
 });
@@ -60097,7 +60147,7 @@ var render = function() {
           "mx-auto bg-indigo-800 hover:bg-indigo-600 text-white font-normal text-sm py-3 px-10 rounded flex items-center",
         class: _vm.processing ? "" : "",
         attrs: { disabled: _vm.processing },
-        on: { click: _vm.initStripe }
+        on: { click: _vm.confirm }
       },
       [
         _c("div", { staticClass: "flex items-center px-5" }, [
@@ -61691,14 +61741,6 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("option", { attrs: { value: "Waiting" } }, [
                                   _vm._v("Waiting")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Testing" } }, [
-                                  _vm._v("Testing")
-                                ]),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Done" } }, [
-                                  _vm._v("Done")
                                 ])
                               ]
                             ),
@@ -62001,7 +62043,7 @@ var render = function() {
               staticClass:
                 "w-full mx-auto items-center block text-center text-gray-600 text-xl pt-10"
             },
-            [_vm._v("You have not assigned any tasks yet.")]
+            [_vm._v("\n    You have not assigned any tasks yet.\n  ")]
           )
         : _vm._e(),
       _vm._v(" "),
@@ -62082,7 +62124,7 @@ var render = function() {
                           attrs: { id: "delete", title: "Delete" },
                           on: {
                             click: function($event) {
-                              return _vm.deleteTask(task)
+                              return _vm.confirmDeletion(task)
                             }
                           }
                         },
@@ -62131,7 +62173,7 @@ var staticRenderFns = [
         _c(
           "th",
           { staticClass: "py-4 font-normal", staticStyle: { width: "15%" } },
-          [_vm._v("Person responsible")]
+          [_vm._v("\n            Person responsible\n          ")]
         ),
         _vm._v(" "),
         _c(

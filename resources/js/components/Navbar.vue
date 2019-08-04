@@ -9,6 +9,7 @@
           </p>
         </a>
       </div>
+
       <div class="block lg:hidden">
         <button
           @click="toggleHamburger"
