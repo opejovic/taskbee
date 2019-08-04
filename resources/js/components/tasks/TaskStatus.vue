@@ -41,7 +41,7 @@
 
     computed: {
       statuses() {
-        var arr = ["Planned", "In progress", "Waiting", "Testing", "Done"];
+        var arr = ["Pending", "Urgent", "Completed"];
 
         for (var i = 0; i < arr.length; i++) {
           if (arr[i] == this.currentStatus) {
@@ -54,20 +54,14 @@
 
       classes() {
         switch (this.task.status) {
-          case "Planned":
-            return "planned";
+          case "Pending":
+            return "pending";
             break;
-          case "In progress":
-            return "inprogress";
+          case "Urgent":
+            return "urgent";
             break;
-          case "Waiting":
-            return "badge-warning";
-            break;
-          case "Testing":
-            return "testing";
-            break;
-          case "Done":
-            return "done";
+          case "Completed":
+            return "completed";
             break;
           default:
             return;

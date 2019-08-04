@@ -21,6 +21,6 @@ $factory->define(Task::class, function (Faker $faker) {
     	},
         'start_date'         => Carbon::now(),
         'finish_date'        => Carbon::now()->addMonth(),
-        'status'             => Task::PLANNED,
+        'status'             => Task::PENDING,
 	];
 });

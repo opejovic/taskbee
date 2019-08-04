@@ -2985,7 +2985,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["workspace"],
   data: function data() {
@@ -3152,7 +3151,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     statuses: function statuses() {
-      var arr = ["Planned", "In progress", "Waiting", "Testing", "Done"];
+      var arr = ["Pending", "Urgent", "Completed"];
 
       for (var i = 0; i < arr.length; i++) {
         if (arr[i] == this.currentStatus) {
@@ -3164,24 +3163,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     classes: function classes() {
       switch (this.task.status) {
-        case "Planned":
-          return "planned";
+        case "Pending":
+          return "pending";
           break;
 
-        case "In progress":
-          return "inprogress";
+        case "Urgent":
+          return "urgent";
           break;
 
-        case "Waiting":
-          return "badge-warning";
-          break;
-
-        case "Testing":
-          return "testing";
-          break;
-
-        case "Done":
-          return "done";
+        case "Completed":
+          return "completed";
           break;
 
         default:
@@ -61729,18 +61720,12 @@ var render = function() {
                                 }
                               },
                               [
-                                _c("option", { attrs: { value: "Planned" } }, [
-                                  _vm._v("Planned")
+                                _c("option", { attrs: { value: "Pending" } }, [
+                                  _vm._v("Pending")
                                 ]),
                                 _vm._v(" "),
-                                _c(
-                                  "option",
-                                  { attrs: { value: "In progress" } },
-                                  [_vm._v("In Progress")]
-                                ),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Waiting" } }, [
-                                  _vm._v("Waiting")
+                                _c("option", { attrs: { value: "Urgent" } }, [
+                                  _vm._v("Urgent")
                                 ])
                               ]
                             ),
@@ -74373,13 +74358,14 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.Form = _utilities_Form__WEBPACK_IMPORTED_MODULE_0__["default"];
-window.events = new Vue();
+window.events = new Vue(); // authenticated user...
+
 Vue.prototype.auth = window.auth;
 Vue.use(vue_js_modal__WEBPACK_IMPORTED_MODULE_1___default.a);
 Vue.use(vue_toasted__WEBPACK_IMPORTED_MODULE_2___default.a, {
   theme: "toasted-primary",
   position: "bottom-left",
-  duration: 5000,
+  duration: 7000,
   action: {
     text: 'Close',
     onClick: function onClick(e, toastObject) {

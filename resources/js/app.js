@@ -14,13 +14,15 @@ window.Vue = require('vue');
 window.Form = Form;
 window.events = new Vue();
 
+// authenticated user...
 Vue.prototype.auth = window.auth;
 
 Vue.use(VModal);
+
 Vue.use(Toasted,  { 
     theme: "toasted-primary", 
 	position: "bottom-left", 
-    duration: 5000,
+    duration: 7000,
     action: {
         text: 'Close',
         onClick: (e, toastObject) => {

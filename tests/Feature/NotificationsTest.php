@@ -27,7 +27,7 @@ class NotificationsTest extends TestCase
             'workspace_id' => $workspace->id,
             'created_by' => $workspace->creator->id,
             'user_responsible' => $member->id,
-            'status' => Task::PLANNED,
+            'status' => Task::URGENT,
             'updated_at' => now()->subDay(), // because of the wasUpdatedRecently method on the task.
         ]);
         $this->assertCount(0, $member->unreadNotifications);
@@ -36,7 +36,7 @@ class NotificationsTest extends TestCase
         // Act: update tasks status
         $response = $this->actingAs($workspace->creator)
             ->json('PATCH', "/workspaces/{$workspace->id}/tasks/{$task->id}", [
-                'status' => Task::DONE,
+                'status' => Task::COMPLETED,
             ]);
 
         // Assert: the notification exist for the workspace members

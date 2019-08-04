@@ -162,9 +162,8 @@
                       class="block appearance-none w-full bg-gray-200 border text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white"
                       :class="form.errors.has('status') ? 'border-red-400' : ''"
                     >
-                      <option value="Planned">Planned</option>
-                      <option value="In progress">In Progress</option>
-                      <option value="Waiting">Waiting</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Urgent">Urgent</option>
                     </select>
                     <div
                       class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"

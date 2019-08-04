@@ -36,6 +36,7 @@ class ViewWorkspaceTest extends TestCase
     /** @test */
     public function workspace_members_can_see_their_own_workspace_details()
     {
+        $this->withoutExceptionHandling();
         $workspace = factory(Workspace::class)->create();
         $member = factory(User::class)->create();
         $workspace->addMember($member);

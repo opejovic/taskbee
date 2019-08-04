@@ -60,7 +60,7 @@ class CreateTasksTest extends TestCase
                     'user_responsible' => $member->id,
                     'start_date'       => '2019-05-12',
                     'finish_date'      => '2019-05-25',
-                    'status'           => Task::PLANNED,
+                    'status'           => Task::URGENT,
                 ]
             );
 
@@ -115,11 +115,11 @@ class CreateTasksTest extends TestCase
 
         $endpoint = "workspaces/{$workspace->id}/tasks/{$johnsTask->id}";
 
-        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::WAITING])->assertStatus(200);
-        $this->assertEquals(Task::WAITING, $john->tasks->fresh()->first()->status);
+        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::URGENT])->assertStatus(200);
+        $this->assertEquals(Task::URGENT, $john->tasks->fresh()->first()->status);
 
-        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::DONE])->assertStatus(429);
-        $this->assertEquals(Task::WAITING, $john->tasks->fresh()->first()->status);
+        $this->actingAs($jane)->json('PATCH', $endpoint, ['status' => Task::COMPLETED])->assertStatus(429);
+        $this->assertEquals(Task::URGENT, $john->tasks->fresh()->first()->status);
     }
 
     /** @test */
@@ -139,7 +139,7 @@ class CreateTasksTest extends TestCase
                     'user_responsible' => $taskCreator->id,
                     'start_date'       => '2019-05-12',
                     'finish_date'      => '2019-05-25',
-                    'status'           => Task::PLANNED,
+                    'status'           => Task::URGENT,
                 ]
             );
         $response->assertStatus(422);

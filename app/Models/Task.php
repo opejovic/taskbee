@@ -10,11 +10,9 @@ class Task extends Model
     /**
      * Class constants. Allowed statuses for the model.
      */
-    const PLANNED     = 'Planned';
-    const IN_PROGRESS = 'In progress';
-    const WAITING     = 'Waiting';
-    const TESTING     = 'Testing';
-    const DONE        = 'Done';
+    const PENDING     = 'Pending';
+    const URGENT      = 'Urgent';
+    const COMPLETED   = 'Completed';
 
     /**
      * The attributes that are not mass assignable.
