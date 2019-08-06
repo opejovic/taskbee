@@ -53,11 +53,9 @@ class WorkspacesController extends Controller
         try {
             $this->authorize('update', $workspace);
 
-            $tasks = $workspace->tasks;
-
             return view('workspaces.show', [
                 'workspace' => $workspace,
-                'tasks' => $tasks,
+                'tasks' => $workspace->tasks,
                 'invitations' => $workspace->invitations()->paginate(5)
             ]);
         } catch (SubscriptionExpiredException $e) {
