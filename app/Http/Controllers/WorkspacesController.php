@@ -53,10 +53,19 @@ class WorkspacesController extends Controller
         try {
             $this->authorize('update', $workspace);
 
+            $workspace = $workspace->load(
+                [
+                    'creator' => function ($query) {
+                        $query->select('id', 'first_name', 'last_name');
+                    }, 
+                    'authorization'
+                ]
+            );
+
             return view('workspaces.show', [
                 'workspace' => $workspace,
-                'tasks' => $workspace->tasks,
-                'invitations' => $workspace->invitations()->paginate(5)
+                'tasks' => $workspace->tasks->take(12),
+                'invitations' => $workspace->invitations,
             ]);
         } catch (SubscriptionExpiredException $e) {
             return redirect(route('subscription-expired.show', $workspace));

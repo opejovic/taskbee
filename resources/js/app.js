@@ -55,6 +55,9 @@ Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('task-filter-dropdown', require('./components/tasks/TaskFilterDropdown.vue').default);
 Vue.component('user-menu-dropdown', require('./components/UserMenuDropdown.vue').default);
 
+Vue.component('team', require('./components/workspaces/Team.vue').default);
+Vue.component('tasks-overview', require('./components/workspaces/TasksOverview.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

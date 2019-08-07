@@ -29,6 +29,13 @@ class Task extends Model
     protected $dates = ['start_date', 'finish_date'];
 
     /**
+     * Attributes that are included in every query.
+     *
+     * @var array
+     **/
+    protected $appends = ['shortName'];
+
+    /**
      * Task has an assignee.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -121,5 +128,15 @@ class Task extends Model
     public function getFormattedFinishDateAttribute()
     {
         return $this->finish_date->format('F j, Y');
+    }
+
+    /**
+     * Return the shorter task name.
+     *
+     * @return string
+     */
+    public function getShortNameAttribute()
+    {
+        return str_limit($this->name, 15);
     }
 }

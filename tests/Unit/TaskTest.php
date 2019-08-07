@@ -55,4 +55,13 @@ class TaskTest extends TestCase
         $task->updated_at = now()->subWeek();
         $this->assertFalse($task->wasUpdatedRecently());
 	}
+
+	/** @test */
+	function it_can_retrieve_a_limited_characters_off_of_its_name()
+	{
+		$task = factory(Task::class)->create([
+			'name' => 'Fifteen chars title. A Really, really, really, long title.'
+		]);
+        $this->assertEquals('Fifteen chars t...', $task->shortName);
+	}
 }

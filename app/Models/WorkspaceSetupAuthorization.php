@@ -15,6 +15,13 @@ class WorkspaceSetupAuthorization extends Model
     const INITIAL_MEMBER_COUNT = 1;
 
     /**
+     * Attributes that are included in every query.
+     *
+     * @var array
+     **/
+    protected $appends = ['invitesRemaining'];
+
+    /**
      * Get the route key for the model.
      *
      * @return string
