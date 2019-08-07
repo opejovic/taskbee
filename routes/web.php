@@ -65,3 +65,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 });
 
 Route::middleware('guest')->get('signup', 'SubscriptionsController@create')->name('signup');
+
+Route::middleware('auth')->get('/api/workspaces/{workspace}/tasks', 'API\TasksController@index');

@@ -57,6 +57,7 @@ Vue.component('user-menu-dropdown', require('./components/UserMenuDropdown.vue')
 
 Vue.component('team', require('./components/workspaces/Team.vue').default);
 Vue.component('tasks-overview', require('./components/workspaces/TasksOverview.vue').default);
+Vue.component('paginator', require('./components/Paginator.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -29,43 +29,69 @@
     <!-- body -->
     <div class="px-5 py-5 w-full flex-1 items-center">
       <div class="text-left text-gray-800 text-sm xl:flex">
-          <div class="text-center flex flex-wrap items-center justify-center items-stretch">
-            <div
-              v-for="task in tasks"
-              :key="task.id"
-              class="cursor-pointer w-1/4 py-8 border m-1 flex items-center hover:bg-gray-200 rounded"
-            >
-              <div class="flex items-center">
-                <div class="mx-2">{{ task.id }}.</div>
+        <div
+          class="text-center flex flex-wrap items-center justify-center items-stretch w-full"
+        >
+          <div
+            v-for="task in items"
+            :key="task.id"
+            class="cursor-pointer w-1/4 py-8 border m-1 xl:flex items-center hover:bg-gray-200 rounded"
+          >
+            <div class="flex items-center justify-between">
+              <div class="mx-2">{{ task.id }}.</div>
 
-                <div class="">
-                  {{ task.shortName }}
-                </div>
-              </div>
-
-              <div
-                class="mx-2 text-xs rounded-lg px-1 font-medium"
-                :class="colorBy(task.status)"
-              >
-                {{ task.status }}
+              <div class="">
+                {{ task.shortName }}
               </div>
             </div>
+
+            <div
+              class="mx-2 text-xs rounded-lg px-1 font-medium"
+              :class="colorBy(task.status)"
+            >
+              {{ task.status }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- footer -->
     <div class="w-full bottom-0 pb-5">
-      footer
+      <paginator :dataSet="dataSet" @changed="fetch"></paginator>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    props: ["tasks"],
+    // props: ["tasks"],
+
+    data() {
+      return {
+        dataSet: false,
+        items: []
+      };
+    },
+
+    created() {
+      this.fetch();
+    },
 
     methods: {
+      fetch(page) {
+        axios.get(this.url(page)).then(this.refresh);
+      },
+
+      url(page = 1) {
+        return `/api/workspaces/${auth.workspace_id}/tasks?page=${page}`;
+      },
+
+      refresh({ data }) {
+        this.dataSet = data;
+        this.items = data.data;
+      },
+
       colorBy(status) {
         switch (status) {
           case "Urgent":

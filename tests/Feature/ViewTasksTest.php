@@ -91,4 +91,23 @@ class ViewTasksTest extends TestCase
         $response->assertSee($membersTask->name);
         $response->assertDontSee($otherTask->name);
     }
+
+    /** @test */
+    function tasks_can_be_fetched_via_api_route()
+    {
+        $don = factory(User::class)->create();
+        $task = factory(Task::class)->create([
+            'workspace_id' => $this->workspace->id
+        ]);
+
+        $this->workspace->addMember($don);
+
+        $this->actingAs($don)->get("/api/workspaces/{$this->workspace->id}/tasks")
+            ->assertSee($task->name)
+            ->assertSee($task->creator->full_name)
+            ->assertSee($task->assignee->full_name)
+            ->assertSee($task->status)
+            ->assertSee($task->start_date)
+            ->assertSee($task->finish_date);
+    }
 }
