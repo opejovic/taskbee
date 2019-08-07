@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Facades;
+namespace taskbee\Facades;
 
-use App\Helpers\AuthorizationCodeGenerator;
+use taskbee\Helpers\AuthorizationCodeGenerator;
 use Illuminate\Support\Facades\Facade;
 
 class AuthorizationCode extends Facade

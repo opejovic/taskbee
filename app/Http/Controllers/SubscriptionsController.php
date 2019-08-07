@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\Plan;
+use taskbee\Models\Plan;
 use Illuminate\Support\Facades\Auth;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\WorkspaceSetupAuthorization;
 
 class SubscriptionsController extends Controller
 {
@@ -23,7 +23,7 @@ class SubscriptionsController extends Controller
     /**
      * Create a Stripe checkout session.
      *
-     * @param \App\Models\Plan $plan
+     * @param \taskbee\Models\Plan $plan
      *
      * @return \Stripe\Checkout\Session
      */

@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                @if (App\Models\User::where('email', $invitation->email)->exists())
+                @if (taskbee\Models\User::where('email', $invitation->email)->exists())
                     @include('invitations.existing-users')
                 @else
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace taskbee\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -12,7 +12,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Models\Workspace' => 'App\Policies\WorkspacePolicy',
+        'taskbee\Models\Workspace' => 'taskbee\Policies\WorkspacePolicy',
     ];
 
     /**

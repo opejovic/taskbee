@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\Plan;
-use App\Models\User;
-use App\Models\Workspace;
+use taskbee\Models\Plan;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +13,7 @@ class WorkspaceMembersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
      */
@@ -34,7 +34,7 @@ class WorkspaceMembersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      * @param int $memberId
      *
      * @return \Illuminate\Http\Response

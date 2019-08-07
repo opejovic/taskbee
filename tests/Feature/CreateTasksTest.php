@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\Task;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Subscription;
-use App\Mail\TaskCreatedEmail;
+use taskbee\Models\Task;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Subscription;
+use taskbee\Mail\TaskCreatedEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;

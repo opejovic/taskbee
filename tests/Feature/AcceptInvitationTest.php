@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Invitation;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Invitation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -16,6 +16,7 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     public function viewing_unused_invitations()
     {
+        $this->withoutExceptionHandling();
         $invitation = factory(Invitation::class)->create([
             'user_id' => null,
             'code' => 'INVITATIONCODE123',

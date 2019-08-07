@@ -3,9 +3,9 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Task;
-use App\Models\User;
-use App\Models\Workspace;
+use taskbee\Models\Task;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -88,9 +88,9 @@ class UserTest extends TestCase
 	function can_get_avatar_path_attribute()
 	{
 		$user = factory(User::class)->create(['avatar_path' => null]);
-		$this->assertEquals("https://taskmonkey.test/storage/avatars/default.png", $user->avatar_path);
+		$this->assertEquals("http://127.0.0.1:8000/img/default.png", $user->avatar_path);
 
 		$otherUser = factory(User::class)->create(['avatar_path' => 'avatars/me.jpg']);
-		$this->assertEquals("https://taskmonkey.test/storage/avatars/me.jpg", $otherUser->avatar_path);
+		$this->assertEquals("http://127.0.0.1:8000/storage/avatars/me.jpg", $otherUser->avatar_path);
 	}
 }

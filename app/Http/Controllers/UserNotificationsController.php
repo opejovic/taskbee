@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\User;
+use taskbee\Models\User;
 use Illuminate\Http\Request;
 
 class UserNotificationsController extends Controller
@@ -10,7 +10,7 @@ class UserNotificationsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \App\Models\User $user
+     * @param \taskbee\Models\User $user
      *
      * @return \Illuminate\Http\Response
      */
@@ -22,7 +22,7 @@ class UserNotificationsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\User $user
+     * @param \taskbee\Models\User $user
      * @param int $notificationId
      *
      * @return void

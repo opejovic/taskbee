@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Invitation;
+use taskbee\Models\User;
+use taskbee\Models\Invitation;
 use Illuminate\Http\Request;
 
 class AcceptInvitationsController extends Controller

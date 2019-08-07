@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Invitation;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Invitation;
+use taskbee\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -3,13 +3,13 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Invitation;
-use App\Mail\InvitationEmail;
-use App\Facades\InvitationCode;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Invitation;
+use taskbee\Mail\InvitationEmail;
+use taskbee\Facades\InvitationCode;
 use Illuminate\Support\Facades\Mail;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Providers;
+namespace taskbee\Providers;
 
-use App\Billing\StripeSubscriptionGateway;
-use App\Billing\SubscriptionGateway;
-use App\Helpers\AuthorizationCodeGenerator;
-use App\Helpers\InvitationCodeGenerator;
-use App\Helpers\RandomNumberGenerator;
+use taskbee\Billing\StripeSubscriptionGateway;
+use taskbee\Billing\SubscriptionGateway;
+use taskbee\Helpers\AuthorizationCodeGenerator;
+use taskbee\Helpers\InvitationCodeGenerator;
+use taskbee\Helpers\RandomNumberGenerator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

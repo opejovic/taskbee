@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace taskbee\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -64,7 +64,7 @@ class User extends Authenticatable
     /**
      * Does user owns a workspace?
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return bool
      */
@@ -108,9 +108,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Retrieve auth users owned workspace, if there is one.
+     * Retrieve the workspace authenticated user belongs to, if there is one.
      *
-     * @return \App\Models\Workspace
+     * @return \taskbee\Models\Workspace
      **/
     public function workspaceOwned()
     {
@@ -144,6 +144,6 @@ class User extends Authenticatable
      */
     public function getAvatarPathAttribute($avatar)
     {
-        return $avatar ? asset("storage/{$avatar}") : asset('storage/avatars/default.png');
+        return $avatar ? asset("storage/{$avatar}") : asset('img/default.png');
     }
 }

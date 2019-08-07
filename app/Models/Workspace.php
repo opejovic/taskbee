@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace taskbee\Models;
 
-use App\Mail\SlotPurchasedEmail;
+use taskbee\Mail\SlotPurchasedEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 

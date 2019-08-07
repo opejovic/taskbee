@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Billing;
+namespace taskbee\Billing;
 
 interface SubscriptionGateway
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace taskbee\Models;
 
-use App\Facades\AuthorizationCode;
+use taskbee\Facades\AuthorizationCode;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
-use App\Mail\SubscriptionPurchasedEmail;
+use taskbee\Mail\SubscriptionPurchasedEmail;
 
 class WorkspaceSetupAuthorization extends Model
 {
@@ -45,7 +45,7 @@ class WorkspaceSetupAuthorization extends Model
     /**
      * Create an authorization for subscription.
      *
-     * @param \App\Models\Subscription $subscription
+     * @param \taskbee\Models\Subscription $subscription
      *
      * @return void
      */
@@ -75,7 +75,7 @@ class WorkspaceSetupAuthorization extends Model
      *
      * @param string $code
      *
-     * @return \App\Models\WorkspaceSetupAuthorization
+     * @return \taskbee\Models\WorkspaceSetupAuthorization
      */
     public static function findByCode($code)
     {

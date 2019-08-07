@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Facades;
+namespace taskbee\Facades;
 
-use App\Helpers\InvitationCodeGenerator;
+use taskbee\Helpers\InvitationCodeGenerator;
 use Illuminate\Support\Facades\Facade;
 
 class InvitationCode extends Facade

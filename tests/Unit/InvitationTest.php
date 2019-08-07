@@ -3,8 +3,8 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Workspace;
-use App\Models\Invitation;
+use taskbee\Models\Workspace;
+use taskbee\Models\Invitation;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -18,7 +18,7 @@ class InvitationTest extends TestCase
 		$workspace = factory(Workspace::class)->create();
 		$invitation = factory(Invitation::class)->create(['workspace_id' => $workspace->id]);
 
-		$this->assertInstanceOf('App\Models\Workspace', $invitation->workspace);
+		$this->assertInstanceOf('taskbee\Models\Workspace', $invitation->workspace);
 	}
 
 	/** @test */

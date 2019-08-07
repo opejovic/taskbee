@@ -3,17 +3,17 @@
 namespace Feature;
 
 use Tests\TestCase;
-use App\Models\Plan;
-use App\Models\User;
-use App\Models\Bundle;
-use App\Models\Customer;
-use App\Models\Subscription;
-use App\Facades\AuthorizationCode;
-use App\Billing\SubscriptionGateway;
+use taskbee\Models\Plan;
+use taskbee\Models\User;
+use taskbee\Models\Bundle;
+use taskbee\Models\Customer;
+use taskbee\Models\Subscription;
+use taskbee\Facades\AuthorizationCode;
+use taskbee\Billing\SubscriptionGateway;
 use Illuminate\Support\Facades\Mail;
-use App\Billing\FakeSubscriptionGateway;
-use App\Mail\SubscriptionPurchasedEmail;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Billing\FakeSubscriptionGateway;
+use taskbee\Mail\SubscriptionPurchasedEmail;
+use taskbee\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -68,7 +68,7 @@ class PurchaseSubscriptionsTest extends TestCase
         $this->assertEquals('jane@example.com', $setupAuthorization->email);
         $this->assertEquals('TESTCODE123', $setupAuthorization->code);
 
-		Mail::assertQueued(SubscriptionPurchasedEmail::class, 
+		Mail::assertQueued(SubscriptionPurchasedEmail::class,
 			function ($mail) use ($subscription, $setupAuthorization) {
 				return $mail->hasTo('jane@example.com')
 					&& $mail->setupAuthorization->is($setupAuthorization)

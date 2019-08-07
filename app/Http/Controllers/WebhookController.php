@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Billing\StripeSubscriptionGateway;
+use taskbee\Billing\StripeSubscriptionGateway;
 
 class WebhookController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
+use taskbee\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -43,7 +43,7 @@ class CreateAccountTest extends TestCase
         $user = User::whereEmail('john@example.com')->first();
         $this->assertNotNull($user);
 	}
-	
+
 	/** @test */
 	function first_name_is_required_in_order_to_create_an_account()
 	{

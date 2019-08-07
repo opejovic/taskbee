@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Plan;
-use App\Models\User;
-use App\Models\Invitation;
-use App\Models\Subscription;
+use taskbee\Models\Plan;
+use taskbee\Models\User;
+use taskbee\Models\Invitation;
+use taskbee\Models\Subscription;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -42,7 +42,7 @@ class SubscriptionTest extends TestCase
 
 		$sub = Subscription::whereEmail('john@example.com')->first();
 
-		$this->assertInstanceOf('App\Models\User', $sub->owner);
+		$this->assertInstanceOf('taskbee\Models\User', $sub->owner);
 	}
 
 	/** @test */

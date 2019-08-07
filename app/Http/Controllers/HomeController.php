@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\WorkspaceSetupAuthorization;
 
 class HomeController extends Controller
 {

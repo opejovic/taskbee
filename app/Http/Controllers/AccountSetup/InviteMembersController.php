@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\AccountSetup;
+namespace taskbee\Http\Controllers\AccountSetup;
 
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Invitation;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Invitation;
 use Illuminate\Http\Request;
-use App\Facades\InvitationCode;
+use taskbee\Facades\InvitationCode;
 use Illuminate\Validation\Rule;
-use App\Http\Controllers\Controller;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Http\Controllers\Controller;
+use taskbee\Models\WorkspaceSetupAuthorization;
 
 class InviteMembersController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
      */

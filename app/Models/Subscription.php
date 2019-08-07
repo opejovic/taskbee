@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace taskbee\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SubscriptionExpiredEmail;
+use taskbee\Mail\SubscriptionExpiredEmail;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\WorkspaceSetupAuthorization;
 
 class Subscription extends Model
 {

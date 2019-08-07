@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace taskbee\Models;
 
-use App\Mail\InvitationEmail;
+use taskbee\Mail\InvitationEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 

@@ -2,7 +2,7 @@
 
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\WorkspaceSetupAuthorization;
 use Faker\Generator as Faker;
 
 $factory->define(WorkspaceSetupAuthorization::class, function (Faker $faker) {
@@ -11,10 +11,10 @@ $factory->define(WorkspaceSetupAuthorization::class, function (Faker $faker) {
         'customer' => 'cus_FAKECUS123',
 		'code' => 'AUTHORIZATIONCODE1234',
 		'subscription_id' => function () {
-			return factory(App\Models\Subscription::class)->create()->id;
+			return factory(taskbee\Models\Subscription::class)->create()->id;
 		},
 		'plan_id' => function () {
-			return factory(App\Models\Plan::class)->create()->stripe_id;
+			return factory(taskbee\Models\Plan::class)->create()->stripe_id;
 		},
         'members_limit' => 5,
     ];

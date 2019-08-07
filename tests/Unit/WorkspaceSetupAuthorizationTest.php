@@ -3,13 +3,13 @@
 namespace Unit;
 
 use Tests\TestCase;
-use App\Models\Plan;
-use App\Models\User;
-use App\Models\Subscription;
-use App\Facades\AuthorizationCode;
+use taskbee\Models\Plan;
+use taskbee\Models\User;
+use taskbee\Models\Subscription;
+use taskbee\Facades\AuthorizationCode;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SubscriptionPurchasedEmail;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Mail\SubscriptionPurchasedEmail;
+use taskbee\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -135,6 +135,6 @@ class WorkspaceSetupAuthorizationTest extends TestCase
 		$subscription = factory(Subscription::class)->create();
 		$authorization = factory(WorkspaceSetupAuthorization::class)->create(['subscription_id' => $subscription->stripe_id]);
 
-		$this->assertInstanceOf('App\Models\Subscription', $authorization->subscription);
+		$this->assertInstanceOf('taskbee\Models\Subscription', $authorization->subscription);
 	}
 }

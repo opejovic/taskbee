@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace taskbee\Models;
 
-use App\Notifications\TaskUpdated;
+use taskbee\Notifications\TaskUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -62,7 +62,7 @@ class Task extends Model
      * Query scope, uses ThreadFilter $filters, if provided.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param \App\Filters\TaskFilters $filters
+     * @param \taskbee\Filters\TaskFilters $filters
      *
      * @return void
      */

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\AccountSetup;
+namespace taskbee\Http\Controllers\AccountSetup;
 
-use App\Models\Workspace;
+use taskbee\Models\Workspace;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use taskbee\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\WorkspaceSetupAuthorization;
 
 class WorkspacesController extends Controller
 {

@@ -3,12 +3,12 @@
 namespace Tests\Unit\Billing;
 
 use Tests\TestCase;
-use App\Billing\PaymentFailedException;
-use App\Billing\StripeSubscriptionGateway;
+use taskbee\Billing\PaymentFailedException;
+use taskbee\Billing\StripeSubscriptionGateway;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-/** 
+/**
  * @group integration
  */
 class StripeSubscriptionGatewayTest extends TestCase
@@ -63,10 +63,10 @@ class StripeSubscriptionGatewayTest extends TestCase
 	/** @test */
 	function cannot_create_two_customers_with_the_same_email()
 	{
-		// since this uses RefreshDatabase, it wont persist a customer to db table, 
-		// and the check for the existing customer in our local db will always return false.. 
-		//(So if we have a customer with email jonh@example.com in our stripe customers, 
-		// running this test will create another customer with john@example.com email. 
+		// since this uses RefreshDatabase, it wont persist a customer to db table,
+		// and the check for the existing customer in our local db will always return false..
+		//(So if we have a customer with email jonh@example.com in our stripe customers,
+		// running this test will create another customer with john@example.com email.
 		// But in production this will work.)
 
 		$customer = $this->subGateway->createCustomer('john@example.com', $this->validToken());

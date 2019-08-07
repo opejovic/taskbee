@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Billing;
+namespace taskbee\Billing;
 
-use App\Models\Plan;
+use taskbee\Models\Plan;
 
 class StripePlansGateway
 {

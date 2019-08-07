@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\Task;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Filters\TaskFilters;
+use taskbee\Models\Task;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Filters\TaskFilters;
 use Illuminate\Http\Request;
-use App\Mail\TaskCreatedEmail;
-use App\Notifications\TaskCreated;
-use App\Notifications\TaskDeleted;
+use taskbee\Mail\TaskCreatedEmail;
+use taskbee\Notifications\TaskCreated;
+use taskbee\Notifications\TaskDeleted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Exceptions\SubscriptionExpiredException;
+use taskbee\Exceptions\SubscriptionExpiredException;
 
 class WorkspaceTasksController extends Controller
 {
@@ -49,7 +49,7 @@ class WorkspaceTasksController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -72,7 +72,7 @@ class WorkspaceTasksController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -119,8 +119,8 @@ class WorkspaceTasksController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Models\Workspace $workspace
-     * @param \App\Models\Task $task
+     * @param \taskbee\Models\Workspace $workspace
+     * @param \taskbee\Models\Task $task
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -149,8 +149,8 @@ class WorkspaceTasksController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Workspace $workspace
-     * @param \App\Models\Task $task
+     * @param \taskbee\Models\Workspace $workspace
+     * @param \taskbee\Models\Task $task
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -172,7 +172,7 @@ class WorkspaceTasksController extends Controller
     /**
      * Notify the members of workspace for the given task, about changes that occurred.
      *
-     * @param \App\Models\Task $task
+     * @param \taskbee\Models\Task $task
      * @param $class
      *
      * @return void

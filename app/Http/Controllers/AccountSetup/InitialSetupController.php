@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\AccountSetup;
+namespace taskbee\Http\Controllers\AccountSetup;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Http\Controllers\Controller;
+use taskbee\Models\WorkspaceSetupAuthorization;
 
 class InitialSetupController extends Controller
 {
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\WorkspaceSetupAuthorization $authorization
+     * @param \taskbee\Models\WorkspaceSetupAuthorization $authorization
      *
      * @return \Illuminate\View\View
      */

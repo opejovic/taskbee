@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\Workspace;
+use taskbee\Models\Workspace;
 use Illuminate\Http\Request;
 
 class AddMemberSlotController extends Controller
@@ -10,7 +10,7 @@ class AddMemberSlotController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
      */

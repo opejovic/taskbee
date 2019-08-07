@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace taskbee\Http\Controllers\Auth;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Invitation;
-use App\Http\Controllers\Controller;
+use taskbee\Models\User;
+use taskbee\Models\Invitation;
+use taskbee\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -56,7 +56,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @return \App\Models\User
+     * @return \taskbee\Models\User
      */
     protected function register()
     {
@@ -83,7 +83,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @return \App\Models\User
+     * @return \taskbee\Models\User
      */
     protected function registerInvitees()
     {

@@ -169,12 +169,12 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\TelescopeServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        taskbee\Providers\AppServiceProvider::class,
+        taskbee\Providers\AuthServiceProvider::class,
+        // taskbee\Providers\BroadcastServiceProvider::class,
+        taskbee\Providers\EventServiceProvider::class,
+        taskbee\Providers\TelescopeServiceProvider::class,
+        taskbee\Providers\RouteServiceProvider::class,
 
     ],
 

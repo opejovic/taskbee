@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace taskbee\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;

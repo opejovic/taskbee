@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Subscription;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Subscription;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

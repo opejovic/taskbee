@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\Plan;
+use taskbee\Models\Plan;
 use Illuminate\Http\Request;
 
 class SubscriptionPlansController extends Controller

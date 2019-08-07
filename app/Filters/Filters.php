@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters;
+namespace taskbee\Filters;
 
 use Illuminate\Http\Request;
 

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Plan;
-use App\Billing\StripePlansGateway;
+use taskbee\Models\Plan;
+use taskbee\Billing\StripePlansGateway;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ use App\Billing\StripePlansGateway;
 */
 
 Artisan::command('generate-plans', function () {
-    
+
     if (Plan::count() > 0) {
         $this->warn(
             'Looks like you already have plans created. Please check your database, there should be no plans there prior to running this command.'
@@ -24,7 +24,7 @@ Artisan::command('generate-plans', function () {
     }
 
     $this->info("Preparing.. please wait.");
-    
+
     // Create Stripe product and subscription plans
     (new StripePlansGateway(config('services.stripe.secret')))->generate();
 
@@ -37,9 +37,9 @@ Artisan::command('generate-plans', function () {
 })->describe('Generate subscription plans. Run only once, at the beggining of the journey.');
 
 Artisan::command('stripe-webhook', function () {
-    
+
     $this->info("Generating stripe webhook.. please wait.");
-    
+
     \Stripe\WebhookEndpoint::create([
         "url" => config('services.ngrok.url') . "/stripe-webhook",
         "enabled_events" => [
@@ -50,7 +50,7 @@ Artisan::command('stripe-webhook', function () {
             "checkout.session.completed",
         ]
     ], ['api_key' => config('services.stripe.secret')]);
-    
+
     $this->info("Done!");
 
 })->describe('Generate a stripe webhook.');

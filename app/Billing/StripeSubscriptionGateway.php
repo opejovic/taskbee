@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Billing;
+namespace taskbee\Billing;
 
-use App\Models\Customer;
-use App\Models\Subscription;
-use App\Models\Workspace;
+use taskbee\Models\Customer;
+use taskbee\Models\Subscription;
+use taskbee\Models\Workspace;
 
 class StripeSubscriptionGateway implements SubscriptionGateway
 {

@@ -2,7 +2,7 @@
 
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
-use App\Models\Bundle;
+use taskbee\Models\Bundle;
 use Faker\Generator as Faker;
 
 // $factory->define(Bundle::class, function (Faker $faker) {

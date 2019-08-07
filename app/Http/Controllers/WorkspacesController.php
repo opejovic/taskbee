@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace taskbee\Http\Controllers;
 
-use App\Models\Workspace;
+use taskbee\Models\Workspace;
 use Illuminate\Http\Request;
-use App\Exceptions\SubscriptionExpiredException;
-use App\Exceptions\SubscriptionCanceledException;
+use taskbee\Exceptions\SubscriptionExpiredException;
+use taskbee\Exceptions\SubscriptionCanceledException;
 
 class WorkspacesController extends Controller
 {
@@ -43,7 +43,7 @@ class WorkspacesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Workspace $workspace
+     * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException

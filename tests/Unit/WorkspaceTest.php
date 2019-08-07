@@ -3,11 +3,11 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Task;
-use App\Models\User;
-use App\Models\Workspace;
-use App\Models\Subscription;
-use App\Models\WorkspaceSetupAuthorization;
+use taskbee\Models\Task;
+use taskbee\Models\User;
+use taskbee\Models\Workspace;
+use taskbee\Models\Subscription;
+use taskbee\Models\WorkspaceSetupAuthorization;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -4,7 +4,7 @@ namespace Tests\Unit\Billing;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use App\Billing\StripePlansGateway;
+use taskbee\Billing\StripePlansGateway;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

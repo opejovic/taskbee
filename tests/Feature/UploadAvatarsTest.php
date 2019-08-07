@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
+use taskbee\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -40,8 +40,8 @@ class UploadAvatarsTest extends TestCase
 				'avatar' => $file = UploadedFile::fake()->image('avatar.jpg'),
 			]);
 
-		$this->assertEquals("https://taskmonkey.test/storage/avatars/{$file->hashName()}", $user->avatar_path);
-			
+		$this->assertEquals("http://127.0.0.1:8000/storage/avatars/{$file->hashName()}", $user->avatar_path);
+
 		Storage::disk('public')->assertExists("avatars/{$file->hashName()}");
 	}
 }
