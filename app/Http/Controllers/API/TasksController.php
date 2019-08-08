@@ -18,7 +18,7 @@ class TasksController extends Controller
     {
         $this->authorize('update', $workspace);
 
-        return $workspace->tasks()->paginate(9);
+        return $workspace->tasks()->paginate(12);
     }
 
     /**

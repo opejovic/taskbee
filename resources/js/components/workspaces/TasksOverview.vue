@@ -35,14 +35,10 @@
           <div
             v-for="task in items"
             :key="task.id"
-            class="cursor-pointer w-1/4 py-8 border m-1 xl:flex items-center hover:bg-gray-200 rounded"
+            class="cursor-pointer w-1/4 py-8 border m-1 items-center hover:bg-gray-200 rounded"
           >
-            <div class="flex items-center justify-between">
-              <div class="mx-2">{{ task.id }}.</div>
-
-              <div class="">
+            <div class="">
                 {{ task.shortName }}
-              </div>
             </div>
 
             <div
@@ -107,7 +103,13 @@
             return;
         }
       }
-    }
+    },
+
+    mounted () {
+      window.events.$on(["task-added"], () => {
+        this.fetch();
+      });
+    },
   };
 </script>
 
