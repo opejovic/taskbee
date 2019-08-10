@@ -3529,15 +3529,15 @@ __webpack_require__.r(__webpack_exports__);
     colorBy: function colorBy(status) {
       switch (status) {
         case "Urgent":
-          return "bg-red-300";
+          return "bg-red-200";
           break;
 
         case "Pending":
-          return "bg-yellow-300";
+          return "bg-yellow-200";
           break;
 
         case "Completed":
-          return "bg-green-300";
+          return "bg-green-200";
           break;
 
         default:
@@ -60721,7 +60721,7 @@ var render = function() {
               }
             ],
             staticClass:
-              "mx-1 bg-gray-200 rounded py-3 w-1/4 hover:bg-gray-400 cursor-pointer",
+              "shadow rounded-lg mx-1 bg-indigo-800 text-white rounded py-1 px-4 text-xs hover:bg-indigo-700 cursor-pointer",
             on: {
               click: function($event) {
                 $event.preventDefault()
@@ -60744,7 +60744,7 @@ var render = function() {
               }
             ],
             staticClass:
-              "mx-1 bg-gray-200 rounded py-3 w-1/4 hover:bg-gray-400 cursor-pointer",
+              "shadow rounded-lg mx-1 bg-indigo-800 text-white rounded py-1 px-4 text-xs hover:bg-indigo-700 cursor-pointer",
             on: {
               click: function($event) {
                 $event.preventDefault()
@@ -62638,7 +62638,7 @@ var render = function() {
               {
                 key: task.id,
                 staticClass:
-                  "cursor-pointer w-1/4 py-8 border m-1 items-center hover:bg-gray-200 rounded"
+                  "cursor-pointer w-1/4 py-8 shadow m-1 items-center hover:bg-gray-200 rounded bg-white"
               },
               [
                 _c("div", {}, [
@@ -62958,7 +62958,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "xl:w-1/3 lg:w-1/2 md:w-1/2 sm:w-1/2 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 mb-5 w-full mx-auto border pt-5 shadow text-center bg-white rounded"
+            "xl:w-1/4 lg:w-1/2 md:w-1/2 sm:w-1/2 xl:mb-0 lg:mb-0 md:mb-0 sm:mb-0 mb-5 w-full mx-auto pt-5 border shadow text-center bg-white rounded"
         },
         [
           _c("team", {
@@ -62972,7 +62972,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "md:ml-5 xl:ml-5 sm:ml-5 xl:w-2/3 lg:w-1/2 md:w-1/2 sm:w-1/2 w-full mx-auto border pt-5 shadow text-center bg-white rounded"
+            "md:ml-5 xl:ml-5 sm:ml-5 xl:w-3/4 lg:w-1/2 md:w-1/2 sm:w-1/2 w-full mx-auto pt-5 border shadow text-center bg-white rounded"
         },
         [_c("tasks-overview", { attrs: { tasks: _vm.tasks } })],
         1

@@ -2,13 +2,13 @@
   <ul class="pagination flex items-center justify-center" v-if="shouldPaginate">
     <li
       v-show="prevUrl" @click.prevent="page--"
-      class="mx-1 bg-gray-200 rounded py-3 w-1/4 hover:bg-gray-400 cursor-pointer"
+      class="shadow rounded-lg mx-1 bg-indigo-800 text-white rounded py-1 px-4 text-xs hover:bg-indigo-700 cursor-pointer"
     >
       <a class="page-link">Previous</a>
     </li>
     <li
       v-show="nextUrl" @click.prevent="page++"
-      class="mx-1 bg-gray-200 rounded py-3 w-1/4 hover:bg-gray-400 cursor-pointer"
+      class="shadow rounded-lg mx-1 bg-indigo-800 text-white rounded py-1 px-4 text-xs hover:bg-indigo-700 cursor-pointer"
     >
       <a class="page-link">Next</a>
     </li>

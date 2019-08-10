@@ -35,7 +35,7 @@
           <div
             v-for="task in items"
             :key="task.id"
-            class="cursor-pointer w-1/4 py-8 border m-1 items-center hover:bg-gray-200 rounded"
+            class="cursor-pointer w-1/4 py-8 shadow m-1 items-center hover:bg-gray-200 rounded bg-white"
           >
             <div class="">
                 {{ task.shortName }}
@@ -91,13 +91,13 @@
       colorBy(status) {
         switch (status) {
           case "Urgent":
-            return "bg-red-300";
+            return "bg-red-200";
             break;
           case "Pending":
-            return "bg-yellow-300";
+            return "bg-yellow-200";
             break;
           case "Completed":
-            return "bg-green-300";
+            return "bg-green-200";
             break;
           default:
             return;
