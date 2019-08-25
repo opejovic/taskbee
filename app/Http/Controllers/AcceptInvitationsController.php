@@ -4,7 +4,6 @@ namespace taskbee\Http\Controllers;
 
 use taskbee\Models\User;
 use taskbee\Models\Invitation;
-use Illuminate\Http\Request;
 
 class AcceptInvitationsController extends Controller
 {

@@ -85,7 +85,6 @@ class StripePlansGateway
      * Create a Basic Monthly StripePlan.
      *
      * @param \Stripe\Product $product
-     *
      * @return \Stripe\Plan
      */
     public function basic($product)
@@ -102,7 +101,6 @@ class StripePlansGateway
      * Create a Standard Monthly StripePlan.
      *
      * @param \Stripe\Product $product
-     *
      * @return \Stripe\Plan
      */
     public function standard($product)
@@ -119,7 +117,6 @@ class StripePlansGateway
      * Create a Premium Monthly StripePlan.
      *
      * @param \Stripe\Product $product
-     *
      * @return \Stripe\Plan
      */
     public function premium($product)

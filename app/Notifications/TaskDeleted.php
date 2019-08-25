@@ -11,8 +11,19 @@ class TaskDeleted extends Notification
 {
     use Queueable;
 
-	protected $task;
-	protected $user;
+    /**
+     * The task instance
+     * 
+     * @var \App\Models\Task
+     */
+    protected $task;
+
+    /**
+     * The user instance
+     * 
+     * @var \App\Models\user
+     */
+    protected $user;
 
     /**
      * Create a new notification instance.

@@ -11,6 +11,11 @@ class SubscriptionExpiredEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The subscription instance.
+     *
+     * @var \App\Models\Subscription
+     */
     public $subscription;
 
     /**

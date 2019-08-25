@@ -6,12 +6,11 @@ use taskbee\Models\Task;
 use taskbee\Models\User;
 use taskbee\Models\Workspace;
 use taskbee\Filters\TaskFilters;
-use Illuminate\Http\Request;
 use taskbee\Mail\TaskCreatedEmail;
-use taskbee\Notifications\TaskCreated;
-use taskbee\Notifications\TaskDeleted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use taskbee\Notifications\TaskCreated;
+use taskbee\Notifications\TaskDeleted;
 use taskbee\Exceptions\SubscriptionExpiredException;
 
 class WorkspaceTasksController extends Controller
@@ -38,6 +37,7 @@ class WorkspaceTasksController extends Controller
                 'tasks'     => $tasks,
             ]);
         } catch (SubscriptionExpiredException $e) {
+
             if (Auth::user()->owns($workspace)) {
                 return redirect(route('subscription-expired.show', $workspace));
             }
@@ -66,7 +66,6 @@ class WorkspaceTasksController extends Controller
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription expired. Please renew your subscription.", 423);
         }
-
     }
 
     /**
@@ -101,9 +100,10 @@ class WorkspaceTasksController extends Controller
             ]);
 
             $assignee = User::find($task->assignee->id);
+            
             Mail::to($assignee->email)->queue(new TaskCreatedEmail($task, Auth::user()));
 
-            $this->notifyUsers($task, TaskCreated::class);
+            $workspace->notifyMembers($task, TaskCreated::class);
 
             if (request()->wantsJson()) {
                 return $task;
@@ -113,7 +113,6 @@ class WorkspaceTasksController extends Controller
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription expired. Please renew your subscription.", 423);
         }
-
     }
 
     /**
@@ -160,25 +159,11 @@ class WorkspaceTasksController extends Controller
         try {
             $this->authorize('update', $workspace);
 
-            $this->notifyUsers($task, TaskDeleted::class);
+            $workspace->notifyMembers($task, TaskDeleted::class);
 
             $task->delete();
-
         } catch (SubscriptionExpiredException $e) {
             return response("Subscription expired. Please renew your subscription.", 423);
         }
-    }
-
-    /**
-     * Notify the members of workspace for the given task, about changes that occurred.
-     *
-     * @param \taskbee\Models\Task $task
-     * @param $class
-     *
-     * @return void
-     **/
-    private function notifyUsers($task, $class)
-    {
-        $task->workspace->members->each->notify(new $class($task, auth()->user()));
     }
 }

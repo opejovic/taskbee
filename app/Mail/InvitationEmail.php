@@ -10,7 +10,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class InvitationEmail extends Mailable
 {
     use Queueable, SerializesModels;
-
+    
+    /**
+     * The invitation instance.
+     *
+     * @var \App\Models\Invitation
+     */
     public $invitation;
 
     /**

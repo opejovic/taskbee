@@ -11,7 +11,18 @@ class SlotPurchasedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The workspace instance.
+     *
+     * @var \App\Models\Workspace
+     */
     public $workspace;
+    
+    /**
+     * The worskapce setup authorization instance.
+     *
+     * @var \App\Models\WorkspaceSetupAuthorization
+     */
     public $authorization;
 
     /**
@@ -34,6 +45,6 @@ class SlotPurchasedEmail extends Mailable
     public function build()
     {
         return $this->markdown('emails.slot-purchased')
-            ->subject('Successful purchase of additional member slot at Taskmonkey.');
+            ->subject('Successful purchase of additional member slot at TaskBee.');
     }
 }

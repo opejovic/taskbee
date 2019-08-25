@@ -11,6 +11,11 @@ class SubscriptionPurchasedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The workspace setup authorization instance.
+     *
+     * @var \App\Models\WorkspaceSetupAuthorization
+     */
     public $authorization;
 
     /**

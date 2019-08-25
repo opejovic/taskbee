@@ -7,16 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Plan extends Model
 {
 	/**
-	 * Class constants.
+	 * Plans names.
 	 */
 	const BASIC               	 = 'Basic Monthly';
-	const BASIC_PRICE         	 = 580; // per user
-	const BASIC_MEMBERS_LIMIT 	 = 5;
 	const STANDARD               = 'Standard Monthly';
+    const PREMIUM                = 'Premium Monthly';
+
+    /**
+     * Plans per user prices.
+     */
+	const BASIC_PRICE         	 = 580;
 	const STANDARD_PRICE         = 390;
-	const STANDARD_MEMBERS_LIMIT = 10;
-	const PREMIUM                = 'Premium Monthly';
 	const PREMIUM_PRICE          = 295;
+
+    /**
+     * Plans members limit.
+     */
+    const BASIC_MEMBERS_LIMIT 	 = 5;
+	const STANDARD_MEMBERS_LIMIT = 10;
 	const PREMIUM_MEMBERS_LIMIT  = 20;
 
 	/**

@@ -3,7 +3,6 @@
 namespace taskbee\Http\Controllers;
 
 use taskbee\Models\Plan;
-use Illuminate\Http\Request;
 
 class SubscriptionPlansController extends Controller
 {

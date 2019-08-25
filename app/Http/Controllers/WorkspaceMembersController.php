@@ -5,7 +5,6 @@ namespace taskbee\Http\Controllers;
 use taskbee\Models\Plan;
 use taskbee\Models\User;
 use taskbee\Models\Workspace;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class WorkspaceMembersController extends Controller
@@ -21,7 +20,7 @@ class WorkspaceMembersController extends Controller
     {
 		$this->authorize('update', $workspace);
 
-        // We avoid passing in emails in our vue components, which can be visible to anyone.
+        # We avoid passing in emails in our vue components, which can be visible to anyone.
         $members = $workspace->members()->select(['user_id', 'first_name', 'last_name'])->get();
 
         return view('workspace-members.index', [
@@ -43,7 +42,7 @@ class WorkspaceMembersController extends Controller
     {
         abort_unless(Auth::user()->owns($workspace), 403);
 
-        // remove the user from the workspace, if the user isn't the workspace owner
+        # Remove the user from the workspace, if the user isn't the workspace owner
         $user = User::whereId($memberId)->firstOrFail();
         abort_if($user->owns($workspace), 403);
 
@@ -51,8 +50,8 @@ class WorkspaceMembersController extends Controller
             $user->update(['workspace_id' => null]);
         }
 
-        // delete the invitation for this user, also decrement the members invited from workspace and workspace authorization
-        // there is a slight duplication of code here, which will have to be refactored
+        # Delete the invitation for this user, also decrement the members invited from workspace and workspace authorization
+        # there is a slight duplication of code here, which will have to be refactored
         $workspace->members()->detach($memberId);
         $workspace->invitations->where('user_id', $memberId)->first()->delete();
         $workspace->decrement('members_invited');

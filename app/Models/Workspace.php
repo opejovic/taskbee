@@ -134,4 +134,17 @@ class Workspace extends Model
             ->get()
             ->groupBy('status');
     }
+
+    /**
+     * Notify the members of workspace for the given task, about changes that occurred.
+     *
+     * @param \taskbee\Models\Task $task
+     * @param $class
+     *
+     * @return void
+     **/
+    public function notifyMembers($task, $class)
+    {
+        $task->workspace->members->each->notify(new $class($task, auth()->user()));
+    }
 }

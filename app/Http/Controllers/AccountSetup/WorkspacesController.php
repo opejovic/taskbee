@@ -3,9 +3,8 @@
 namespace taskbee\Http\Controllers\AccountSetup;
 
 use taskbee\Models\Workspace;
-use Illuminate\Http\Request;
-use taskbee\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use taskbee\Http\Controllers\Controller;
 use taskbee\Models\WorkspaceSetupAuthorization;
 
 class WorkspacesController extends Controller
@@ -21,9 +20,7 @@ class WorkspacesController extends Controller
 
         abort_if($authorization->hasBeenUsedForWorkspace(), 403);
 
-        request()->validate([
-            'name' => ['required', 'min:3', 'unique:workspaces,name']
-        ]);
+        request()->validate([ 'name' => ['required', 'min:3', 'unique:workspaces,name'] ]);
 
         $workspace = Workspace::create([
             'name'            => request('name'),

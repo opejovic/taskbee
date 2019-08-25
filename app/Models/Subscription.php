@@ -4,14 +4,14 @@ namespace taskbee\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-use taskbee\Mail\SubscriptionExpiredEmail;
 use Illuminate\Database\Eloquent\Model;
+use taskbee\Mail\SubscriptionExpiredEmail;
 use taskbee\Models\WorkspaceSetupAuthorization;
 
 class Subscription extends Model
 {
     /**
-     * Class constants.
+     * Subscription statuses.
      */
     const ACTIVE   = 'active';
     const UNPAID   = 'unpaid';
@@ -32,7 +32,7 @@ class Subscription extends Model
      */
     private static function findByStripeId($subscription)
     {
-        return self::where('stripe_id', $subscription['id'])->first();
+        return self::firstWhere('stripe_id', $subscription['id']);
     }
 
     /**

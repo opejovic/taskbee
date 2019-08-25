@@ -2,8 +2,6 @@
 
 namespace taskbee\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class TaskbeeController extends Controller
 {
     /**

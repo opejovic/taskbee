@@ -3,7 +3,6 @@
 namespace taskbee\Http\Controllers;
 
 use taskbee\Models\Workspace;
-use Illuminate\Http\Request;
 
 class RenewSubscriptionsController extends Controller
 {
@@ -32,7 +31,7 @@ class RenewSubscriptionsController extends Controller
     {
     	\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         
-        // retrieve subscription from stripe
+        # Retrieve subscription from stripe
         $stripeSub = \Stripe\Subscription::retrieve([
         	"id" => $workspace->subscription->stripe_id,
         ]);

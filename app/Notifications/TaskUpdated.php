@@ -10,7 +10,18 @@ class TaskUpdated extends Notification
 {
     use Queueable;
 
+    /**
+     * The task instance
+     * 
+     * @var \App\Models\Task
+     */
     protected $task;
+
+    /**
+     * The user instance
+     * 
+     * @var \App\Models\user
+     */
     protected $user;
 
     /**

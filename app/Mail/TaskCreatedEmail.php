@@ -11,7 +11,18 @@ class TaskCreatedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The task instance.
+     *
+     * @var \App\Models\Task
+     */
     public $task;
+
+    /**
+     * The authenticated user instance.
+     *
+     * @var \App\Models\User
+     */
     public $authUser;
 
     /**

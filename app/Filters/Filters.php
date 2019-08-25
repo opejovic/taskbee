@@ -7,11 +7,17 @@ use Illuminate\Http\Request;
 abstract class Filters
 {
     /**
-     * summary
+     * Filters request, and query builder.
      *
      * @var string
      */
     protected $request, $builder;
+
+    /**
+     * Defined filters.
+     *
+     * @var array
+     */  
     protected $filters = [];
 
     /**
@@ -25,7 +31,7 @@ abstract class Filters
     }
 
     /**
-     * summary
+     * Apply filter to the query builder.
      *
      * @param $builder
      *

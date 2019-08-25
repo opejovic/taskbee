@@ -8,17 +8,17 @@ use taskbee\Models\WorkspaceSetupAuthorization;
 
 class SubscriptionsController extends Controller
 {
-	/**
-	 * Show the form for subscribing.
-	 *
-	 * @return \Illuminate\Http\Response
-	 **/
-	public function create()
-	{
-		return view('subscriptions.create', [
-			'plans' => Plan::all(),
-		]);
-	}
+    /**
+     * Show the form for subscribing.
+     *
+     * @return \Illuminate\Http\Response
+     **/
+    public function create()
+    {
+        return view('subscriptions.create', [
+            'plans' => Plan::all(),
+        ]);
+    }
 
     /**
      * Create a Stripe checkout session.
@@ -61,10 +61,10 @@ class SubscriptionsController extends Controller
     {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        // Get a StripeSubscription from Checkout Session.
+        # Get a StripeSubscription from Checkout Session.
         $sub = \Stripe\Checkout\Session::retrieve(request()->session()->get('sub')->id)['subscription'];
 
-        // Get authorization code for that Subscription.
+        # Get authorization code for that Subscription.
         $authorization = WorkspaceSetupAuthorization::where('subscription_id', $sub)->first()->code;
 
         return redirect(route('workspace-setup.show', $authorization));

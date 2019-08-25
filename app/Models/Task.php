@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     /**
-     * Class constants. Allowed statuses for the model.
+     * Task statuses.
      */
     const PENDING     = 'Pending';
     const URGENT      = 'Urgent';
@@ -87,17 +87,7 @@ class Task extends Model
     {
         $this->update(['status' => $status]);
 
-        $this->notifyMembers();
-    }
-
-    /**
-     * Notify the task workspace members that the task status has been changed.
-     *
-     * @return void
-     **/
-    public function notifyMembers()
-    {
-        $this->workspace->members->each->notify(new TaskUpdated($this, auth()->user()));
+        $this->workspace->notifyMembers($this, TaskUpdated::class);
     }
 
     /**

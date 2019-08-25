@@ -6,13 +6,17 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskFilters extends Filters
 {
+    /**
+     * Filters.
+     *
+     * @var array
+     */
     protected $filters = ['my', 'creator', 'responsibility'];
 
     /**
-     * summary
+     * Filter the tasks by the authenticated user.
      *
      * @return void
-     * @author
      */
     public function my()
     {
@@ -20,28 +24,26 @@ class TaskFilters extends Filters
     }
 
     /**
-     * summary
+     * Filter the tasks by the creator.
+     * 
+     * @param integer $id
      *
      * @return void
-     * @author
      */
     public function creator($id)
     {
-        if ($id) {
-            return $this->builder->where('created_by', $id);
-        }
+        if ($id) { return $this->builder->where('created_by', $id); }
     }
 
     /**
-     * summary
+     * Filter the tasks by the responsibe user.
      *
+     * @param integer $id
+     * 
      * @return void
-     * @author
      */
     public function responsibility($id)
     {
-        if ($id) {
-            return $this->builder->where('user_responsible', $id);
-        }
+        if ($id) { return $this->builder->where('user_responsible', $id); }
     }
 }

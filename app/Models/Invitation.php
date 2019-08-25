@@ -3,8 +3,8 @@
 namespace taskbee\Models;
 
 use taskbee\Mail\InvitationEmail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Model;
 
 class Invitation extends Model
 {

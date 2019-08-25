@@ -2,8 +2,8 @@
 
 namespace taskbee\Facades;
 
-use taskbee\Helpers\AuthorizationCodeGenerator;
 use Illuminate\Support\Facades\Facade;
+use taskbee\Helpers\AuthorizationCodeGenerator;
 
 class AuthorizationCode extends Facade
 {
@@ -11,7 +11,6 @@ class AuthorizationCode extends Facade
      * Get the registered name of the component.
      *
      * @return string
-     *
      */
     protected static function getFacadeAccessor()
     {

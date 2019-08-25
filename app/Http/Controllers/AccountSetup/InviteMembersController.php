@@ -5,9 +5,8 @@ namespace taskbee\Http\Controllers\AccountSetup;
 use taskbee\Models\User;
 use taskbee\Models\Workspace;
 use taskbee\Models\Invitation;
-use Illuminate\Http\Request;
-use taskbee\Facades\InvitationCode;
 use Illuminate\Validation\Rule;
+use taskbee\Facades\InvitationCode;
 use taskbee\Http\Controllers\Controller;
 use taskbee\Models\WorkspaceSetupAuthorization;
 
@@ -32,9 +31,9 @@ class InviteMembersController extends Controller
             'email'      => [
                 'required',
                 'email',
-                // Same user cant be invited to the workspace twice
+                # Same user cant be invited to the workspace twice
                 Rule::unique('invitations')->where(function ($query) use ($workspace) {
-                    return ! $query->where('workspace_id', $workspace->id);
+                    return !$query->where('workspace_id', $workspace->id);
                 })
             ],
         ]);

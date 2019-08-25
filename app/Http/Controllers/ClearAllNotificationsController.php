@@ -3,7 +3,6 @@
 namespace taskbee\Http\Controllers;
 
 use taskbee\Models\User;
-use Illuminate\Http\Request;
 
 class ClearAllNotificationsController extends Controller
 {

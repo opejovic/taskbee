@@ -8,6 +8,9 @@ use taskbee\Models\Workspace;
 
 class StripeSubscriptionGateway implements SubscriptionGateway
 {
+    /**
+     * Stripe api key instance.
+     */
     private $apiKey;
 
     /**
@@ -58,7 +61,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
     {
         $customer = \Stripe\Customer::retrieve($subscription->customer);
 
-        // If the customer with the given email doesnt exist, create it.
+        # If the customer with the given email doesnt exist, create it.
         if (! Customer::where('email', $customer['email'])->exists()) {
             Customer::create([
                 'email'     => $customer['email'],
@@ -82,22 +85,23 @@ class StripeSubscriptionGateway implements SubscriptionGateway
     public function handleInvoice($invoice)
     {
         switch ($invoice->description) {
-            // ... handle the Add additional member slot payment
+            # ... handle the Add additional member slot payment
             case 'Add additional member slot':
                 Workspace::addSlot($invoice->subscription);
                 break;
 
-            // ... handle the invoice.payment_succeeded event for subscription renewal 
+            # ... handle the invoice.payment_succeeded event for subscription renewal 
             case 'Renew subscription':
                 Subscription::renew($invoice->subscription);
                 break;
 
             default:
-                // Unexpected event type
+                # ... unexpected event type
                 exit();
         }
-        // Add additional checks for the paid invoice
-        // need to notify the customer that he can now invite additional member.
+        
+        # Add additional checks for the paid invoice
+        # need to notify the customer that he can now invite additional member.
     }
 
     /**
