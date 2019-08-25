@@ -51,8 +51,8 @@ class StripePlansGateway
     public function product()
     {
         return \Stripe\Product::create([
-            "name"                 => 'Workspace Bundle',
-            "statement_descriptor" => 'TaskMonkey Workspace',
+            "name"                 => "TaskBee Workspace Bundle",
+            "statement_descriptor" => "TaskBee Workspace",
             "type"                 => "service",
         ], ['api_key' => $this->apiKey]);
     }

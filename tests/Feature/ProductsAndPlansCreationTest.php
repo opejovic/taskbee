@@ -68,7 +68,7 @@ class ProductsAndPlansCreationTest extends TestCase
             collect($stripePlans['data'])->pluck('nickname')->toArray(),
         );
 
-        // Delete the product and plans from stripe after finished test
+        # Delete the product and plans from stripe after finished test
         $product = \Stripe\Product::retrieve($stripePlans['data'][0]['product']['id']);
 
         collect($stripePlans['data'])->each(function ($plan) {
