@@ -14,8 +14,7 @@ window.Vue = require('vue');
 window.Form = Form;
 window.events = new Vue();
 
-// authenticated user...
-Vue.prototype.auth = window.auth;
+Vue.prototype.auth = window.auth; // ...authenticated user
 
 Vue.use(VModal);
 
