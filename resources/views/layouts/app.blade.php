@@ -24,19 +24,6 @@
 		<!-- Styles -->
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<style>
-			.bg-curve {
-				background-image: url("/img/curve-desc.svg");
-				background-position-x: center;
-				background-position-y: bottom;
-				background-size: 5153px 200px;
-				background-repeat-x: no-repeat;
-				background-repeat-y: no-repeat;
-				background-attachment: fixed;
-				background-origin: initial;
-				background-clip: initial;
-			}
-		</style>
 	</head>
 
 	<body>
