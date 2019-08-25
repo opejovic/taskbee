@@ -16,7 +16,7 @@ Auth::routes();
 Route::post('stripe-webhook', 'WebhookController@handle')->name('webhook.handle');
 Route::middleware('guest')->get('/', 'TaskbeeController@index')->name('welcome');
 Route::get('home', 'HomeController@index')->name('home');
-Route::get('/plans', 'SubscriptionPlansController@index');
+Route::get('/pricing', 'PricingController@index')->name('pricing');
 Route::middleware('guest')->post('register', 'Auth\RegisterController@register')->name('register');
 
 Route::middleware('auth')->group(function () {

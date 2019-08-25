@@ -15,15 +15,14 @@
             <div class="pl-1 mx-auto flex">
                 <a href="#"
                     class="block mx-2 text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 border-b-2 border-transparent hover:border-indigo-500">
-                    Features
+                    Contact
                 </a>
-                <a href="#"
+                <a href="{{ route('pricing') }}"
                     class="block text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 border-b-2 border-transparent hover:border-indigo-500">
                     Pricing
                 </a>
             </div>
         </div>
-
 
         <a href="/login"
             class="block text-sm lg:inline-block lg:mt-0 text-indigo-800 hover:text-indigo-500 border-b-2 border-transparent hover:border-indigo-500">
