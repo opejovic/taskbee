@@ -57,13 +57,13 @@
                                     <span class="px-8 border-b-2 py-1">Features</span>
                                 </div>
                                 <div>
-                                    Members limit: {{ $plan->members_limit }}
+                                    {{ $plan->members_limit }} member slots.
                                 </div>
                                 <div>
-                                    Storage: Unlimited.
+                                    Unlimited storage.
                                 </div>
                                 <div>
-                                    Other Features: More to come.
+                                    And many other features.
                                 </div>
                             </div>
                         </div>
