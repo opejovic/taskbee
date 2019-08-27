@@ -12,7 +12,9 @@ class TasksController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param \taskbee\Models\Workspace $workspace
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Workspace $workspace)
     {

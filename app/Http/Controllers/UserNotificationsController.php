@@ -10,7 +10,6 @@ class UserNotificationsController extends Controller
      * Display a listing of the resource.
      *
      * @param \taskbee\Models\User $user
-     *
      * @return \Illuminate\Http\Response
      */
     public function index(User $user)
@@ -23,7 +22,6 @@ class UserNotificationsController extends Controller
      *
      * @param \taskbee\Models\User $user
      * @param int $notificationId
-     *
      * @return void
      */
     public function destroy(User $user, $notificationId)

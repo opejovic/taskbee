@@ -26,7 +26,7 @@ class Subscription extends Model
 
     /**
      * Retrieve the subscription by its stripe id.
-     *  
+     *
      * @param $subscription
      * @return mixed
      */
@@ -102,7 +102,6 @@ class Subscription extends Model
      * Change the status of the subscription.
      *
      * @param $subscription
-     *
      * @return void
      */
     public static function expire($subscription)
@@ -116,7 +115,6 @@ class Subscription extends Model
      * Renews the subscription.
      *
      * @param $subscription
-     *
      * @return void
      */
     public static function renew($subscription)

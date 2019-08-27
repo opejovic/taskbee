@@ -18,6 +18,8 @@ class WorkspaceTasksController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \taskbee\Models\Workspace $workspace
+     * @param \taskbee\Filters\TaskFilters $filters
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -50,7 +52,6 @@ class WorkspaceTasksController extends Controller
      * Show the form for creating a new resource.
      *
      * @param \taskbee\Models\Workspace $workspace
-     *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -72,7 +73,6 @@ class WorkspaceTasksController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \taskbee\Models\Workspace $workspace
-     *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -100,7 +100,7 @@ class WorkspaceTasksController extends Controller
             ]);
 
             $assignee = User::find($task->assignee->id);
-            
+
             Mail::to($assignee->email)->queue(new TaskCreatedEmail($task, Auth::user()));
 
             $workspace->notifyMembers($task, TaskCreated::class);
@@ -120,7 +120,6 @@ class WorkspaceTasksController extends Controller
      *
      * @param \taskbee\Models\Workspace $workspace
      * @param \taskbee\Models\Task $task
-     *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -150,7 +149,6 @@ class WorkspaceTasksController extends Controller
      *
      * @param \taskbee\Models\Workspace $workspace
      * @param \taskbee\Models\Task $task
-     *
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

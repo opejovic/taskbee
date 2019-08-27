@@ -45,7 +45,7 @@ class User extends Authenticatable
      * Attributes to include in every query.
      *
      * @var array
-     * 
+     *
      */
     protected $appends = [
         'full_name'
@@ -65,7 +65,6 @@ class User extends Authenticatable
      * Does user owns a workspace?
      *
      * @param \taskbee\Models\Workspace $workspace
-     *
      * @return bool
      */
     public function owns($workspace)
@@ -114,6 +113,7 @@ class User extends Authenticatable
      **/
     public function workspaceOwned()
     {
+        # Consider implementing Null Object
         return $this->workspace()->exists() ? $this->workspace : 'NO_WORKSPACE_CREATED';
     }
 

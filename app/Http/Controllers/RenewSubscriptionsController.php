@@ -10,7 +10,6 @@ class RenewSubscriptionsController extends Controller
      * Show the form for creating a new resource.
      *
      * @param \taskbee\Models\Workspace $workspace
-     *
      * @return \Illuminate\Http\Response
      */
 	public function show(Workspace $workspace)
@@ -24,13 +23,12 @@ class RenewSubscriptionsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \taskbee\Models\Workspace $workspace
-     *
      * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)
     {
     	\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        
+
         # Retrieve subscription from stripe
         $stripeSub = \Stripe\Subscription::retrieve([
         	"id" => $workspace->subscription->stripe_id,
@@ -43,7 +41,7 @@ class RenewSubscriptionsController extends Controller
         ]);
 
         $finalizedInvoice = $invoice->finalizeInvoice();
-        
+
         return response($finalizedInvoice, 200);
     }
 }

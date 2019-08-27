@@ -11,17 +11,17 @@ class AddMemberSlotController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \taskbee\Models\Workspace $workspace
-     *
+     * @param \taskbee\Billing\StripeSubscriptionGateway $gateway
      * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace, StripeSubscriptionGateway $gateway)
     {
         $stripeSubscription = $gateway->increaseSlot($workspace);
-        
+
         $invoice = $gateway->createInvoice($stripeSubscription);
 
-        # Finalize the invoice, wait for 
-        # invoice payment succeeded webhook, then update the stripe subscription quantity
+        # Finalize the invoice, wait for
+        # invoice payment succeeded web hook, then update the stripe subscription quantity
         $finalizedInvoice = $invoice->finalizeInvoice();
 
         # Customer is redirected to the stripe Hosted invoice payment page.

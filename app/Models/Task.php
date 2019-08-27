@@ -2,6 +2,7 @@
 
 namespace taskbee\Models;
 
+use Illuminate\Support\Str;
 use taskbee\Notifications\TaskUpdated;
 use Illuminate\Database\Eloquent\Model;
 
@@ -70,7 +71,6 @@ class Task extends Model
      *
      * @param \Illuminate\Database\Query\Builder $query
      * @param \taskbee\Filters\TaskFilters $filters
-     *
      * @return void
      */
     public function scopeFilter($query, $filters)
@@ -80,7 +80,6 @@ class Task extends Model
 
     /**
      * Update the tasks status and notify the users.
-     *
      * @param $status
      */
     public function updateStatus($status)
@@ -127,6 +126,6 @@ class Task extends Model
      */
     public function getShortNameAttribute()
     {
-        return str_limit($this->name, 15);
+        return Str::limit($this->name, 15);
     }
 }
