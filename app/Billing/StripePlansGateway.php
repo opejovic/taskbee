@@ -6,6 +6,11 @@ use taskbee\Models\Plan;
 
 class StripePlansGateway
 {
+    /**
+     * Stripe's API key.
+     *
+     * @var string
+     */
     private $apiKey;
 
     /**
@@ -82,7 +87,7 @@ class StripePlansGateway
     }
 
     /**
-     * Create a Basic Monthly StripePlan.
+     * Create a Basic Monthly StripePlan.P
      *
      * @param \Stripe\Product $product
      * @return \Stripe\Plan

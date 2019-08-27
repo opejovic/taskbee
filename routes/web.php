@@ -14,10 +14,16 @@
 Auth::routes();
 
 Route::post('stripe-webhook', 'WebhookController@handle')->name('webhook.handle');
-Route::middleware('guest')->get('/', 'TaskbeeController@index')->name('welcome');
 Route::get('home', 'HomeController@index')->name('home');
 Route::get('/pricing', 'PricingController@index')->name('pricing');
-Route::middleware('guest')->post('register', 'Auth\RegisterController@register')->name('register');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/', 'TaskbeeController@index')->name('welcome');
+    Route::get('signup', 'SubscriptionsController@create')->name('signup');
+
+    Route::post('register', 'Auth\RegisterController@register')->name('register');
+    Route::post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register');
+});
 
 Route::middleware('auth')->group(function () {
     Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout');
@@ -36,9 +42,9 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/profiles/{user}/notifications/', 'ClearAllNotificationsController@destroy')->name('notifications.delete-all');
 
-	Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
+    Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 
-	Route::post('/profiles/{user}/avatar', 'UsersAvatarController@store')->name('avatar.store');
+    Route::post('/profiles/{user}/avatar', 'UsersAvatarController@store')->name('avatar.store');
 });
 
 Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
@@ -48,8 +54,6 @@ Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace'
 });
 
 Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
-
-Route::middleware('guest')->post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
     Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
@@ -63,7 +67,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
 
     Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
-
-Route::middleware('guest')->get('signup', 'SubscriptionsController@create')->name('signup');
 
 Route::middleware('auth')->get('/api/workspaces/{workspace}/tasks', 'API\TasksController@index');

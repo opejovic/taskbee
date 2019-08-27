@@ -18,10 +18,10 @@ class ViewSubscriptionPlans extends TestCase
         $advancedPlan = factory(Plan::class)->states('standard')->create();
         $proPlan = factory(Plan::class)->states('premium')->create();
 
-        $response = $this->get('/plans');
+        $response = $this->get('/pricing');
 
         $response->assertStatus(200);
-        $response->assertViewIs('subscription-plans.index');
+        $response->assertViewIs('pricing.index');
 
         $response->assertSee($basicPlan->name);
         $response->assertSee($basicPlan->members_limit);

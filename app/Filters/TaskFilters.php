@@ -25,7 +25,7 @@ class TaskFilters extends Filters
 
     /**
      * Filter the tasks by the creator.
-     * 
+     *
      * @param integer $id
      *
      * @return void
@@ -36,10 +36,10 @@ class TaskFilters extends Filters
     }
 
     /**
-     * Filter the tasks by the responsibe user.
+     * Filter the tasks by the responsible user.
      *
      * @param integer $id
-     * 
+     *
      * @return void
      */
     public function responsibility($id)

@@ -15,8 +15,6 @@ class StripeSubscriptionGateway implements SubscriptionGateway
 
     /**
      * Create a new class instance.
-     *
-     * @param $apiKey
      */
     public function __construct()
     {
@@ -87,7 +85,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
                 Workspace::addSlot($invoice->subscription);
                 break;
 
-            # ... handle the invoice.payment_succeeded event for subscription renewal 
+            # ... handle the invoice.payment_succeeded event for subscription renewal
             case 'Renew subscription':
                 Subscription::renew($invoice->subscription);
                 break;
@@ -96,16 +94,16 @@ class StripeSubscriptionGateway implements SubscriptionGateway
                 # ... unexpected event type
                 exit();
         }
-        
+
         # Add additional checks for the paid invoice
         # need to notify the customer that he can now invite additional member.
     }
 
     /**
-     * undocumented function summary
+     * Increase the subscriptions member slots.
      *
-     * @param Type $var Description
-     * @return type
+     * @param $workspace
+     * @return \Stripe\Subscription
      */
     public function increaseSlot($workspace)
     {
@@ -127,13 +125,10 @@ class StripeSubscriptionGateway implements SubscriptionGateway
     }
 
     /**
-     * undocumented function summary
+     * Invoice the additional member slot.
      *
-     * Undocumented function long description
-     *
-     * @param Type $var Description
-     * @return type
-     * @throws conditon
+     * @param $stripeSub
+     * @return \Stripe\Invoice
      */
     public function createInvoice($stripeSub)
     {
@@ -159,7 +154,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
             Subscription::UNPAID,
             Subscription::CANCELED
         ])->contains($subscription->status)) {
-            Subscription::changeStatus($subscription);
+            Subscription::expire($subscription);
         }
     }
 }

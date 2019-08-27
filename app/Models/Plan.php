@@ -47,8 +47,7 @@ class Plan extends Model
 	/**
 	 * Map over each plan passed from the $data  collection to a proper format and persist it to db.
 	 *
-	 * @param collection $data
-	 *
+	 * @param \Illuminate\Support\Collection $data
 	 * @return void
 	 */
 	public static function assemble($data)

@@ -19,7 +19,7 @@ class ClearStripeData extends Command
      *
      * @var string
      */
-    protected $description = "Clear apps stripe plans and webhooks.";
+    protected $description = "Clear apps stripe plans and web hooks.";
 
     /**
      * Create a new command instance.
@@ -35,6 +35,7 @@ class ClearStripeData extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -46,7 +47,7 @@ class ClearStripeData extends Command
                 return $product['name'] == 'TaskBee Workspace Bundle';
             });
 
-            throw_if($stripeProducts->isEmpty(), new \Exception('No TaskBee products exist on Stripe.'));
+            throw_if($stripeProducts->isEmpty(), new Exception('No TaskBee products exist on Stripe.'));
 
             # Delete the plans associated with TaskBee
             $stripeProducts->map(function ($product) {
@@ -63,9 +64,8 @@ class ClearStripeData extends Command
             $stripeProducts->each->delete();
 
             $this->info('Done');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->warn($e->getMessage());
         }
-        
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-use taskbee\Models\Plan;
-use taskbee\Billing\StripePlansGateway;
+use Illuminate\Foundation\Inspiring;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,46 +13,9 @@ use taskbee\Billing\StripePlansGateway;
 |
 */
 
-Artisan::command('generate-plans', function () {
 
-    if (Plan::count() > 0) {
-        $this->warn(
-            'Looks like you already have plans created. Please check your database, there should be no plans there prior to running this command.'
-        );
-        return;
-    }
-
-    $this->info("Preparing.. please wait.");
-
-    // Create Stripe product and subscription plans
-    (new StripePlansGateway(config('services.stripe.secret')))->generate();
-
-    if (Plan::count() == 3) {
-        $this->info('Done!');
-    } else {
-        $this->error('Something went wrong.');
-    }
-
-})->describe('Generate subscription plans. Run only once, at the beggining of the journey.');
-
-Artisan::command('stripe-webhook', function () {
-
-    $this->info("Generating stripe webhook.. please wait.");
-
-    \Stripe\WebhookEndpoint::create([
-        "url" => config('services.ngrok.url') . "/stripe-webhook",
-        "enabled_events" => [
-            "customer.subscription.created",
-            "customer.subscription.updated",
-            "customer.subscription.deleted",
-            "invoice.payment_succeeded",
-            "checkout.session.completed",
-        ]
-    ], ['api_key' => config('services.stripe.secret')]);
-
-    $this->info("Done!");
-
-})->describe('Generate a stripe webhook.');
-
+Artisan::command('inspire', function () {
+    $this->comment(Inspiring::quote());
+})->describe('Display an inspiring quote');
 
 
