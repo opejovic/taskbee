@@ -50,22 +50,33 @@ class ClearStripeData extends Command
             throw_if($stripeProducts->isEmpty(), new Exception('No TaskBee products exist on Stripe.'));
 
             # Delete the plans associated with TaskBee
-            $stripeProducts->map(function ($product) {
-                return $product['id'];
-            })->map(function ($product) {
-                return \Stripe\Plan::all(['product' => $product])['data'];
-            })->each(function ($productPlans) {
-                collect($productPlans)->each(function ($plan) {
-                    $plan->delete();
-                });
-            });
+            $this->deletePlansFor($stripeProducts);
 
             # Delete the TaskBee products
             $stripeProducts->each->delete();
 
-            $this->info('Done');
+            $this->info('Stripe products and plans deleted.');
         } catch (Exception $e) {
             $this->warn($e->getMessage());
         }
+    }
+
+    /**
+     * Delete all the plans that belong to given products.
+     *
+     * @param \Illuminate\Support\Collection $products
+     */
+    public function deletePlansFor($products)
+    {
+        dd($products);
+        $products->map(function ($product) {
+            return $product['id'];
+        })->map(function ($product) {
+            return \Stripe\Plan::all(['product' => $product])['data'];
+        })->each(function ($productPlans) {
+            collect($productPlans)->each(function ($plan) {
+                $plan->delete();
+            });
+        });
     }
 }

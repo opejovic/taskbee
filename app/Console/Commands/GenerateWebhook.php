@@ -11,14 +11,14 @@ class GenerateWebhook extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:stripe-webhooks';
+    protected $signature = 'generate:stripe-webhook';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate a stripe web hooks.';
+    protected $description = 'Generate a stripe web hook.';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,9 @@ class GenerateWebhook extends Command
      */
     public function handle()
     {
-        $this->info("Generating stripe web hooks.. please wait.");
+        $this->info("Generating stripe web hook.. please wait.");
+
+        # @TODO Move it to the WebhookGateway
 
         \Stripe\WebhookEndpoint::create([
             "url" => config('services.ngrok.url') . "/stripe-webhook",
