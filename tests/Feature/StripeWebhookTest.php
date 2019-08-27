@@ -36,7 +36,7 @@ class StripeWebhookTest extends TestCase
 
         $this->assertEquals(1, count($webhooks));
 
-        # Clean up - delete created webhook.
+        # Clean up - delete created web hook.
         $webhooks->each->delete();
     }
 
@@ -46,14 +46,13 @@ class StripeWebhookTest extends TestCase
         # Arrange
         $created_at = Carbon::now()->unix();
         $this->artisan('generate:stripe-webhook');
-        $endpoint  = config('services.ngrok.url') . "/stripe-webhook";
 
         $dataAfterGenerating = \Stripe\WebhookEndpoint::all([
             "limit" => 16, # Only 16 test web hooks can exist.
         ])['data'];
 
-        $webhooks = collect($dataAfterGenerating)->filter(function ($item) use ($created_at, $endpoint) {
-            return $item['created'] >= $created_at && $item['url'] == $endpoint;
+        $webhooks = collect($dataAfterGenerating)->filter(function ($item) use ($created_at) {
+            return $item['created'] >= $created_at && $item['url'] == config('services.ngrok.url');
         });
 
         # Assert
@@ -69,8 +68,8 @@ class StripeWebhookTest extends TestCase
             "limit" => 16, # Only 16 test web hooks can exist.
         ])['data'];
 
-        $webhooksAfterDeleting = collect($dataAfterDeleting)->filter(function ($item) use ($endpoint) {
-            return $item['url'] == $endpoint;
+        $webhooksAfterDeleting = collect($dataAfterDeleting)->filter(function ($item) {
+            return $item['url'] == config('services.ngrok.url');
         });
 
         $this->assertTrue($webhooksAfterDeleting->isEmpty());

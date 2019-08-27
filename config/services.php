@@ -46,7 +46,7 @@ return [
 
     // Testing only
     'ngrok' => [
-        'url' => env('NGROK_URL'),
+        'url' => env('NGROK_URL') . "/stripe-webhook",
     ]
 
 ];

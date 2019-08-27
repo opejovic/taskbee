@@ -68,6 +68,8 @@ class ClearStripeData extends Command
      */
     public function deletePlansFor($products)
     {
+        # @TODO Refactor
+
         $products->map(function ($product) {
             return $product['id'];
         })->map(function ($product) {

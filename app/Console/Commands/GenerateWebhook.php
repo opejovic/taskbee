@@ -42,7 +42,7 @@ class GenerateWebhook extends Command
         # @TODO Move it to the WebhookGateway
 
         \Stripe\WebhookEndpoint::create([
-            "url" => config('services.ngrok.url') . "/stripe-webhook",
+            "url" => config('services.ngrok.url'),
             "enabled_events" => [
                 "customer.subscription.created",
                 "customer.subscription.updated",

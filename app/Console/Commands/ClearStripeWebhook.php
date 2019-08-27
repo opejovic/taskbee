@@ -44,9 +44,7 @@ class ClearStripeWebhook extends Command
 
         $webhooks = $this->retrieveStripeWebhooks();
 
-        $endpoint  = config('services.ngrok.url') . "/stripe-webhook";
-
-        $this->delete($webhooks, $endpoint);
+        $this->delete($webhooks, config('services.ngrok.url'));
     }
 
     /**
