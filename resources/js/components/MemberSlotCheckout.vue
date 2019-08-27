@@ -3,7 +3,6 @@
     <button
       class="mx-auto bg-indigo-800 hover:bg-indigo-600 text-white font-normal text-sm py-3 px-10 rounded flex items-center"
       @click="confirm"
-      :class="processing ? '' : ''"
       :disabled="processing"
     >
       <div class="flex items-center px-5">
@@ -41,33 +40,36 @@
     },
 
     methods: {
-        confirm() {
-				Swal.fire({
-					title: "Please confirm your purchase",
-          text: "Invoice payment is required in order to add a member slot.",
+      confirm() {
+        Swal.fire({
+          title: "Please confirm your purchase",
+          text: "You will be billed on the monthly basis and one time payment for the added member.",
           type: "info",
-					showCancelButton: true,
-					confirmButtonColor: "#434190",
-					cancelButtonColor: "#a0aec0",
-					confirmButtonText: "Yes, proceed."
-				}).then(result => {
+          showCancelButton: true,
+          confirmButtonColor: "#434190",
+          cancelButtonColor: "#a0aec0",
+          confirmButtonText: "Yes, proceed."
+        }).then(result => {
           // If the user clicks proceed, he will be invoiced.
-					if (result.value) {
-						this.initStripe();
-					}
-				});
-			},
+          if (result.value) {
+            this.initStripe();
+          }
+        });
+      },
 
       initStripe() {
-        // ask if they are sure, they will be billed on the monthly basis and one time payment for the added member.
-        
         const stripe = Stripe(process.env.MIX_STRIPE_KEY);
         this.processing = true;
 
-        axios.post(`/workspaces/${this.workspace.id}/add-slot`).then(response => {
-          // return a link for the hosted invoice instead of redirecting the user.
-          window.location = response.data.hosted_invoice_url;
-        });
+        axios
+          .post(`/workspaces/${this.workspace.id}/add-slot`)
+          .then(response => {
+            // return a link for the hosted invoice instead of redirecting the user.
+            window.location = response.data.hosted_invoice_url;
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     }
   };

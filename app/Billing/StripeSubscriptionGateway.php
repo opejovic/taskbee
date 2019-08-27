@@ -18,16 +18,15 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      *
      * @param $apiKey
      */
-    public function __construct($apiKey)
+    public function __construct()
     {
-        $this->apiKey = $apiKey;
+        $this->apiKey = \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
 
     /**
      * Fulfills the process of subscribing the customer after a successful payment.
      *
      * @param array $subscription
-     *
      * @return void
      */
     public function fulfill($subscription)
@@ -41,7 +40,6 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Is subscription paid for?
      *
      * @param $subscription
-     *
      * @return bool
      */
     public function subscriptionPaid($subscription)
@@ -79,7 +77,6 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Handles the invoice payment succeeded event.
      *
      * @param $invoice
-     *
      * @return void
      */
     public function handleInvoice($invoice)
@@ -105,11 +102,54 @@ class StripeSubscriptionGateway implements SubscriptionGateway
     }
 
     /**
+     * undocumented function summary
+     *
+     * @param Type $var Description
+     * @return type
+     */
+    public function increaseSlot($workspace)
+    {
+        # Retrieve subscription
+        $stripeSub = \Stripe\Subscription::retrieve($workspace->subscription->stripe_id);
+
+        # Increment current stripe subscription item (current subscription plan) quantity.
+        \Stripe\Subscription::update($stripeSub['id'], [
+            'cancel_at_period_end' => false,
+            'items' => [
+                [
+                    'id' => $stripeSub['items']['data'][0]['id'],
+                    'quantity' => $stripeSub['quantity'] + 1,
+                ],
+            ],
+        ]);
+
+        return $stripeSub;
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     */
+    public function createInvoice($stripeSub)
+    {
+        # Create and pay an invoice for added member - make this a first step before editing a subscription
+        return \Stripe\Invoice::create([
+            "customer" => $stripeSub['customer'],
+            "subscription" => $stripeSub['id'],
+            "description" => 'Add additional member slot'
+        ]);
+    }
+
+    /**
      * Inspects the subscription status, after the subscription updated event,
      * and updates subscription locally.
      *
      * @param $subscription
-     *
      * @return void
      */
     public function inspect($subscription)

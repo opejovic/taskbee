@@ -38,7 +38,7 @@ class WebhookController extends Controller
             exit();
         }
 
-        $subscriptionGateway = new StripeSubscriptionGateway($apiKey);
+        $subscriptionGateway = new StripeSubscriptionGateway();
 
         switch ($event->type) {
             # ... handle the customer.subscription.created event

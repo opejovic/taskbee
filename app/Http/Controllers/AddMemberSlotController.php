@@ -3,6 +3,7 @@
 namespace taskbee\Http\Controllers;
 
 use taskbee\Models\Workspace;
+use taskbee\Billing\StripeSubscriptionGateway;
 
 class AddMemberSlotController extends Controller
 {
@@ -13,29 +14,11 @@ class AddMemberSlotController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Workspace $workspace)
+    public function store(Workspace $workspace, StripeSubscriptionGateway $gateway)
     {
-        // retrieve subscription
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $stripeSub = \Stripe\Subscription::retrieve($workspace->subscription->stripe_id);
-
-        // increment current stripe subscription item (current subscription plan) quantity.
-        \Stripe\Subscription::update($stripeSub['id'], [
-            'cancel_at_period_end' => false,
-            'items' => [
-                [
-                    'id' => $stripeSub['items']['data'][0]['id'],
-                    'quantity' => $stripeSub['quantity'] + 1,
-                ],
-            ],
-        ]);
-
-        # Create and pay an invoice for added member - make this a first step before editing a subscription
-        $invoice = \Stripe\Invoice::create([
-            "customer" => $stripeSub['customer'],
-            "subscription" => $stripeSub['id'],
-            "description" => 'Add additional member slot'
-        ]);
+        $stripeSubscription = $gateway->increaseSlot($workspace);
+        
+        $invoice = $gateway->createInvoice($stripeSubscription);
 
         # Finalize the invoice, wait for 
         # invoice payment succeeded webhook, then update the stripe subscription quantity
