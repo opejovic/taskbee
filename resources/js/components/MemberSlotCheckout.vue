@@ -43,14 +43,15 @@
       confirm() {
         Swal.fire({
           title: "Please confirm your purchase",
-          text: "You will be billed on the monthly basis and one time payment for the added member.",
+          text:
+            "You will be billed on the monthly basis and one time payment for the added member.",
           type: "info",
           showCancelButton: true,
           confirmButtonColor: "#434190",
           cancelButtonColor: "#a0aec0",
           confirmButtonText: "Yes, proceed."
         }).then(result => {
-          // If the user clicks proceed, he will be invoiced.
+          // If the user clicks proceed, he will be sent an invoice.
           if (result.value) {
             this.initStripe();
           }
@@ -64,12 +65,17 @@
         axios
           .post(`/workspaces/${this.workspace.id}/add-slot`)
           .then(response => {
-            // return a link for the hosted invoice instead of redirecting the user.
-            window.location = response.data.hosted_invoice_url;
+            // Alert user that an invoice has been sent to him, and he needs to pay for it to invite new members.
+            this.notifySubscriber(response);
           })
           .catch(error => {
             console.log(error);
           });
+      },
+
+      notifySubscriber(response) {
+        this.$toasted.show(response.data[0]);
+        this.processing = false;
       }
     }
   };

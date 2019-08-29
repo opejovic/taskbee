@@ -136,6 +136,8 @@ class StripeSubscriptionGateway implements SubscriptionGateway
         return \Stripe\Invoice::create([
             "customer" => $stripeSub['customer'],
             "subscription" => $stripeSub['id'],
+            "collection_method" => "send_invoice",
+            "days_until_due" => 1,
             "description" => 'Add additional member slot'
         ]);
     }

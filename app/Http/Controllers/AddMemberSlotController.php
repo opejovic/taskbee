@@ -3,7 +3,7 @@
 namespace taskbee\Http\Controllers;
 
 use taskbee\Models\Workspace;
-use taskbee\Billing\StripeSubscriptionGateway;
+use taskbee\Jobs\PurchaseSlot;
 
 class AddMemberSlotController extends Controller
 {
@@ -14,18 +14,10 @@ class AddMemberSlotController extends Controller
      * @param \taskbee\Billing\StripeSubscriptionGateway $gateway
      * @return \Illuminate\Http\Response
      */
-    public function store(Workspace $workspace, StripeSubscriptionGateway $gateway)
+    public function store(Workspace $workspace)
     {
-        $stripeSubscription = $gateway->increaseSlot($workspace);
+        PurchaseSlot::dispatch($workspace);
 
-        $invoice = $gateway->createInvoice($stripeSubscription);
-
-        # Finalize the invoice, wait for
-        # invoice payment succeeded web hook, then update the stripe subscription quantity
-        $finalizedInvoice = $invoice->finalizeInvoice();
-
-        # Customer is redirected to the stripe Hosted invoice payment page.
-        # After the successful payment, Workspace members limit is incremented, as well as WSA.
-        return response($finalizedInvoice, 200);
+        return response(['Invoice will be sent shortly to your email.'], 200);
     }
 }
