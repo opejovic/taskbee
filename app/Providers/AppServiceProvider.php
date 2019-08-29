@@ -2,12 +2,14 @@
 
 namespace taskbee\Providers;
 
-use taskbee\Billing\StripeSubscriptionGateway;
-use taskbee\Billing\SubscriptionGateway;
-use taskbee\Helpers\AuthorizationCodeGenerator;
-use taskbee\Helpers\InvitationCodeGenerator;
-use taskbee\Helpers\RandomNumberGenerator;
+use taskbee\Billing\PaymentGateway;
 use Illuminate\Support\ServiceProvider;
+use taskbee\Billing\SubscriptionGateway;
+use taskbee\Billing\StripePaymentGateway;
+use taskbee\Helpers\RandomNumberGenerator;
+use taskbee\Helpers\InvitationCodeGenerator;
+use taskbee\Billing\StripeSubscriptionGateway;
+use taskbee\Helpers\AuthorizationCodeGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(StripeSubscriptionGateway::class, function () {
             return new StripeSubscriptionGateway(config('services.stripe.secret'));
+        });
+
+        $this->app->bind(PaymentGateway::class, function () {
+            return new StripePaymentGateway(config('services.stripe.secret'));
         });
 
         $this->app->bind(SubscriptionGateway::class, StripeSubscriptionGateway::class);

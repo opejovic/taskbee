@@ -26,7 +26,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::post('plans/{plan}/checkout', 'SubscriptionsController@checkout');
+    Route::post('plans/{plan}/checkout', 'SubscriptionsController@store');
     Route::get('success', 'SubscriptionsController@success');
     Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store');
 

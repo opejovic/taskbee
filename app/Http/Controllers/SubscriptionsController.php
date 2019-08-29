@@ -3,7 +3,7 @@
 namespace taskbee\Http\Controllers;
 
 use taskbee\Models\Plan;
-use Illuminate\Support\Facades\Auth;
+use taskbee\Billing\PaymentGateway;
 use taskbee\Models\WorkspaceSetupAuthorization;
 
 class SubscriptionsController extends Controller
@@ -21,31 +21,16 @@ class SubscriptionsController extends Controller
     }
 
     /**
-     * Create a Stripe checkout session.
+     * Create a Checkout session, and charge the customer.
      *
      * @param \taskbee\Models\Plan $plan
      *
+     * @param \taskbee\Billing\PaymentGateway $paymentGateway
      * @return \Stripe\Checkout\Session
      */
-    public function checkout(Plan $plan)
+    public function store(Plan $plan, PaymentGateway $paymentGateway)
     {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
-        $session = \Stripe\Checkout\Session::create([
-            'customer_email'       => Auth::user()->email,
-            'cancel_url'           => "http://127.0.0.1:8000/plans",
-            'expand'               => ['subscription'],
-            'payment_method_types' => ['card'],
-            'subscription_data'    => [
-                'items' => [
-                    [
-                        'plan'     => $plan->stripe_id,
-                        'quantity' => $plan->members_limit,
-                    ],
-                ],
-            ],
-            'success_url'          => 'http://127.0.0.1:8000/success',
-        ]);
+        $session = $paymentGateway->checkout($plan);
 
         session(['sub' => $session]);
 
@@ -55,17 +40,20 @@ class SubscriptionsController extends Controller
     /**
      * Redirect customer after successful subscription.
      *
+     * @param \taskbee\Billing\PaymentGateway $paymentGateway
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function success()
+    public function success(PaymentGateway $paymentGateway)
     {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
         # Get a StripeSubscription from Checkout Session.
-        $sub = \Stripe\Checkout\Session::retrieve(request()->session()->get('sub')->id)['subscription'];
+        $subscription = $paymentGateway->getSubscription(
+            request()->session()->get('sub')->id
+        );
 
         # Get authorization code for that Subscription.
-        $authorization = WorkspaceSetupAuthorization::where('subscription_id', $sub)->first()->code;
+        $authorization = WorkspaceSetupAuthorization::where(
+            'subscription_id', $subscription
+        )->first()->code;
 
         return redirect(route('workspace-setup.show', $authorization));
     }
