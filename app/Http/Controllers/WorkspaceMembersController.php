@@ -2,7 +2,6 @@
 
 namespace taskbee\Http\Controllers;
 
-use taskbee\Models\Plan;
 use taskbee\Models\User;
 use taskbee\Models\Workspace;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +14,7 @@ class WorkspaceMembersController extends Controller
      * @param \taskbee\Models\Workspace $workspace
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Workspace $workspace)
     {
@@ -25,7 +25,6 @@ class WorkspaceMembersController extends Controller
 
         return view('workspace-members.index', [
             'members'   => $members,
-            'plan'      => Plan::whereName('Per User Monthly')->first(),
             'workspace' => $workspace,
         ]);
     }
@@ -42,10 +41,10 @@ class WorkspaceMembersController extends Controller
     {
         abort_unless(Auth::user()->owns($workspace), 403);
 
-        # Remove the user from the workspace, if the user isn't the workspace owner
         $user = User::whereId($memberId)->firstOrFail();
         abort_if($user->owns($workspace), 403);
 
+        # Remove the user from the workspace, if the user isn't the workspace owner
         if ($user->workspace_id == $workspace->id) {
             $user->update(['workspace_id' => null]);
         }

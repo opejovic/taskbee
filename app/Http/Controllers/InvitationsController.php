@@ -7,7 +7,7 @@ use taskbee\Models\Invitation;
 class InvitationsController extends Controller
 {
     /**
-     * Display the specified resource.
+     * Display the invitation.
      *
      * @param  string $code
      * @return \Illuminate\Http\Response

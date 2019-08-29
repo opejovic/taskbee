@@ -7,7 +7,7 @@ use taskbee\Models\User;
 class ProfilesController extends Controller
 {
     /**
-     * Display the specified resource.
+     * Display the users profile.
      *
      * @param  \taskbee\Models\User $user
      * @return \Illuminate\Http\Response

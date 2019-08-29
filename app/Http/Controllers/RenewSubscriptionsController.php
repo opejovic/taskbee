@@ -27,6 +27,8 @@ class RenewSubscriptionsController extends Controller
      */
     public function store(Workspace $workspace)
     {
+        # @TODO Move this to SubscriptionGateway
+
     	\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         # Retrieve subscription from stripe
@@ -34,6 +36,7 @@ class RenewSubscriptionsController extends Controller
         	"id" => $workspace->subscription->stripe_id,
         ]);
 
+        # Create the invoice
         $invoice = \Stripe\Invoice::create([
             "customer" => $stripeSub['customer'],
             "subscription" => $stripeSub['id'],
