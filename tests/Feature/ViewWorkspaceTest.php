@@ -28,15 +28,12 @@ class ViewWorkspaceTest extends TestCase
         $workspace->addMember($user);
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}");
 
-        // $response->assertStatus(423); // locked
-        // $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
         $response->assertRedirect(route('subscription-expired.show', $workspace));
     }
 
     /** @test */
     public function workspace_members_can_see_their_own_workspace_details()
     {
-        $this->withoutExceptionHandling();
         $workspace = factory(Workspace::class)->create();
         $member = factory(User::class)->create();
         $workspace->addMember($member);

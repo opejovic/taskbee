@@ -16,7 +16,7 @@ class PurchaseSlot implements ShouldQueue
 
     /**
      * Workspace instance.
-     * 
+     *
      * @var \taskbee\Models\Workspace
      */
     protected $workspace;
@@ -34,6 +34,7 @@ class PurchaseSlot implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param \taskbee\Billing\StripeSubscriptionGateway $gateway
      * @return void
      */
     public function handle(StripeSubscriptionGateway $gateway)

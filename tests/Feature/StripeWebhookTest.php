@@ -59,7 +59,6 @@ class StripeWebhookTest extends TestCase
         $this->assertEquals(1, count($webhooks));
 
         # Act - find web hooks with the $endpoint
-
         # This will clear every web hook with $endpoint...
         # Use this test with caution, it will delete all your current web hooks with $endpoint.
         $this->artisan('clear:stripe-webhook');
@@ -72,6 +71,7 @@ class StripeWebhookTest extends TestCase
             return $item['url'] == config('services.ngrok.url');
         });
 
+        # Assert
         $this->assertTrue($webhooksAfterDeleting->isEmpty());
     }
 }

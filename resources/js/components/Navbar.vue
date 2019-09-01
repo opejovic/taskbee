@@ -33,6 +33,7 @@
       >
         <div class="mx-auto">
           <new-task-modal
+            v-show="subIsActive"
             v-if="auth.workspace_id !== null"
             class="lg:mt-0 mt-4 lg:-mr-8"
             :workspace="workspace"
@@ -70,12 +71,18 @@
 
 <script>
   export default {
-    props: ['workspace'],
+    props: ['workspace', 'subscription'],
     
     data() {
       return {
         isOpen: false,
       }
+    },
+
+    computed: {
+        subIsActive() {
+            return this.subscription.status == 'active';
+        }
     },
 
     methods: {
