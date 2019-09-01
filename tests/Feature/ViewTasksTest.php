@@ -13,6 +13,9 @@ class ViewTasksTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $member;
+    private $workspace;
+
     protected function setUp(): void
     {
         parent::setUp();

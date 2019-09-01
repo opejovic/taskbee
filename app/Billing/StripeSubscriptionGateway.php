@@ -103,7 +103,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Increase the subscriptions member slots.
      *
      * @param $workspace
-     * @return \Stripe\Subscription
+     * @return \Stripe\Invoice
      */
     public function increaseSlot($workspace)
     {
@@ -121,7 +121,8 @@ class StripeSubscriptionGateway implements SubscriptionGateway
             ],
         ]);
 
-        return $stripeSub;
+        # Create an invoice for the increased member slot.
+        return $this->createInvoice($stripeSub);
     }
 
     /**
@@ -139,7 +140,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
             "collection_method" => "send_invoice",
             "days_until_due" => 1,
             "description" => 'Add additional member slot'
-        ]);
+        ])->sendInvoice();
     }
 
     /**

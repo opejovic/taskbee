@@ -11,7 +11,6 @@ class AddMemberSlotController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \taskbee\Models\Workspace $workspace
-     * @param \taskbee\Billing\StripeSubscriptionGateway $gateway
      * @return \Illuminate\Http\Response
      */
     public function store(Workspace $workspace)
