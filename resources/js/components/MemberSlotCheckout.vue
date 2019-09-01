@@ -74,7 +74,14 @@
       },
 
       notifySubscriber(response) {
-        this.$toasted.show(response.data[0]);
+        Swal.fire({
+          title: "Check your email.",
+          text: response.data[0],
+          type: "success",
+          confirmButtonColor: "#434190",
+          confirmButtonText: "Okay."
+        });
+
         this.processing = false;
       }
     }

@@ -30,14 +30,14 @@
         </a>
     </header>
 
-    <div class="lg:flex md:flex flex-wrap md:pb-10 items-center justify-center md:pt-10">
+    <div class="lg:flex md:flex flex-wrap md:pb-10 items-center pt-10 justify-center">
         {{-- left section --}}
-        <div class="xl:w-1/3 lg:w-1/3 md:w-1/2 sm:w-full flex items-center px-4 mr-5 -ml-5 xl:pt-64 lg:pt-10 pb-10">
+        <div class="xl:w-3/6 lg:w-1/3 md:w-1/2 w-5/6 mx-auto flex items-center px-4 xl:pt-24 lg:pt-32 pb-10">
             <img src="img/team.svg" alt="Team">
         </div>
 
         {{-- right section --}}
-        <div class="flex-row xl:w-1/4 lg:w-1/3 md:w-1/2 sm:w-full">
+        <div class="flex-row xl:w-1/4 lg:w-1/3 md:w-1/2 w-5/6 mx-auto">
             <div class="shadow bg-purple-800 rounded-lg overflow-hidden">
                 <div
                     class="border-b border-white pb-4 pt-5 px-4 text-4xl text-white tracking-tight font-semibold text-center">
