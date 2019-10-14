@@ -86,11 +86,11 @@ class Workspace extends Model
     {
         $workspace = self::where('subscription_id', $subscription)->first();
         $workspace->increment('members_limit');
-        
+
         // Is this really needed? Perhaps, after adding slot, we fire an event -> and notify the user he can now invite additional team member.
         $authorization = WorkspaceSetupAuthorization::where('subscription_id', $subscription)->first();
         $authorization->increment('members_limit');
-        
+
         self::notifyOwner($workspace, $authorization);
     }
 
@@ -115,6 +115,23 @@ class Workspace extends Model
     public function addMember($member)
     {
         $this->members()->attach($member);
+    }
+
+    /**
+     * Remove a member from the workspace.
+     *
+     * @param User $user
+     */
+    public function removeMember($user)
+    {
+        if ($user->workspace_id == $this->id) {
+            $user->update(['workspace_id' => null]);
+        }
+
+        $this->members()->detach($user->id);
+        $this->invitations->where('user_id', $user->id)->first()->delete();
+        $this->decrement('members_invited');
+        $this->authorization->decrement('members_invited');
     }
 
     /**

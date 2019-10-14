@@ -20,7 +20,6 @@ Route::get('/pricing', 'PricingController@index')->name('pricing');
 Route::middleware('guest')->group(function () {
     Route::get('/', 'TaskbeeController@index')->name('welcome');
     Route::get('signup', 'SubscriptionsController@create')->name('signup');
-
     Route::post('register', 'Auth\RegisterController@register')->name('register');
     Route::post('register-invitees', 'Auth\RegisterController@registerInvitees')->name('invitees.register');
 });
@@ -29,25 +28,23 @@ Route::middleware('auth')->group(function () {
     Route::post('plans/{plan}/checkout', 'SubscriptionsController@store');
     Route::get('success', 'SubscriptionsController@success');
     Route::post('workspaces/{workspace}/add-slot', 'AddMemberSlotController@store');
-
     Route::post('workspaces/{workspace}/renew', 'RenewSubscriptionsController@store');
     Route::get('workspaces/{workspace}/subscription-expired', 'RenewSubscriptionsController@show')->name('subscription-expired.show');
-
     Route::get('/dashboard', 'AdminDashboardController@show')->name('dashboard');
     Route::patch('/workspaces/{workspace}/members/{memberId}', 'WorkspaceMembersController@update')->name('members.update');
     Route::post('accept-invitation', 'AcceptInvitationsController@store')->name('accept-invitation.store');
-
     Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index')->name('notifications.index');
     Route::delete('/profiles/{user}/notifications/{notificationId}', 'UserNotificationsController@destroy')->name('notifications.delete');
-
     Route::delete('/profiles/{user}/notifications/', 'ClearAllNotificationsController@destroy')->name('notifications.delete-all');
-
     Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
-
     Route::post('/profiles/{user}/avatar', 'UsersAvatarController@store')->name('avatar.store');
 });
 
-Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace' => 'AccountSetup'], function () {
+Route::group([
+    'prefix' => 'workspace-setup',
+    'middleware' => 'auth',
+    'namespace' => 'AccountSetup'
+], function () {
     Route::get('{authorization}', 'InitialSetupController@show')->name('workspace-setup.show');
     Route::post('workspace', 'WorkspacesController@store')->name('store-workspace');
     Route::post('{workspace}/members', 'InviteMembersController@store')->name('invite-members');
@@ -55,16 +52,16 @@ Route::group(['prefix' => 'workspace-setup', 'middleware' => 'auth', 'namespace'
 
 Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
 
-Route::group(['middleware' => 'auth', 'prefix' => 'workspaces'], function () {
+Route::group([
+    'middleware' => 'auth',
+    'prefix' => 'workspaces'
+], function () {
     Route::get('{workspace}', 'WorkspacesController@show')->name('workspaces.show');
     Route::get('{workspace}/tasks', 'WorkspaceTasksController@index')->name('tasks.index');
     Route::get('{workspace}/tasks/create', 'WorkspaceTasksController@create')->name('tasks.create');
     Route::post('{workspace}/tasks', 'WorkspaceTasksController@store')->name('tasks.store');
-
     Route::patch('{workspace}/tasks/{task}', 'WorkspaceTasksController@update')->name('tasks.update');
-
     Route::delete('{workspace}/tasks/{task}', 'WorkspaceTasksController@destroy')->name('tasks.delete');
-
     Route::get('{workspace}/members', 'WorkspaceMembersController@index')->name('workspace-members.index');
 });
 

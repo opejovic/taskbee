@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full mx-auto items-center px-3"
+    class="flex w-full mx-auto items-center px-3 pb-10"
   >
     <!-- if user is signed in already, dont show the form for registraton, else, show the subscription form. -->
     <div class="mx-auto w-full">
@@ -37,9 +37,9 @@
           </div>
           <div v-for="plan in plans" :key="plan.id" style="cursor: pointer;" class="px-3">
             <!-- this can be its own component Plan or Plans -->
-            <div :class="{ unclickable: processing }" class="h-full">
+            <div :class="{ unclickable: processing }" class="h-full mb-1">
               <div
-                class="text-sm tracking-tight text-indigo-900 mb-2 border-2 border-gray-400 px-6 py-4 rounded"
+                class="text-sm tracking-tight text-indigo-900 border-2 border-gray-400 px-6 py-6 rounded"
                 @click="choose(plan)"
                 :class="{ 'indie-border': clicked(plan.id) }"
               >

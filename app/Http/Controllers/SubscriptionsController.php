@@ -46,9 +46,7 @@ class SubscriptionsController extends Controller
     public function success(PaymentGateway $paymentGateway)
     {
         # Get a StripeSubscription from Checkout Session.
-        $subscription = $paymentGateway->getSubscription(
-            request()->session()->get('sub')->id
-        );
+        $subscription = $paymentGateway->getSubscription();
 
         # Get authorization code for that Subscription.
         $authorization = WorkspaceSetupAuthorization::where(

@@ -41,7 +41,7 @@ class ProductsAndPlansCreationTest extends TestCase
 
         // Act: type console command (generate-plans)
         $created_at = Carbon::now()->unix();
-        $this->artisan('generate-plans');
+        $this->artisan('generate:plans');
 
         // Assert: the subscription plans exist in the db and on the stripe server.
         $this->assertCount(3, Plan::all());

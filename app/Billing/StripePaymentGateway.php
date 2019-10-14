@@ -52,10 +52,9 @@ class StripePaymentGateway implements PaymentGateway
     /**
      * Get Stripe subscription from the checkout session.
      *
-     * @param $subscription
      * @return mixed
      */
-    public function getSubscription($subscription)
+    public function getSubscription()
     {
         return \Stripe\Checkout\Session::retrieve(
             request()->session()->get('sub')->id
