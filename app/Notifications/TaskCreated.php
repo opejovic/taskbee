@@ -9,15 +9,15 @@ class TaskCreated extends Notification
 {
     /**
      * The task instance
-     * 
-     * @var \App\Models\Task
+     *
+     * @var \taskbee\Models\Task
      */
     protected $task;
 
     /**
      * The user instance
-     * 
-     * @var \App\Models\user
+     *
+     * @var \taskbee\Models\user
      */
 	protected $user;
 

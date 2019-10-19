@@ -17,7 +17,7 @@ abstract class Filters
      * Defined filters.
      *
      * @var array
-     */  
+     */
     protected $filters = [];
 
     /**
@@ -36,7 +36,6 @@ abstract class Filters
      * @param $builder
      *
      * @return void
-     * @author
      */
     public function apply($builder)
     {

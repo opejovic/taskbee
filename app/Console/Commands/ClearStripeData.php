@@ -42,6 +42,8 @@ class ClearStripeData extends Command
         try {
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
+            $this->info('Interacting with Stripe, please wait.');
+
             # Retrieve all TaskBee products from stripe
             $stripeProducts = collect(\Stripe\Product::all()['data'])->filter(function ($product) {
                 return $product['name'] == 'TaskBee Workspace Bundle';

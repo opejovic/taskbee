@@ -37,7 +37,7 @@ class GenerateWebhook extends Command
      */
     public function handle()
     {
-        $this->info("Generating stripe web hook.. please wait.");
+        $this->info("Generating stripe web hook, please wait.");
 
         # @TODO Move it to the WebhookGateway
 
@@ -52,6 +52,6 @@ class GenerateWebhook extends Command
             ]
         ], ['api_key' => config('services.stripe.secret')]);
 
-        $this->info("Done!");
+        $this->info("Webhook generated.");
     }
 }

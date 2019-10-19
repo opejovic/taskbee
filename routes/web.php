@@ -50,7 +50,7 @@ Route::group([
     Route::post('{workspace}/members', 'InviteMembersController@store')->name('invite-members');
 });
 
-Route::get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
+Route::middleware('guest')->get('invitations/{code}', 'InvitationsController@show')->name('invitations.show');
 
 Route::group([
     'middleware' => 'auth',

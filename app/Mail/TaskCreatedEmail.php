@@ -14,14 +14,14 @@ class TaskCreatedEmail extends Mailable
     /**
      * The task instance.
      *
-     * @var \App\Models\Task
+     * @var \taskbee\Models\Task
      */
     public $task;
 
     /**
      * The authenticated user instance.
      *
-     * @var \App\Models\User
+     * @var \taskbee\Models\User
      */
     public $authUser;
 
@@ -44,6 +44,8 @@ class TaskCreatedEmail extends Mailable
      */
     public function build()
     {
-        return $this->from($this->authUser->email)->markdown('emails.task-created');
+        return $this->from($this->authUser->email)
+            ->subject('You have new task.')
+            ->markdown('emails.task-created');
     }
 }
