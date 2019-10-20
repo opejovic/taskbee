@@ -2,7 +2,7 @@ let mix = require('laravel-mix');
 
 require('laravel-mix-tailwind');
 
-// mix.disableNotifications();
+mix.disableNotifications();
 
 /*
  |--------------------------------------------------------------------------
