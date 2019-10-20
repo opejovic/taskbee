@@ -5,7 +5,7 @@ namespace taskbee\Helpers;
 class RandomNumberGenerator implements AuthorizationCodeGenerator, InvitationCodeGenerator
 {
     /**
-     * Generate a random 24 character code from a pool of characters for an invitation.
+     * Generate a random 24 character code from a pool of characters.
      *
      * @return string
      */
