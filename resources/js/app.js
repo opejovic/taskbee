@@ -18,9 +18,9 @@ Vue.prototype.auth = window.auth; // ...authenticated user
 
 Vue.use(VModal);
 
-Vue.use(Toasted,  { 
-    theme: "toasted-primary", 
-	position: "bottom-left", 
+Vue.use(Toasted,  {
+    theme: "toasted-primary",
+	position: "bottom-left",
     duration: 7000,
     action: {
         text: 'Close',
@@ -52,9 +52,9 @@ Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 Vue.component('new-task-modal', require('./components/tasks/NewTaskModal.vue').default);
 Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('task-filter-dropdown', require('./components/tasks/TaskFilterDropdown.vue').default);
-Vue.component('user-menu-dropdown', require('./components/UserMenuDropdown.vue').default);
 Vue.component('workspace', require('./components/workspaces/Workspace.vue').default);
 Vue.component('paginator', require('./components/Paginator.vue').default);
+Vue.component('account-dropdown', require('./components/AccountDropdown.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

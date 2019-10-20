@@ -50,17 +50,7 @@
             :user="auth"
           ></user-notifications>
           <div class="block flex items-center">
-            <img
-              class="block lg:mt-0 mt-4 mr-2"
-              :src="auth.avatar_path"
-              width="40px"
-              height="40px"
-              alt="avatar"
-              style="border-radius: 50%;"
-            />
-            <user-menu-dropdown
-              class="text-sm block lg:mt-0 mt-4 lg:mt-0 text-indigo-900 hover:text-indigo-600"
-            ></user-menu-dropdown>
+            <account-dropdown></account-dropdown>
           </div>
         </div>
       </div>
@@ -69,9 +59,12 @@
 </template>
 
 <script>
+  import AccountDropdown from "./AccountDropdown.vue";
+
   export default {
+    components: { AccountDropdown },
     props: ['workspace'],
-    
+
     data() {
       return {
         isOpen: false,
