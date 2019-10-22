@@ -1,20 +1,17 @@
 <template>
-  <div>
-    <div class="dropdown">
-      <div class="dropdown__header" @click="toggleDropdown($event)">
-        <span class="text-indigo-800 hover:text-indigo-500"
-          ><i
-            v-html="hasNotifications"
-            class="material-icons"
-            style="font-size: 1.2em;"
-          ></i
-        ></span>
-      </div>
+    <dropdown-menu :isOpen="isOpen">
+    <button slot="title" @click="toggle()" class="z-10 relative block focus:outline-none">
+      <i
+        v-html="hasNotifications"
+        class=" hover:text-indigo-500 material-icons"
+        :class="isOpen ? 'text-indigo-700' : 'text-gray-700'"
+        style="font-size: 1.2em;"
+      ></i
+    >
+    </button>
 
-      <div
-        class="dropdown__content bg-gray-200 rounded border absolute shadow text-sm mr-2"
-      >
-        <ul>
+  <div slot="content">
+        <ul class="px-4 py-2">
           <div v-if="notifications.length">
             <li class="text-left border-b-2 border-blue-900">
               <a class="hover:text-indigo-600" href="#" @click="clearAll"
@@ -42,28 +39,25 @@
           </div>
         </ul>
       </div>
-    </div>
-  </div>
+    </dropdown-menu>
 </template>
 
 <script>
+  import DropdownMenu from "./DropdownMenu";
   import moment from "moment";
 
   export default {
-    props: ["user"],
+    components: {
+      DropdownMenu,
+    },
+
+    props: ['user'],
 
     data() {
       return {
+        isOpen: false,
         notifications: false
-      };
-    },
-
-    created() {
-      window.events.$on(["task-updated", "task-added", "task-deleted"], () => {
-        this.fetch();
-      });
-
-      this.fetch();
+      }
     },
 
     computed: {
@@ -74,9 +68,37 @@
       }
     },
 
+    created() {
+      window.events.$on(["task-updated", "task-added", "task-deleted"], () => {
+        this.fetch();
+      });
+
+      this.fetch();
+
+      const handleEscape = (e) => {
+        if (e.key === 'Esc' || e.key === 'Escape') {
+          this.isOpen = false
+        }
+      }
+
+      document.addEventListener('keydown', handleEscape)
+
+      this.$once('hook:beforeDestroy', () => {
+        document.removeEventListener('keydown', handleEscape)
+      })
+    },
+
     methods: {
-      toggleDropdown(event) {
-        event.currentTarget.classList.toggle("is-active");
+      toggle() {
+        this.isOpen = !this.isOpen
+
+        if (this.isOpen) {
+          this.$emit('opened')
+        }
+      },
+
+      close() {
+        return this.isOpen = false;
       },
 
       fetch() {
@@ -124,47 +146,6 @@
           : notification.data.member;
       }
     }
+
   };
 </script>
-
-<style lang="scss" scoped>
-  .dropdown {
-    &__header {
-      cursor: pointer;
-      position: relative;
-      text-overflow: ellipsis;
-      i.fa {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: opacity 0.3s;
-        &.fa-angle-up {
-          opacity: 0;
-        }
-      }
-      &.is-active {
-        i.fa {
-          &.fa-angle-up {
-            opacity: 1;
-          }
-          &.fa-angle-down {
-            opacity: 0;
-          }
-        }
-        + .dropdown__content {
-          height: auto;
-          opacity: 1;
-          visibility: visible;
-        }
-      }
-    }
-    &__content {
-      height: 0;
-      opacity: 0;
-      overflow: hidden;
-      padding: 15px 10px;
-      transition: opacity 0.5s;
-      visibility: hidden;
-    }
-  }
-</style>

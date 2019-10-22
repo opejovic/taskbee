@@ -43,14 +43,18 @@
             <task-filter-dropdown
               class="block mt-4 lg:inline-block lg:mt-0 text-indigo-900 hover:text-indigo-600 mr-4"
               v-if="auth.workspace_id !== null"
+              ref="filters"
+              @opened="closeAccountAndNotifications()"
             ></task-filter-dropdown>
           </div>
           <user-notifications
+            ref="notifications"
             class="block lg:inline-block mr-4 lg:mt-1 mt-4"
             :user="auth"
+            @opened="closeAccountAndFilters()"
           ></user-notifications>
           <div class="block flex items-center">
-            <account-dropdown></account-dropdown>
+            <account-dropdown @opened="closeNotificationsAndFilters()" ref="account"></account-dropdown>
           </div>
         </div>
       </div>
@@ -68,12 +72,25 @@
     data() {
       return {
         isOpen: false,
+        close: false,
       }
     },
 
     methods: {
       toggleHamburger() {
         this.isOpen = ! this.isOpen;
+      },
+      closeNotificationsAndFilters() {
+        this.$refs.notifications.close()
+        this.$refs.filters.close();
+      },
+      closeAccountAndFilters() {
+        this.$refs.account.close()
+        this.$refs.filters.close()
+      },
+      closeAccountAndNotifications() {
+        this.$refs.account.close()
+        this.$refs.notifications.close()
       }
     },
   };

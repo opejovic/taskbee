@@ -54,6 +54,7 @@ Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('task-filter-dropdown', require('./components/tasks/TaskFilterDropdown.vue').default);
 Vue.component('workspace', require('./components/workspaces/Workspace.vue').default);
 Vue.component('paginator', require('./components/Paginator.vue').default);
+Vue.component('dropdown-menu', require('./components/DropdownMenu.vue').default);
 Vue.component('account-dropdown', require('./components/AccountDropdown.vue').default);
 
 /**
