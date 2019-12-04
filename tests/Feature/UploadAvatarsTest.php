@@ -11,37 +11,37 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UploadAvatarsTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function guests_cannot_upload_avatars()
-	{
-		$this->json('POST', "/profiles/1/avatar", [])->assertStatus(401); // unauthorized
-	}
+    /** @test */
+    public function guests_cannot_upload_avatars()
+    {
+        $this->json('POST', "/profiles/1/avatar", [])->assertStatus(401); // unauthorized
+    }
 
-	/** @test */
-	function avatar_must_be_a_valid_image_file()
-	{
-		$user = factory(User::class)->create();
-		$this->actingAs($user)
-			->json('POST', "/profiles/{$user->id}/avatar", [
-				'avatar' => 'not-an-image',
-			])->assertStatus(422);
-	}
+    /** @test */
+    public function avatar_must_be_a_valid_image_file()
+    {
+        $user = factory(User::class)->create();
+        $this->actingAs($user)
+            ->json('POST', "/profiles/{$user->id}/avatar", [
+                'avatar' => 'not-an-image',
+            ])->assertStatus(422);
+    }
 
-	/** @test */
-	function authenticated_users_can_upload_their_avatar()
-	{
-		Storage::fake();
+    /** @test */
+    public function authenticated_users_can_upload_their_avatar()
+    {
+        Storage::fake();
 
-		$user = factory(User::class)->create();
-		$this->actingAs($user)
-			->json('POST', "/profiles/{$user->id}/avatar", [
-				'avatar' => $file = UploadedFile::fake()->image('avatar.jpg'),
-			]);
+        $user = factory(User::class)->create();
+        $this->actingAs($user)
+            ->json('POST', "/profiles/{$user->id}/avatar", [
+                'avatar' => $file = UploadedFile::fake()->image('avatar.jpg'),
+            ]);
 
-		$this->assertEquals("http://127.0.0.1:8000/storage/avatars/{$file->hashName()}", $user->avatar_path);
+        $this->assertEquals("http://127.0.0.1:8000/storage/avatars/{$file->hashName()}", $user->avatar_path);
 
-		Storage::disk('public')->assertExists("avatars/{$file->hashName()}");
-	}
+        Storage::disk('public')->assertExists("avatars/{$file->hashName()}");
+    }
 }

@@ -96,7 +96,7 @@ class ViewTasksTest extends TestCase
     }
 
     /** @test */
-    function tasks_can_be_fetched_via_api_route()
+    public function tasks_can_be_fetched_via_api_route()
     {
         $don = factory(User::class)->create();
         $task = factory(Task::class)->create([

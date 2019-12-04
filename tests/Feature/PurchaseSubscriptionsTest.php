@@ -68,12 +68,14 @@ class PurchaseSubscriptionsTest extends TestCase
         $this->assertEquals('jane@example.com', $setupAuthorization->email);
         $this->assertEquals('TESTCODE123', $setupAuthorization->code);
 
-		Mail::assertQueued(SubscriptionPurchasedEmail::class,
-			function ($mail) use ($subscription, $setupAuthorization) {
-				return $mail->hasTo('jane@example.com')
-					&& $mail->setupAuthorization->is($setupAuthorization)
-					&& $mail->subscription->id == $subscription->id;
-			});
+        Mail::assertQueued(
+            SubscriptionPurchasedEmail::class,
+            function ($mail) use ($subscription, $setupAuthorization) {
+                return $mail->hasTo('jane@example.com')
+                    && $mail->setupAuthorization->is($setupAuthorization)
+                    && $mail->subscription->id == $subscription->id;
+            }
+        );
     }
 
     /** @test */

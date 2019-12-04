@@ -13,13 +13,13 @@ class StripeCheckoutTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function only_authenticated_users_can_view_checkout_page()
+    public function only_authenticated_users_can_view_checkout_page()
     {
         $this->post("/plans/1/checkout")->assertRedirect('login');
     }
 
     /** @test */
-    function it_creates_a_checkout_session()
+    public function it_creates_a_checkout_session()
     {
         # Arrange: Existing plan
         $user = factory(User::class)->create();

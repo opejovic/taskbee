@@ -42,24 +42,24 @@ class CreateAccountTest extends TestCase
         $this->assertCount(1, User::all());
         $user = User::whereEmail('john@example.com')->first();
         $this->assertNotNull($user);
-	}
+    }
 
-	/** @test */
-	function first_name_is_required_in_order_to_create_an_account()
-	{
-		$this->assertCount(0, User::all());
+    /** @test */
+    public function first_name_is_required_in_order_to_create_an_account()
+    {
+        $this->assertCount(0, User::all());
 
-		$this->json('POST', "/register", [
-			'first_name' => 'John',
-			'last_name' => 'Malkovich',
-			'email' => 'john@example.com',
-			'email_confirmation' => 'john@example.com',
-			'password' => 'password',
-			'password_confirmation' => 'password',
-		]);
+        $this->json('POST', "/register", [
+            'first_name' => 'John',
+            'last_name' => 'Malkovich',
+            'email' => 'john@example.com',
+            'email_confirmation' => 'john@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
 
-		$this->assertCount(1, User::all());
-		$user = User::whereEmail('john@example.com')->first();
-		$this->assertNotNull($user);
-	}
+        $this->assertCount(1, User::all());
+        $user = User::whereEmail('john@example.com')->first();
+        $this->assertNotNull($user);
+    }
 }

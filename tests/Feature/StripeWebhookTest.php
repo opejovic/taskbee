@@ -19,7 +19,7 @@ class StripeWebhookTest extends TestCase
     }
 
     /** @test */
-    function stripe_webhooks_are_generated_via_console_command()
+    public function stripe_webhooks_are_generated_via_console_command()
     {
         # Call artisan command for generating web hooks.
         $created_at = Carbon::now()->unix();
@@ -31,7 +31,7 @@ class StripeWebhookTest extends TestCase
         ])['data'];
 
         $webhooks = collect($data)->filter(function ($item) use ($created_at) {
-           return $item['created'] >= $created_at;
+            return $item['created'] >= $created_at;
         });
 
         $this->assertEquals(1, count($webhooks));
@@ -41,7 +41,7 @@ class StripeWebhookTest extends TestCase
     }
 
     /** @test */
-    function stripe_webhooks_can_be_deleted_via_console_command()
+    public function stripe_webhooks_can_be_deleted_via_console_command()
     {
         # Arrange
         $created_at = Carbon::now()->unix();

@@ -10,58 +10,58 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TaskTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function it_has_an_assignee()
-	{
-		$user = factory(User::class)->create();
-		$task = factory(Task::class)->create(['user_responsible' => $user->id]);
+    /** @test */
+    public function it_has_an_assignee()
+    {
+        $user = factory(User::class)->create();
+        $task = factory(Task::class)->create(['user_responsible' => $user->id]);
 
-		$this->assertTrue($task->assignee->is($user));
-	}
+        $this->assertTrue($task->assignee->is($user));
+    }
 
-	/** @test */
-	function it_has_a_creator()
-	{
-		$user = factory(User::class)->create();
-		$task = factory(Task::class)->create(['created_by' => $user->id]);
+    /** @test */
+    public function it_has_a_creator()
+    {
+        $user = factory(User::class)->create();
+        $task = factory(Task::class)->create(['created_by' => $user->id]);
 
-		$this->assertTrue($task->creator->is($user));
-	}
+        $this->assertTrue($task->creator->is($user));
+    }
 
-	/** @test */
-	function it_can_get_a_formatted_start_date()
-	{
-		$task = factory(Task::class)->create(['start_date' => '2019-05-22']);
+    /** @test */
+    public function it_can_get_a_formatted_start_date()
+    {
+        $task = factory(Task::class)->create(['start_date' => '2019-05-22']);
 
-		$this->assertEquals('May 22, 2019', $task->formatted_start_date);
-	}
+        $this->assertEquals('May 22, 2019', $task->formatted_start_date);
+    }
 
-	/** @test */
-	function it_can_get_a_formatted_finish_date()
-	{
-		$task = factory(Task::class)->create(['finish_date' => '2019-05-22']);
+    /** @test */
+    public function it_can_get_a_formatted_finish_date()
+    {
+        $task = factory(Task::class)->create(['finish_date' => '2019-05-22']);
 
-		$this->assertEquals('May 22, 2019', $task->formatted_finish_date);
-	}
+        $this->assertEquals('May 22, 2019', $task->formatted_finish_date);
+    }
 
-	/** @test */
-	function it_knows_if_its_been_updated_recently()
-	{
+    /** @test */
+    public function it_knows_if_its_been_updated_recently()
+    {
         $task = factory(Task::class)->create(['updated_at' => now()]);
         $this->assertTrue($task->wasUpdatedRecently());
 
         $task->updated_at = now()->subWeek();
         $this->assertFalse($task->wasUpdatedRecently());
-	}
+    }
 
-	/** @test */
-	function it_can_retrieve_a_limited_characters_off_of_its_name()
-	{
-		$task = factory(Task::class)->create([
-			'name' => 'Fifteen chars title. A Really, really, really, long title.'
-		]);
+    /** @test */
+    public function it_can_retrieve_a_limited_characters_off_of_its_name()
+    {
+        $task = factory(Task::class)->create([
+            'name' => 'Fifteen chars title. A Really, really, really, long title.'
+        ]);
         $this->assertEquals('Fifteen chars t...', $task->shortName);
-	}
+    }
 }

@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ClearStripeDataTest extends TestCase
 {
     /** @test */
-    function stripe_plans_are_cleared_when_command_is_called()
+    public function stripe_plans_are_cleared_when_command_is_called()
     {
         # Arrange:  Create 4 plans, 3 to be deleted and a Webhook, assert that plans exist
         $stripeGateway = (new StripePlansGateway(config('services.stripe.secret')));

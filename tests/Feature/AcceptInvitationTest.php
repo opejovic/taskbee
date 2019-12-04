@@ -99,5 +99,5 @@ class AcceptInvitationTest extends TestCase
         $member = $workspace->members()->where('email', 'jae@example.com')->first();
         $this->assertNotNull($member);
         $this->assertEquals(2, $existingUser->workspaces->count());
-	}
+    }
 }

@@ -13,91 +13,91 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
  */
 class StripePlansGatewayTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function can_generate_subscription_plans()
-	{
-		$plansGateway = new StripePlansGateway(config('services.stripe.secret'));
-		\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    /** @test */
+    public function can_generate_subscription_plans()
+    {
+        $plansGateway = new StripePlansGateway(config('services.stripe.secret'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-		$created_at = Carbon::now()->unix();
-		$plansGateway->generate();
+        $created_at = Carbon::now()->unix();
+        $plansGateway->generate();
 
-		$stripePlans = \Stripe\Plan::all([
-			"limit" => 10,
-			"created" => [
-				"gte" => $created_at,
-			],
-		], ['api_key' => config('services.stripe.secret')]);
+        $stripePlans = \Stripe\Plan::all([
+            "limit" => 10,
+            "created" => [
+                "gte" => $created_at,
+            ],
+        ], ['api_key' => config('services.stripe.secret')]);
 
-		$this->assertCount(3, $stripePlans['data']);
-		$this->assertArraySubset(
-			[
-				'Premium Monthly',
-				'Standard Monthly',
-				'Basic Monthly',
-			],
-			collect($stripePlans['data'])->pluck('nickname')->toArray(),
-		);
+        $this->assertCount(3, $stripePlans['data']);
+        $this->assertArraySubset(
+            [
+                'Premium Monthly',
+                'Standard Monthly',
+                'Basic Monthly',
+            ],
+            collect($stripePlans['data'])->pluck('nickname')->toArray(),
+        );
 
-		// Delete the product and plans from stripe after finished test
-		$product = \Stripe\Product::retrieve($stripePlans['data'][0]['product']);
+        // Delete the product and plans from stripe after finished test
+        $product = \Stripe\Product::retrieve($stripePlans['data'][0]['product']);
 
-		collect($stripePlans['data'])->each(function ($plan) {
-			$plan->delete();
-		});
+        collect($stripePlans['data'])->each(function ($plan) {
+            $plan->delete();
+        });
 
-		$product->delete();
-	}
+        $product->delete();
+    }
 
-	/** @test */
-	function can_create_a_product()
-	{
-		$plansGateway = new StripePlansGateway(config('services.stripe.secret'));
-		\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    /** @test */
+    public function can_create_a_product()
+    {
+        $plansGateway = new StripePlansGateway(config('services.stripe.secret'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-		$created_at = Carbon::now()->unix();
-		$plansGateway->product();
+        $created_at = Carbon::now()->unix();
+        $plansGateway->product();
 
-		$stripeProduct = \Stripe\Product::all([
-			"limit" => 10,
-			"created" => [
-				"gte" => $created_at,
-			],
-		], ['api_key' => config('services.stripe.secret')]);
+        $stripeProduct = \Stripe\Product::all([
+            "limit" => 10,
+            "created" => [
+                "gte" => $created_at,
+            ],
+        ], ['api_key' => config('services.stripe.secret')]);
 
-		$this->assertCount(1, $stripeProduct['data']);
-		$this->assertTrue(collect($stripeProduct['data'])->pluck('name')->contains('Workspace Bundle'));
+        $this->assertCount(1, $stripeProduct['data']);
+        $this->assertTrue(collect($stripeProduct['data'])->pluck('name')->contains('Workspace Bundle'));
 
-		$product = \Stripe\Product::retrieve($stripeProduct['data'][0]['id']);
-		$product->delete();
-	}
+        $product = \Stripe\Product::retrieve($stripeProduct['data'][0]['id']);
+        $product->delete();
+    }
 
-	/** @test */
-	function can_create_a_plan()
-	{
-		$plansGateway = new StripePlansGateway(config('services.stripe.secret'));
-		\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    /** @test */
+    public function can_create_a_plan()
+    {
+        $plansGateway = new StripePlansGateway(config('services.stripe.secret'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-		$created_at = Carbon::now()->unix();
-		$product = $plansGateway->product();
-		$plan = $plansGateway->plan('Basic Monthly', 3995, 5, $product);
+        $created_at = Carbon::now()->unix();
+        $product = $plansGateway->product();
+        $plan = $plansGateway->plan('Basic Monthly', 3995, 5, $product);
 
-		$stripePlan = \Stripe\Plan::all([
-			"limit" => 10,
-			"created" => [
-				"gte" => $created_at,
-			],
-		], ['api_key' => config('services.stripe.secret')]);
+        $stripePlan = \Stripe\Plan::all([
+            "limit" => 10,
+            "created" => [
+                "gte" => $created_at,
+            ],
+        ], ['api_key' => config('services.stripe.secret')]);
 
-		$this->assertCount(1, $stripePlan['data']);
-		$this->assertTrue(collect($stripePlan['data'])->pluck('nickname')->contains('Basic Monthly'));
+        $this->assertCount(1, $stripePlan['data']);
+        $this->assertTrue(collect($stripePlan['data'])->pluck('nickname')->contains('Basic Monthly'));
 
-		collect($stripePlan['data'])->each(function ($plan) {
-			$plan->delete();
-		});
+        collect($stripePlan['data'])->each(function ($plan) {
+            $plan->delete();
+        });
 
-		$product->delete();
-	}
+        $product->delete();
+    }
 }
