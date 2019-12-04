@@ -34,7 +34,7 @@ class StripePaymentGateway implements PaymentGateway
     {
         return \Stripe\Checkout\Session::create([
             'customer_email'       => Auth::user()->email,
-            'cancel_url'           => "http://127.0.0.1:8000/plans",
+            'cancel_url'           => config('app.url') . "/plans",
             'expand'               => ['subscription'],
             'payment_method_types' => ['card'],
             'subscription_data'    => [
@@ -45,7 +45,7 @@ class StripePaymentGateway implements PaymentGateway
                     ],
                 ],
             ],
-            'success_url'          => 'http://127.0.0.1:8000/success',
+            'success_url'          => config('app.url') . "/success",
         ]);
     }
 
