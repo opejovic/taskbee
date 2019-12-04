@@ -1,5 +1,5 @@
 <template>
-  <dropdown-menu :isOpen="isOpen">
+  <dropdown-menu :isOpen="isOpen" @close="close()">
     <button slot="title" @click="toggle()" class="z-10 relative block focus:outline-none" :class="isOpen ? 'text-indigo-700' : 'text-gray-700'">
       Browse
     </button>
