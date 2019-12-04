@@ -101,25 +101,36 @@ class Subscription extends Model
     /**
      * Change the status of the subscription.
      *
-     * @param $subscription
+     * @param  $subscription
      * @return void
      */
     public static function expire($subscription)
     {
-        $sub = self::findByStripeId($subscription);
-        $sub->update(['status' => $subscription->status]);
+        $sub = self::updateStatus($subscription);
+
         Mail::to($sub->email)->queue(new SubscriptionExpiredEmail($sub));
     }
 
     /**
      * Renews the subscription.
      *
-     * @param $subscription
+     * @param  $subscription
      * @return void
      */
     public static function renew($subscription)
     {
-        self::findByStripeId($subscription)->update(['status' => $subscription->status]);
+        self::updateStatus($subscription);
+    }
+
+    /**
+     * Update the subscriptions status.
+     *
+     * @param  $subscription
+     * @return \App\Models\Subscription $model
+     */
+    public static function updateStatus($subscription)
+    {
+        return self::findByStripeId($subscription)->update(['status' => $subscription->status]);
     }
 
     /**
