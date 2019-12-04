@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <slot name="title"></slot>
-    <button v-if="isOpen" @click="close()" tabindex="-1" class="fixed inset-0 h-full w-full cursor-default focus:outline-none"></button>
+    <button v-if="isOpen" @click="close" tabindex="-1" class="fixed inset-0 h-full w-full cursor-default focus:outline-none"></button>
 
     <transition
       enter-active-class="transition-all transition-fastest ease-out-quad"
@@ -20,6 +20,11 @@
 
 <script>
     export default {
-      props: ['isOpen']
+      props: ['isOpen'],
+      methods: {
+          close() {
+            this.$emit('close')
+          }
+      },
     }
 </script>
