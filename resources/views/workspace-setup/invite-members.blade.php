@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex items-center justify-center mx-auto mt-5 border max-w-lg px-10 py-5 w-full shadow rounded-sm bg-white">
+<div class="flex items-center justify-center mx-auto mt-5 border max-w-lg px-10 py-5 w-full shadow-lg rounded-lg bg-white">
     <div class="w-full">
         <img class="w-64 mx-auto" src="/img/invite-members.svg" alt="">
         <div class="w-full text-center pt-10">

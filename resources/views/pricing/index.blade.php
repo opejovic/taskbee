@@ -35,7 +35,7 @@
         <div class="lg:flex md:flex justify-center pt-10 pb-10">
             @foreach ($plans as $plan)
             <div class="xl:w-1/4 sm:w-full md:w-full sm:mx-2 sm:mt-2">
-                <div class="m-2 rounded shadow bg-gray-100 text-gray-700">
+                <div class="m-2 rounded-lg shadow bg-gray-100 text-gray-700">
                     <div class="">
                         {{-- Header --}}
                         <div class="py-10 text-center uppercase font-light">

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="px-5">
-    <div class="mx-auto text-center mt-5 border max-w-lg px-10 py-10 shadow rounded-sm bg-white">
+    <div class="mx-auto text-center mt-5 border max-w-lg px-10 py-10 shadow-lg rounded-lg bg-white">
         <img class="w-64 mx-auto" src="/img/workspace.svg" alt="">
         <div class="w-full">
             <div>
