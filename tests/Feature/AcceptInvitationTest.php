@@ -16,7 +16,6 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     public function viewing_unused_invitations()
     {
-        $this->withoutExceptionHandling();
         $invitation = factory(Invitation::class)->create([
             'user_id' => null,
             'code' => 'INVITATIONCODE123',
