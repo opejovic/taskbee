@@ -20,7 +20,7 @@ class StripePlansGateway
      */
     public function __construct($apiKey)
     {
-        $this->apiKey = $apiKey;
+        $this->apiKey = \Stripe\Stripe::setApiKey($apiKey);
     }
 
     /**
@@ -59,16 +59,16 @@ class StripePlansGateway
             "name"                 => "TaskBee Workspace Bundle",
             "statement_descriptor" => "TaskBee Workspace",
             "type"                 => "service",
-        ], ['api_key' => $this->apiKey]);
+        ]);
     }
 
     /**
      * Create a StripePlan
      *
-     * @param $nickname
-     * @param integer $amount
-     * @param integer $members_limit
-     * @param $product
+     * @param  $nickname
+     * @param  $amount
+     * @param  $members_limit
+     * @param  $product
      *
      * @return \Stripe\Plan
      */
@@ -83,7 +83,7 @@ class StripePlansGateway
             "usage_type"     => "licensed",
             "metadata"       => ["members_limit" => $members_limit],
             "product"        => $product['id'],
-        ], ['api_key' => $this->apiKey]);
+        ]);
     }
 
     /**
