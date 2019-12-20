@@ -74,17 +74,17 @@ class Subscription extends Model
     public static function buildFrom($subscription, $email)
     {
         return self::create([
-            'stripe_id'  => $subscription['id'],
-            'product_id' => $subscription['plan']['product'],
-            'plan_id'    => $subscription['plan']['id'],
-            'plan_name'  => $subscription['plan']['nickname'],
-            'customer'   => $subscription['customer'],
-            'email'      => $email,
-            'billing'    => $subscription['billing'],
-            'amount'     => $subscription['plan']['amount'] * $subscription['quantity'],
-            'status'     => $subscription['status'],
-            'start_date' => Carbon::createFromTimestamp($subscription['current_period_start']),
-            'expires_at' => Carbon::createFromTimestamp($subscription['current_period_end']),
+            'stripe_id'         => $subscription['id'],
+            'product_id'        => $subscription['plan']['product'],
+            'plan_id'           => $subscription['plan']['id'],
+            'plan_name'         => $subscription['plan']['nickname'],
+            'customer'          => $subscription['customer'],
+            'email'             => $email,
+            'collection_method' => $subscription['collection_method'],
+            'amount'            => $subscription['plan']['amount'] * $subscription['quantity'],
+            'status'            => $subscription['status'],
+            'start_date'        => Carbon::createFromTimestamp($subscription['current_period_start']),
+            'expires_at'        => Carbon::createFromTimestamp($subscription['current_period_end']),
         ])->getAuthorization();
     }
 
