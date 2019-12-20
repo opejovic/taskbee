@@ -2,8 +2,8 @@
 
 namespace taskbee\Models;
 
-use taskbee\Facades\AuthorizationCode;
 use Illuminate\Support\Facades\Mail;
+use taskbee\Facades\AuthorizationCode;
 use Illuminate\Database\Eloquent\Model;
 use taskbee\Mail\SubscriptionPurchasedEmail;
 

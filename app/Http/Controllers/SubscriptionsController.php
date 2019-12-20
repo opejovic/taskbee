@@ -47,10 +47,11 @@ class SubscriptionsController extends Controller
     {
         # Get a StripeSubscription from Checkout Session.
         $subscription = $paymentGateway->getSubscription();
-
+        
         # Get authorization code for that Subscription.
         $authorization = WorkspaceSetupAuthorization::where(
-            'subscription_id', $subscription
+            'subscription_id',
+            $subscription
         )->first()->code;
 
         return redirect(route('workspace-setup.show', $authorization));
