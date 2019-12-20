@@ -2,7 +2,7 @@
   <div>
     <div class="display-4 d-flex align-items-center">
       <img
-        class="mr-2"
+        class="mr-2 cursor-pointer"
         :src="avatar"
         width="60px"
         height="60px"
@@ -45,62 +45,62 @@
 </template>
 
 <script>
-  export default {
-    props: ["profileuser"],
+export default {
+  props: ["profileuser"],
 
-    data() {
-      return {
-        avatar: this.profileuser.avatar_path,
-        errors: {}
+  data() {
+    return {
+      avatar: this.profileuser.avatar_path,
+      errors: {}
+    };
+  },
+
+  computed: {
+    canUpload() {
+      return this.profileuser.id == auth.id;
+    }
+  },
+
+  methods: {
+    onChange(event) {
+      if (!event.target.files.length) return;
+
+      let avatar = event.target.files[0];
+      let data = new FileReader();
+      data.readAsDataURL(avatar);
+
+      data.onload = event => {
+        this.avatar = event.target.result;
       };
+
+      this.persist(avatar);
     },
 
-    computed: {
-      canUpload() {
-        return this.profileuser.id == auth.id;
-      }
+    persist(avatar) {
+      let data = new FormData();
+
+      data.append("avatar", avatar);
+
+      axios
+        .post(`/profiles/${this.profileuser.id}/avatar`, data)
+        .then(response => {
+          this.$toasted.show("Avatar saved.");
+          this.errors = {};
+        })
+        .catch(errors => {
+          this.errors = errors.response.data.errors;
+        });
     },
 
-    methods: {
-      onChange(event) {
-        if (!event.target.files.length) return;
+    errorsHave(field) {
+      return this.errors.hasOwnProperty(field);
+    },
 
-        let avatar = event.target.files[0];
-        let data = new FileReader();
-        data.readAsDataURL(avatar);
-
-        data.onload = event => {
-          this.avatar = event.target.result;
-        };
-
-        this.persist(avatar);
-      },
-
-      persist(avatar) {
-        let data = new FormData();
-
-        data.append("avatar", avatar);
-
-        axios
-          .post(`/profiles/${this.profileuser.id}/avatar`, data)
-          .then(response => {
-            this.$toasted.show("Avatar saved.");
-            this.errors = {};
-          })
-          .catch(errors => {
-            this.errors = errors.response.data.errors;
-          });
-      },
-
-      errorsHave(field) {
-        return this.errors.hasOwnProperty(field);
-      },
-
-      get(field) {
-        if (this.errors[field]) {
-          return this.errors[field][0];
-        }
+    get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
       }
     }
-  };
+  }
+};
 </script>
