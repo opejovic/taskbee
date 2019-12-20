@@ -1,8 +1,6 @@
 <?php
 
-
 namespace taskbee\Billing;
-
 
 use taskbee\Models\Plan;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +25,8 @@ class StripePaymentGateway implements PaymentGateway
     /**
      * Create a Stripe Checkout session, and charge the customer.
      *
-     * @param \taskbee\Models\Plan $plan
+     * @param  \taskbee\Models\Plan $plan
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Checkout\Session
      */
     public function checkout(Plan $plan)
@@ -52,6 +51,7 @@ class StripePaymentGateway implements PaymentGateway
     /**
      * Get Stripe subscription from the checkout session.
      *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return mixed
      */
     public function getSubscription()

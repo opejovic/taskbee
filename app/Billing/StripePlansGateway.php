@@ -35,6 +35,7 @@ class StripePlansGateway
     /**
      * Returns the collection of created Stripe plans.
      *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Illuminate\Support\Collection
      */
     public function plans()
@@ -51,6 +52,7 @@ class StripePlansGateway
     /**
      * Create a StripeProduct
      *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Product
      */
     public function product()
@@ -69,7 +71,7 @@ class StripePlansGateway
      * @param  $amount
      * @param  $members_limit
      * @param  $product
-     *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
     public function plan($nickname, $amount, $members_limit, $product)
@@ -89,7 +91,8 @@ class StripePlansGateway
     /**
      * Create a Basic Monthly StripePlan.P
      *
-     * @param \Stripe\Product $product
+     * @param  \Stripe\Product $product
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
     public function basic($product)
@@ -105,7 +108,8 @@ class StripePlansGateway
     /**
      * Create a Standard Monthly StripePlan.
      *
-     * @param \Stripe\Product $product
+     * @param  \Stripe\Product $product
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
     public function standard($product)
@@ -121,7 +125,8 @@ class StripePlansGateway
     /**
      * Create a Premium Monthly StripePlan.
      *
-     * @param \Stripe\Product $product
+     * @param  \Stripe\Product $product
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
     public function premium($product)

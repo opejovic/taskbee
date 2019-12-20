@@ -6,7 +6,7 @@ use taskbee\Billing\StripeSubscriptionGateway;
 
 class StripeWebhookGateway
 {
-    /** 
+    /**
      * The stripe api key.
      */
     protected $apiKey;
@@ -24,35 +24,16 @@ class StripeWebhookGateway
     /**
      * Handle stripe webhooks.
      *
-     * @return \Illuminate\Http\Response
+     * @throws \Stripe\Exception\ApiErrorException
+     * @throws \Stripe\Exception\SignatureVerificationException
+     * @return void
      */
     public function handleEvents()
     {
-        # You can find your endpoint's secret in your webhook settings
-        $endpoint_secret = config('services.stripe.webhook.secret');
-
-        $payload = @file_get_contents('php://input');
-        $sig_header = request()->server('HTTP_STRIPE_SIGNATURE');
-        $event = null;
-
-        try {
-            $event = \Stripe\Webhook::constructEvent(
-                $payload,
-                $sig_header,
-                $endpoint_secret
-            );
-        } catch (\UnexpectedValueException $e) {
-            # Invalid payload
-            http_response_code(400); // PHP 5.4 or greater
-            exit();
-        } catch (\Stripe\Error\SignatureVerification $e) {
-            # Invalid signature
-            http_response_code(400); // PHP 5.4 or greater
-            exit();
-        }
+        $event = $this->getEvent();
 
         $subscriptionGateway = new StripeSubscriptionGateway();
-        
+
         switch ($event->type) {
             # ... handle the customer.subscription.created event
             case 'customer.subscription.created':
@@ -99,5 +80,37 @@ class StripeWebhookGateway
         }
 
         http_response_code(200); # PHP 5.4 or greater
+    }
+
+    /**
+    * @throws \Stripe\Exception\SignatureVerificationException
+    * @return \Stripe\Event|null
+    */
+    protected function getEvent()
+    {
+        # You can find your endpoint's secret in your webhook settings
+        $endpoint_secret = config('services.stripe.webhook.secret');
+
+        $payload = @file_get_contents('php://input');
+        $sig_header = request()->server('HTTP_STRIPE_SIGNATURE');
+        $event = null;
+
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $sig_header,
+                $endpoint_secret
+            );
+        } catch (\UnexpectedValueException $e) {
+            # Invalid payload
+            http_response_code(400); // PHP 5.4 or greater
+            exit();
+        } catch (\Stripe\Error\SignatureVerification $e) {
+            # Invalid signature
+            http_response_code(400); // PHP 5.4 or greater
+            exit();
+        }
+
+        return $event;
     }
 }

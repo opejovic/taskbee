@@ -24,7 +24,8 @@ class StripeSubscriptionGateway implements SubscriptionGateway
     /**
      * Fulfills the process of subscribing the customer after a successful payment.
      *
-     * @param array $subscription
+     * @param  array $subscription
+     * @throws \Stripe\Exception\ApiErrorException
      * @return void
      */
     public function fulfill($subscription)
@@ -37,7 +38,8 @@ class StripeSubscriptionGateway implements SubscriptionGateway
     /**
      * Is subscription paid for?
      *
-     * @param $subscription
+     * @param  $subscription
+     * @throws \Stripe\Exception\ApiErrorException
      * @return bool
      */
     public function subscriptionPaid($subscription)
@@ -52,6 +54,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Store subscription in the database.
      *
      * @param $subscription
+     * @throws \Stripe\Exception\ApiErrorException
      */
     public function setupSubscription($subscription)
     {
@@ -103,6 +106,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Increase the subscriptions member slots.
      *
      * @param $workspace
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Invoice
      */
     public function increaseSlot($workspace)
@@ -129,6 +133,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Invoice the additional member slot.
      *
      * @param $stripeSub
+     * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Invoice
      */
     public function createInvoice($stripeSub)
@@ -147,8 +152,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * Inspects the subscription status, after the subscription updated event,
      * and updates subscription locally.
      *
-     * @param $subscription
-     * @return void
+     * @param  $subscription
      */
     public function inspect($subscription)
     {
