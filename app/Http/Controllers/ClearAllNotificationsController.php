@@ -14,7 +14,7 @@ class ClearAllNotificationsController extends Controller
      */
     public function destroy(User $user)
     {
-        auth()->user()->notifications->each->delete();
+        auth()->user()->notifications()->delete();
 
         return response('Notifications cleared.', 200);
     }
