@@ -36,7 +36,6 @@ class WorkspacesController extends Controller
                 'tasks' => $workspace->tasks->take(12),
                 'invitations' => $workspace->invitations,
             ]);
-
         } catch (SubscriptionExpiredException $e) {
             return redirect(route('subscription-expired.show', $workspace));
         } catch (SubscriptionCanceledException $e) {

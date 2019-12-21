@@ -69,7 +69,7 @@ class ClearStripeWebhook extends Command
     protected function delete($webhooks, $endpoint)
     {
         collect($webhooks)->filter(function ($webhook) use ($endpoint) {
-            return $webhook['url'] == $endpoint;
+            return $webhook['url'] === $endpoint;
         })->each->delete();
 
         $this->info('Web hooks deleted.');

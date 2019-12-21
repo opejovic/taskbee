@@ -20,7 +20,7 @@ class AcceptInvitationsController extends Controller
         $user = User::where('email', $invitation->email)->first();
         abort_if($user->isNot(auth()->user()), 403);
 
-    	$invitation->update(['user_id' => $user->id]);
+        $invitation->update(['user_id' => $user->id]);
         $invitation->workspace->addMember($user);
 
         return redirect(route('tasks.index', $invitation->workspace->id));

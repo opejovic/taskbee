@@ -62,8 +62,9 @@ class GeneratePlans extends Command
         throw_if(
             Plan::count() > 0,
             new Exception(
-            'Looks like you already have plans created. Please check your database, there should be no plans there prior to running this command.'
-        ));
+                'Looks like you already have plans created. Please check your database, there should be no plans there prior to running this command.'
+            )
+        );
 
         $this->info("Preparing.. please wait.");
     }
@@ -80,6 +81,5 @@ class GeneratePlans extends Command
         }
 
         $this->info('Done!');
-
     }
 }

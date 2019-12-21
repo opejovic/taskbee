@@ -18,7 +18,7 @@ class WorkspaceMembersController extends Controller
      */
     public function index(Workspace $workspace)
     {
-		$this->authorize('update', $workspace);
+        $this->authorize('update', $workspace);
 
         # We avoid passing in emails in our vue components, which can be visible to anyone.
         $members = $workspace->members()->select(['user_id', 'first_name', 'last_name'])->get();
@@ -40,10 +40,9 @@ class WorkspaceMembersController extends Controller
     public function update(Workspace $workspace, $memberId)
     {
         abort_unless(Auth::user()->owns($workspace), 403);
-
         $user = User::whereId($memberId)->firstOrFail();
+        
         abort_if($user->owns($workspace), 403);
-
         $workspace->removeMember($user);
 
         return response(['message' => 'Member removed!'], 200);

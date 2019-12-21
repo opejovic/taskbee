@@ -39,7 +39,6 @@ class WorkspaceTasksController extends Controller
                 'tasks'     => $tasks,
             ]);
         } catch (SubscriptionExpiredException $e) {
-
             if (Auth::user()->owns($workspace)) {
                 return redirect(route('subscription-expired.show', $workspace));
             }

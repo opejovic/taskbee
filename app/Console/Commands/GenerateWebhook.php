@@ -40,7 +40,6 @@ class GenerateWebhook extends Command
         $this->info("Generating stripe web hook, please wait.");
 
         # @TODO Move it to the WebhookGateway
-
         \Stripe\WebhookEndpoint::create([
             "url" => config('services.ngrok.url'),
             "enabled_events" => [
