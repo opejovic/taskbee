@@ -33,7 +33,7 @@ class WorkspacesController extends Controller
 
             return view('workspaces.show', [
                 'workspace' => $workspace,
-                'tasks' => $workspace->tasks->take(12),
+                'tasks' => $workspace->tasks()->take(12)->get(),
                 'invitations' => $workspace->invitations,
             ]);
         } catch (SubscriptionExpiredException $e) {
