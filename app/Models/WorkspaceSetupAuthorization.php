@@ -78,6 +78,17 @@ class WorkspaceSetupAuthorization extends Model
     }
 
     /**
+     * Get the authorization code for given subscription.
+     *
+     * @param  int $subscription
+     * @return string $code
+     */
+    public static function getCodeFor($subscriptionId)
+    {
+        return self::where('subscription_id', $subscriptionId)->first()->code;
+    }
+
+    /**
      * Get the WorkspaceSetupAuthorization by its code.
      *
      * @param string $code

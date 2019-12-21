@@ -49,10 +49,7 @@ class SubscriptionsController extends Controller
         $subscription = $paymentGateway->getSubscription();
         
         # Get authorization code for that Subscription.
-        $authorization = WorkspaceSetupAuthorization::where(
-            'subscription_id',
-            $subscription
-        )->first()->code;
+        $authorization = WorkspaceSetupAuthorization::getCodeFor($subscription);
 
         return redirect(route('workspace-setup.show', $authorization));
     }
