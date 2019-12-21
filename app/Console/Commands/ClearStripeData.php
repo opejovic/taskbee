@@ -41,14 +41,10 @@ class ClearStripeData extends Command
     {
         try {
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
             $this->info('Interacting with Stripe, please wait.');
 
             # Retrieve all TaskBee products from stripe
-            $stripeProducts = collect(\Stripe\Product::all()['data'])->filter(function ($product) {
-                return $product['name'] == 'TaskBee Workspace Bundle';
-            });
-
+            $stripeProducts = $this->products();
             throw_if($stripeProducts->isEmpty(), new Exception('No TaskBee products exist on Stripe.'));
 
             # Delete the plans associated with TaskBee
@@ -56,7 +52,6 @@ class ClearStripeData extends Command
 
             # Delete the TaskBee products
             $stripeProducts->each->delete();
-
             $this->info('Stripe products and plans deleted.');
         } catch (Exception $e) {
             $this->warn($e->getMessage());
@@ -71,7 +66,6 @@ class ClearStripeData extends Command
     public function deletePlansFor($products)
     {
         # @TODO Refactor
-
         $products->map(function ($product) {
             return $product['id'];
         })->map(function ($product) {
@@ -80,6 +74,18 @@ class ClearStripeData extends Command
             collect($productPlans)->each(function ($plan) {
                 $plan->delete();
             });
+        });
+    }
+
+    /**
+     * Get the stripe products.
+     *
+     * @return \Stripe\Product
+     */
+    public function products()
+    {
+        return collect(\Stripe\Product::all()['data'])->filter(function ($product) {
+            return $product['name'] == 'TaskBee Workspace Bundle';
         });
     }
 }
