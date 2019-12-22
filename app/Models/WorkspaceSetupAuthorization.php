@@ -2,6 +2,7 @@
 
 namespace taskbee\Models;
 
+use taskbee\Models\Workspace;
 use Illuminate\Support\Facades\Mail;
 use taskbee\Facades\AuthorizationCode;
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +10,6 @@ use taskbee\Mail\SubscriptionPurchasedEmail;
 
 class WorkspaceSetupAuthorization extends Model
 {
-    /**
-     * Class constants.
-     */
-    const INITIAL_MEMBER_COUNT = 1;
-
     /**
      * Attributes that are included in every query.
      *
@@ -53,7 +49,6 @@ class WorkspaceSetupAuthorization extends Model
      * Create an authorization for subscription.
      *
      * @param \taskbee\Models\Subscription $subscription
-     *
      * @return void
      */
     public static function authorize($subscription)
@@ -61,7 +56,7 @@ class WorkspaceSetupAuthorization extends Model
         self::create([
             'email'           => $subscription->email,
             'customer'        => $subscription->customer,
-            'members_invited' => self::INITIAL_MEMBER_COUNT,
+            'members_invited' => Workspace::INITIAL_MEMBER_COUNT,
             'code'            => AuthorizationCode::generate(),
             'subscription_id' => $subscription->stripe_id,
             'plan_id'         => $subscription->plan_id,

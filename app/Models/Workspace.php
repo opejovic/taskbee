@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class Workspace extends Model
 {
     /**
+     * Initial workspace member count.
+     */
+    const INITIAL_MEMBER_COUNT = 1;
+
+    /**
      * Attributes that are not mass assignable.
      *
      * @var array
