@@ -33,6 +33,7 @@ class GenerateWebhook extends Command
     /**
      * Execute the console command.
      *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return void
      */
     public function handle()
