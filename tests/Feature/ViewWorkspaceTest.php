@@ -28,8 +28,6 @@ class ViewWorkspaceTest extends TestCase
         $workspace->addMember($user);
         $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}");
 
-        // $response->assertStatus(423); // locked
-        // $this->assertEquals($response->content(), 'Subscription exipred. Please renew your subscription.');
         $response->assertRedirect(route('subscription-expired.show', $workspace));
     }
 

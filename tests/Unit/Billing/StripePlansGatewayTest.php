@@ -68,7 +68,7 @@ class StripePlansGatewayTest extends TestCase
         ], ['api_key' => config('services.stripe.secret')]);
 
         $this->assertCount(1, $stripeProduct['data']);
-        $this->assertTrue(collect($stripeProduct['data'])->pluck('name')->contains('Workspace Bundle'));
+        $this->assertTrue(collect($stripeProduct['data'])->pluck('name')->contains('TaskBee Workspace Bundle'));
 
         $product = \Stripe\Product::retrieve($stripeProduct['data'][0]['id']);
         $product->delete();

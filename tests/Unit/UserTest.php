@@ -88,9 +88,9 @@ class UserTest extends TestCase
     public function can_get_avatar_path_attribute()
     {
         $user = factory(User::class)->create(['avatar_path' => null]);
-        $this->assertEquals("http://127.0.0.1:8000/img/default.png", $user->avatar_path);
+        $this->assertEquals("http://taskbee.test/img/default.png", $user->avatar_path);
 
         $otherUser = factory(User::class)->create(['avatar_path' => 'avatars/me.jpg']);
-        $this->assertEquals("http://127.0.0.1:8000/storage/avatars/me.jpg", $otherUser->avatar_path);
+        $this->assertEquals("http://taskbee.test/storage/avatars/me.jpg", $otherUser->avatar_path);
     }
 }
