@@ -4,6 +4,7 @@ namespace taskbee\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class ClearStripeData extends Command
 {
@@ -19,17 +20,7 @@ class ClearStripeData extends Command
      *
      * @var string
      */
-    protected $description = "Clear apps stripe plans and web hooks.";
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Clear apps stripe plans and web hooks.';
 
     /**
      * Execute the console command.
@@ -63,7 +54,7 @@ class ClearStripeData extends Command
      *
      * @param \Illuminate\Support\Collection $products
      */
-    public function deletePlansFor($products)
+    public function deletePlansFor($products) : void
     {
         # @TODO Refactor
         $products->map(function ($product) {
@@ -80,12 +71,13 @@ class ClearStripeData extends Command
     /**
      * Get the stripe products.
      *
-     * @return \Stripe\Product
+     * @throws \Stripe\Exception\ApiErrorException
+     * @return \Illuminate\Support\Collection
      */
-    public function products()
+    public function products() : Collection
     {
         return collect(\Stripe\Product::all()['data'])->filter(function ($product) {
-            return $product['name'] == 'TaskBee Workspace Bundle';
+            return $product['name'] === 'TaskBee Workspace Bundle';
         });
     }
 }

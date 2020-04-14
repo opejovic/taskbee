@@ -34,10 +34,8 @@ abstract class Filters
      * Apply filter to the query builder.
      *
      * @param $builder
-     *
-     * @return void
      */
-    public function apply($builder)
+    public function apply($builder) : void
     {
         $this->builder = $builder;
 
@@ -52,10 +50,8 @@ abstract class Filters
 
     /**
      * Return the filters from the request.
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getFilters()
+    public function getFilters() : \Illuminate\Support\Collection
     {
         return collect($this->request->only($this->filters));
     }

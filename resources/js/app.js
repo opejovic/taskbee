@@ -4,13 +4,14 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
-import Form from './utilities/Form';
 import VModal from 'vue-js-modal';
 import Toasted from 'vue-toasted';
+import Form from './utilities/Form';
+
+require('./bootstrap');
 
 window.Vue = require('vue');
+
 window.Form = Form;
 window.events = new Vue();
 
@@ -18,15 +19,15 @@ Vue.prototype.auth = window.auth; // ...authenticated user
 
 Vue.use(VModal);
 
-Vue.use(Toasted,  {
-    theme: "toasted-primary",
-	position: "bottom-left",
+Vue.use(Toasted, {
+    theme: 'toasted-primary',
+    position: 'bottom-left',
     duration: 7000,
     action: {
         text: 'Close',
         onClick: (e, toastObject) => {
             toastObject.goAway(0);
-        }
+        },
     },
 });
 
@@ -65,4 +66,7 @@ Vue.component('account-dropdown', require('./components/AccountDropdown.vue').de
 
 const app = new Vue({
     el: '#app',
+    data: {
+        sidebarOpen: false,
+    },
 });

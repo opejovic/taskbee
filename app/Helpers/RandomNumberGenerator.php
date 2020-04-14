@@ -5,13 +5,16 @@ namespace taskbee\Helpers;
 class RandomNumberGenerator implements AuthorizationCodeGenerator, InvitationCodeGenerator
 {
     /**
-     * Generate a random 24 character code from a pool of characters.
-     *
-     * @return string
+     * @var string
      */
-    public function generate()
+    protected $pool = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+    /**
+     * Generate a random 24 character code from a pool of characters.
+     */
+    public function generate() : string
     {
-        $pool = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        return substr(str_shuffle(str_repeat($pool, 24)), 0, 24);
+
+        return substr(str_shuffle(str_repeat($this->pool, 24)), 0, 24);
     }
 }

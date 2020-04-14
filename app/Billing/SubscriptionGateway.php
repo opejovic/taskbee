@@ -11,5 +11,5 @@ interface SubscriptionGateway
      *
      * @return void
      */
-    public function fulfill($purchase);
+    public function fulfill($purchase) : void;
 }

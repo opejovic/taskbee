@@ -6,8 +6,6 @@ interface InvitationCodeGenerator
 {
     /**
      * Generate an invitation code.
-     *
-     * @return string
      */
-    public function generate();
+    public function generate() : string;
 }

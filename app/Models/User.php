@@ -47,9 +47,7 @@ class User extends Authenticatable
      * @var array
      *
      */
-    protected $appends = [
-        'full_name'
-    ];
+    protected $appends = ['full_name'];
 
     /**
      * User can own many workspaces.
@@ -69,7 +67,7 @@ class User extends Authenticatable
      */
     public function owns($workspace)
     {
-        return $this->id == $workspace->created_by;
+        return $this->id === $workspace->created_by;
     }
 
     /**

@@ -2,19 +2,20 @@
 
 namespace Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use taskbee\Models\Plan;
 use taskbee\Models\User;
 use taskbee\Models\Bundle;
 use taskbee\Models\Customer;
 use taskbee\Models\Subscription;
+use Illuminate\Support\Facades\Mail;
 use taskbee\Facades\AuthorizationCode;
 use taskbee\Billing\SubscriptionGateway;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Foundation\Testing\WithFaker;
 use taskbee\Billing\FakeSubscriptionGateway;
 use taskbee\Mail\SubscriptionPurchasedEmail;
 use taskbee\Models\WorkspaceSetupAuthorization;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
@@ -27,41 +28,45 @@ class PurchaseSubscriptionsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->subscriptionGateway = new FakeSubscriptionGateway;
-        $this->app->instance(SubscriptionGateway::class, $this->subscriptionGateway);
-        $this->plan = factory(Plan::class)->create([
-            'amount' => 2500,
-            'product' => factory(Bundle::class)->create()->stripe_id,
-        ]);
     }
 
     /** @test */
     public function guests_cannot_purchase_a_bundle_subscription()
     {
-        $response = $this->json('POST', "plans/{$this->plan->id}/checkout", [])->assertStatus(401);
+        $response = $this->json('POST', "plans/1/checkout", [])->assertStatus(401);
     }
 
     /** @test */
     public function authenticated_users_can_subscribe_to_a_plan_with_successful_purchase()
     {
-        $this->withoutExceptionHandling();
+        // I just call the stripes checkout, which prompts the screen. THen the user enters the
+        // card number etc, that passes and we get the webhook back.
+        // So I need to figure out how to submit a payment to stripe,
+        // so that I activate the webhook. Not sure how to get the ngrok / valet running in tests tho
+
         Mail::fake();
         AuthorizationCode::shouldReceive('generate')->andReturn('TESTCODE123');
 
         $user = factory(User::class)->create();
 
         $plan = $this->SetupStripe();
+        $created_at = Carbon::now()->unix();
 
-        Token::create();
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $token = $this->getTestToken();
 
         $response = $this->actingAs($user)->json('POST', "/plans/{$plan->id}/checkout", [
-            'email' => 'jane@example.com',
-            'tok' => $tok,
+            'token' => $token
         ]);
+
+        dd(session());
+
+        $sup = $this->get("http://taskbee.test/success");
 
         $subscription = $plan->subscriptions()->where('email', 'jane@example.com')->first();
         $this->assertNotNull($subscription);
-        $this->assertEquals(2500, $subscription->amount);
+        $this->assertEquals(3995, $subscription->amount);
 
         $setupAuthorization = WorkspaceSetupAuthorization::first();
         $this->assertNotNull($setupAuthorization);
@@ -121,7 +126,7 @@ class PurchaseSubscriptionsTest extends TestCase
     {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $basicBundle = \Stripe\Product::create([
+        $product = \Stripe\Product::create([
             "name" => 'Testing Workspace Bundle',
             "type" => "service",
             "metadata" => [
@@ -132,7 +137,7 @@ class PurchaseSubscriptionsTest extends TestCase
         $basicPlan = \Stripe\Plan::create([
             "amount" => 3995,
             "interval" => "month",
-            "product" => $basicBundle['id'],
+            "product" => $product['id'],
             "currency" => "eur",
         ]);
 
@@ -140,9 +145,21 @@ class PurchaseSubscriptionsTest extends TestCase
             "name" => $basicPlan['nickname'],
             "amount" => $basicPlan['amount'],
             "interval" => "month",
-            "product" => $basicBundle['id'],
+            "members_limit" => 5,
             "currency" => "eur",
             "stripe_id" => $basicPlan['id'],
         ]);
+    }
+
+    protected function getTestToken()
+    {
+        return \Stripe\Token::create([
+            'card' => [
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => 2020,
+                'cvc' => '123',
+            ],
+        ], ['api_key' => getenv('STRIPE_SECRET')])->id;
     }
 }

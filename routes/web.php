@@ -66,3 +66,5 @@ Route::group([
 });
 
 Route::middleware('auth')->get('/api/workspaces/{workspace}/tasks', 'API\TasksController@index');
+
+Route::get('/newdesign', 'NewDesignController@index');

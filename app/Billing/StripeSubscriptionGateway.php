@@ -9,16 +9,11 @@ use taskbee\Models\Workspace;
 class StripeSubscriptionGateway implements SubscriptionGateway
 {
     /**
-     * Stripe api key instance.
-     */
-    private $apiKey;
-
-    /**
      * Create a new class instance.
      */
     public function __construct()
     {
-        $this->apiKey = \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
 
     /**
@@ -28,7 +23,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return void
      */
-    public function fulfill($subscription)
+    public function fulfill($subscription) : void
     {
         if ($this->subscriptionPaid($subscription)) {
             $this->setupSubscription($subscription);
@@ -42,7 +37,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return bool
      */
-    public function subscriptionPaid($subscription)
+    public function subscriptionPaid($subscription) : bool
     {
         return \Stripe\Subscription::retrieve([
             'id'     => $subscription->id,
@@ -56,7 +51,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * @param $subscription
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function setupSubscription($subscription)
+    public function setupSubscription($subscription) : void
     {
         $customer = \Stripe\Customer::retrieve($subscription->customer);
 
@@ -80,7 +75,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * @param $invoice
      * @return void
      */
-    public function handleInvoice($invoice)
+    public function handleInvoice($invoice) : void
     {
         switch ($invoice->description) {
             # ... handle the Add additional member slot payment
@@ -109,7 +104,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Invoice
      */
-    public function increaseSlot($workspace)
+    public function increaseSlot($workspace) : \Stripe\Invoice
     {
         # Retrieve subscription
         $stripeSub = \Stripe\Subscription::retrieve($workspace->subscription->stripe_id);
@@ -136,7 +131,7 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Invoice
      */
-    public function createInvoice($stripeSub)
+    public function createInvoice($stripeSub) : \Stripe\Invoice
     {
         # Create and pay an invoice for added member - make this a first step before editing a subscription
         return \Stripe\Invoice::create([
@@ -153,8 +148,9 @@ class StripeSubscriptionGateway implements SubscriptionGateway
      * and updates subscription locally.
      *
      * @param  $subscription
+     * @return void
      */
-    public function inspect($subscription)
+    public function inspect($subscription) : void
     {
         if (collect([
             Subscription::PAST_DUE,

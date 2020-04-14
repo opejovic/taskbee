@@ -28,7 +28,7 @@ class StripeWebhookGateway
      * @throws \Stripe\Exception\SignatureVerificationException
      * @return void
      */
-    public function handleEvents()
+    public function handleEvents() : void
     {
         $event = $this->getEvent();
 
@@ -52,7 +52,7 @@ class StripeWebhookGateway
             # ... handle the subscription updated event
             case 'customer.subscription.updated':
                 $subscription = $event->data->object; # contains a StripePaymentIntent
-                # if subscription status is unpaid - lock the workspace access untill its paid
+                # if subscription status is unpaid - lock the workspace access until its paid
                 $subscriptionGateway->inspect($subscription);
                 http_response_code(200);
                 break;
@@ -86,7 +86,7 @@ class StripeWebhookGateway
     * @throws \Stripe\Exception\SignatureVerificationException
     * @return \Stripe\Event|null
     */
-    protected function getEvent()
+    protected function getEvent() : \Stripe\Event
     {
         # You can find your endpoint's secret in your webhook settings
         $endpoint_secret = config('services.stripe.webhook.secret');

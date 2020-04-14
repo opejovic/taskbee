@@ -8,18 +8,13 @@ use Illuminate\Support\Facades\Auth;
 class StripePaymentGateway implements PaymentGateway
 {
     /**
-     * @var void
-     */
-    private $apiKey;
-
-    /**
      * StripePaymentGateway constructor.
      *
      * @param $apiKey
      */
     public function __construct($apiKey)
     {
-        $this->apiKey = \Stripe\Stripe::setApiKey($apiKey);
+        \Stripe\Stripe::setApiKey($apiKey);
     }
 
     /**

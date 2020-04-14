@@ -7,27 +7,22 @@ use taskbee\Models\Plan;
 class StripePlansGateway
 {
     /**
-     * Stripe's API key.
-     *
-     * @var string
-     */
-    private $apiKey;
-
-    /**
      * StripePlansGateway constructor.
      *
      * @param $apiKey
      */
     public function __construct($apiKey)
     {
-        $this->apiKey = \Stripe\Stripe::setApiKey($apiKey);
+        \Stripe\Stripe::setApiKey($apiKey);
     }
 
     /**
      * Generates the product and its subscription plans in Stripe and in our database.
      *
+     * @throws \Stripe\Exception\ApiErrorException
+     * @return void
      */
-    public function generate()
+    public function generate() : void
     {
         Plan::assemble($this->plans());
     }
@@ -38,7 +33,7 @@ class StripePlansGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Illuminate\Support\Collection
      */
-    public function plans()
+    public function plans() : \Illuminate\Support\Collection
     {
         $product = $this->product();
 
@@ -55,12 +50,12 @@ class StripePlansGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Product
      */
-    public function product()
+    public function product() : \Stripe\Product
     {
         return \Stripe\Product::create([
-            "name"                 => "TaskBee Workspace Bundle",
-            "statement_descriptor" => "TaskBee Workspace",
-            "type"                 => "service",
+            'name'                 => 'TaskBee Workspace Bundle',
+            'statement_descriptor' => 'TaskBee Workspace',
+            'type'                 => 'service',
         ]);
     }
 
@@ -74,17 +69,17 @@ class StripePlansGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
-    public function plan($nickname, $amount, $members_limit, $product)
+    public function plan($nickname, $amount, $members_limit, $product) : \Stripe\Plan
     {
         return \Stripe\Plan::create([
-            "nickname"       => $nickname,
-            "amount"         => $amount,
-            "billing_scheme" => "per_unit",
-            "interval"       => "month",
-            "currency"       => "eur",
-            "usage_type"     => "licensed",
-            "metadata"       => ["members_limit" => $members_limit],
-            "product"        => $product['id'],
+            'nickname'       => $nickname,
+            'amount'         => $amount,
+            'billing_scheme' => 'per_unit',
+            'interval'       => 'month',
+            'currency'       => 'eur',
+            'usage_type'     => 'licensed',
+            'metadata'       => ['members_limit' => $members_limit],
+            'product'        => $product['id'],
         ]);
     }
 
@@ -95,7 +90,7 @@ class StripePlansGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
-    public function basic($product)
+    public function basic($product) : \Stripe\Plan
     {
         return $this->plan(
             Plan::BASIC,
@@ -112,7 +107,7 @@ class StripePlansGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
-    public function standard($product)
+    public function standard($product) : \Stripe\Plan
     {
         return $this->plan(
             Plan::STANDARD,
@@ -129,7 +124,7 @@ class StripePlansGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Plan
      */
-    public function premium($product)
+    public function premium($product) : \Stripe\Plan
     {
         return $this->plan(
             Plan::PREMIUM,

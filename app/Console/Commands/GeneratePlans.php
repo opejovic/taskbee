@@ -24,22 +24,12 @@ class GeneratePlans extends Command
     protected $description = 'Generate subscription plans. Run only once, at the beginning of the journey.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
      * @throws \Throwable
      */
-    public function handle()
+    public function handle() : void
     {
         try {
             $this->runCheckBefore();
@@ -57,7 +47,7 @@ class GeneratePlans extends Command
      *
      * @throws \Throwable
      */
-    public function runCheckBefore()
+    public function runCheckBefore() : void
     {
         throw_if(
             Plan::count() > 0,
@@ -66,7 +56,7 @@ class GeneratePlans extends Command
             )
         );
 
-        $this->info("Preparing.. please wait.");
+        $this->info('Preparing.. please wait.');
     }
 
     /**
@@ -74,7 +64,7 @@ class GeneratePlans extends Command
      *
      * @throws \Exception
      */
-    public function runCheckAfter()
+    public function runCheckAfter() : void
     {
         if (Plan::count() !== 3) {
             throw new Exception('Something went wrong.');

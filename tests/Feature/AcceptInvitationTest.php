@@ -23,7 +23,6 @@ class AcceptInvitationTest extends TestCase
         ]);
 
         $response = $this->get("/invitations/INVITATIONCODE123");
-
         $response->assertStatus(200);
         $response->assertViewIs('invitations.show');
         $this->assertTrue($response->viewData('invitation')->is($invitation));

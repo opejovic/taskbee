@@ -21,20 +21,10 @@ class ClearStripeWebhook extends Command
     protected $description = "Clear Stripe's web hook.";
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return mixed
-     * @throws \Stripe\Error\Api
      */
     public function handle()
     {
@@ -50,13 +40,13 @@ class ClearStripeWebhook extends Command
     /**
      * Retrieve web hooks from Stripe API.
      *
+     * @throws \Stripe\Exception\ApiErrorException
      * @return mixed
-     * @throws \Stripe\Error\Api
      */
-    protected function retrieveStripeWebhooks()
+    protected function retrieveStripeWebhooks() : mixed
     {
         return \Stripe\WebhookEndpoint::all([
-            "limit" => 16, # Only 16 test web hooks can exist.
+            'limit' => 16, # Only 16 test web hooks can exist.
         ])['data'];
     }
 
@@ -66,7 +56,7 @@ class ClearStripeWebhook extends Command
      * @param array $webhooks
      * @param string $endpoint
      */
-    protected function delete($webhooks, $endpoint)
+    protected function delete($webhooks, $endpoint) : void
     {
         collect($webhooks)->filter(function ($webhook) use ($endpoint) {
             return $webhook['url'] === $endpoint;
