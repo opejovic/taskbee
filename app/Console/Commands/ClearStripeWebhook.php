@@ -43,7 +43,7 @@ class ClearStripeWebhook extends Command
      * @throws \Stripe\Exception\ApiErrorException
      * @return mixed
      */
-    protected function retrieveStripeWebhooks() : mixed
+    protected function retrieveStripeWebhooks(): mixed
     {
         return \Stripe\WebhookEndpoint::all([
             'limit' => 16, # Only 16 test web hooks can exist.
@@ -53,10 +53,10 @@ class ClearStripeWebhook extends Command
     /**
      * Delete Stripe web hooks with specified endpoint.
      *
-     * @param array $webhooks
-     * @param string $endpoint
+     * @param  array  $webhooks
+     * @param  string $endpoint
      */
-    protected function delete($webhooks, $endpoint) : void
+    protected function delete($webhooks, $endpoint): void
     {
         collect($webhooks)->filter(function ($webhook) use ($endpoint) {
             return $webhook['url'] === $endpoint;

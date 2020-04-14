@@ -24,7 +24,7 @@ class StripePaymentGateway implements PaymentGateway
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Stripe\Checkout\Session
      */
-    public function checkout(Plan $plan)
+    public function checkout(Plan $plan): \Stripe\Checkout\Session
     {
         return \Stripe\Checkout\Session::create([
             'customer_email'       => Auth::user()->email,
@@ -47,7 +47,6 @@ class StripePaymentGateway implements PaymentGateway
      * Get Stripe subscription from the checkout session.
      *
      * @throws \Stripe\Exception\ApiErrorException
-     * @return mixed
      */
     public function getSubscription()
     {

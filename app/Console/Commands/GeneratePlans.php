@@ -26,10 +26,10 @@ class GeneratePlans extends Command
     /**
      * Execute the console command.
      *
-     * @return void
      * @throws \Throwable
+     * @return void
      */
-    public function handle() : void
+    public function handle(): void
     {
         try {
             $this->runCheckBefore();
@@ -47,12 +47,13 @@ class GeneratePlans extends Command
      *
      * @throws \Throwable
      */
-    public function runCheckBefore() : void
+    public function runCheckBefore(): void
     {
         throw_if(
             Plan::count() > 0,
             new Exception(
-                'Looks like you already have plans created. Please check your database, there should be no plans there prior to running this command.'
+                'Looks like you already have plans created.
+                 Please check your database, there should be no plans there prior to running this command.'
             )
         );
 
@@ -64,7 +65,7 @@ class GeneratePlans extends Command
      *
      * @throws \Exception
      */
-    public function runCheckAfter() : void
+    public function runCheckAfter(): void
     {
         if (Plan::count() !== 3) {
             throw new Exception('Something went wrong.');
