@@ -9,6 +9,11 @@ use Illuminate\Support\Collection;
 class ClearStripeData extends Command
 {
     /**
+     * The name of the product on stripe.
+     */
+    const NAME = 'TaskBee Workspace Bundle';
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -20,7 +25,7 @@ class ClearStripeData extends Command
      *
      * @var string
      */
-    protected $description = 'Clear apps stripe plans and web hooks.';
+    protected $description = 'Clear stripe plans and web hooks.';
 
     /**
      * Execute the console command.
@@ -54,17 +59,14 @@ class ClearStripeData extends Command
      *
      * @param \Illuminate\Support\Collection $products
      */
-    public function deletePlansFor($products) : void
+    public function deletePlansFor($products): void
     {
-        # @TODO Refactor
         $products->map(function ($product) {
             return $product['id'];
-        })->map(function ($product) {
+        })->flatMap(function ($product) {
             return \Stripe\Plan::all(['product' => $product])['data'];
-        })->each(function ($productPlans) {
-            collect($productPlans)->each(function ($plan) {
-                $plan->delete();
-            });
+        })->each(function ($plan) {
+            $plan->delete();
         });
     }
 
@@ -74,10 +76,10 @@ class ClearStripeData extends Command
      * @throws \Stripe\Exception\ApiErrorException
      * @return \Illuminate\Support\Collection
      */
-    public function products() : Collection
+    public function products(): Collection
     {
         return collect(\Stripe\Product::all()['data'])->filter(function ($product) {
-            return $product['name'] === 'TaskBee Workspace Bundle';
+            return $product['name'] === self::NAME;
         });
     }
 }

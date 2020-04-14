@@ -15,7 +15,7 @@ class ClearStripeDataTest extends TestCase
     /** @test */
     public function stripe_plans_are_cleared_when_command_is_called()
     {
-        # Arrange:  Create 4 plans, 3 to be deleted and a Webhook, assert that plans exist
+        # Arrange: Create 4 plans, 3 to be deleted and a Webhook, assert that plans exist
         $stripeGateway = (new StripePlansGateway(config('services.stripe.secret')));
         $created_at = Carbon::now()->unix();
 
