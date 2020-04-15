@@ -1,0 +1,35 @@
+.bg-curve {
+    background-image: url("/img/curve-desc.svg");
+    background-position-x: center;
+    background-position-y: bottom;
+    background-size: 5153px 200px;
+    background-repeat-x: no-repeat;
+    background-repeat-y: no-repeat;
+    background-attachment: fixed;
+    background-origin: initial;
+    background-clip: initial;
+}
+
+.welcome-card::after {
+    position: absolute;
+    top: 25%;
+    right: -20%;
+    width: 100%;
+    height: 95%;
+    z-index: -1;
+    margin-top: -15%;
+    content: "";
+    background: url("/img/dots.svg");
+}
+
+.welcome-card-2::after {
+    position: absolute;
+    bottom: 15%;
+    right: -15%;
+    width: 100%;
+    height: 95%;
+    z-index: -1;
+    margin-top: -15%;
+    content: "";
+    background: url("/img/dots.svg");
+}

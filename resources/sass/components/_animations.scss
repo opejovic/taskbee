@@ -1,0 +1,14 @@
+@keyframes welcome-particle {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-16px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+.welcome-cat {
+    animation: welcome-particle 6s ease-in-out 3s infinite;
+}

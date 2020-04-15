@@ -27,7 +27,7 @@
 	</head>
 
 	<body>
-		<div id="app" class="min-h-screen bg-curve">
+		<div id="app" class="min-h-screen">
 			@auth
 				<navbar :workspace="{{ auth()->user()->workspaceOwned() }}"></navbar>
 			@endauth
