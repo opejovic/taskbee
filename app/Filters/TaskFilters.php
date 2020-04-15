@@ -16,7 +16,7 @@ class TaskFilters extends Filters
     /**
      * Filter the tasks by the authenticated user.
      */
-    public function my() : void
+    public function my()
     {
         return $this->builder->where('user_responsible', Auth::user()->id);
     }
@@ -26,7 +26,7 @@ class TaskFilters extends Filters
      *
      * @param integer $id
      */
-    public function creator($id) : void
+    public function creator($id)
     {
         if ($id) { return $this->builder->where('created_by', $id); }
     }
@@ -36,7 +36,7 @@ class TaskFilters extends Filters
      *
      * @param integer $id
      */
-    public function responsibility($id) : void
+    public function responsibility($id)
     {
         if ($id) { return $this->builder->where('user_responsible', $id); }
     }

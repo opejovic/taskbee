@@ -35,7 +35,7 @@ abstract class Filters
      *
      * @param $builder
      */
-    public function apply($builder) : void
+    public function apply($builder)
     {
         $this->builder = $builder;
 

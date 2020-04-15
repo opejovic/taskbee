@@ -173,7 +173,6 @@ return [
         taskbee\Providers\AuthServiceProvider::class,
         // taskbee\Providers\BroadcastServiceProvider::class,
         taskbee\Providers\EventServiceProvider::class,
-        taskbee\Providers\TelescopeServiceProvider::class,
         taskbee\Providers\RouteServiceProvider::class,
 
     ],
